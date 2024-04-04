@@ -59,10 +59,10 @@ void vLedWriteLed (char cLedNum, int iLedWrite)
 }
 
 // ***************************************************** //
-// Method name:         vLedOnLed                    //
-// Method description:  Function that turns the led on   //
-// Input params:        xNumLed:                         //
-//                      is the number of the led         //
+// Method name:         vLedOnLed                        //
+// Method description:  Função que liga o led            //
+// Input params:        cLedNum:                         //
+//                                                       //
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedOnLed (char cLedNum){
@@ -86,10 +86,10 @@ void vLedOnLed (char cLedNum){
 }
 
 // ***************************************************** //
-// Method name:         vLedTurnOffLed                   //
-// Method description:  Function that turns the led on   //
-// Input params:        xNumLed:                         //
-//                      is the number of the led         //
+// Method name:         vLedOffLed                       //
+// Method description:  Função que desliga o led         //
+// Input params:        cLedNum:                         //
+//                                                       //
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedOffLed (char cLedNum)
@@ -116,14 +116,14 @@ void vLedOffLed (char cLedNum)
 	}
 }
 
-// ***************************************************** //
-// Method name:         vLedToggleLed                    //
-// Method description:  Function that toggle the led     //
-//                      state.                           //
-// Input params:        xNumLed:                         //
-//                      is the number of the led         //
-// Output params:       n/a                              //
-// ***************************************************** //
+// ******************************************************** //
+// Method name:         vLedToggleLed                       //
+// Method description:  Função que alterna o estado do led  //
+//                                                          //
+// Input params:        cLedNum:                            //
+//                                                          //
+// Output params:       n/a                                 //
+// ******************************************************** //
 void vLedToggleLed (char cLedNum)
 {
 

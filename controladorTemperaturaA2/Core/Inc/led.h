@@ -1,9 +1,9 @@
-/*
- * led.h
- *
- *  Created on: Apr 3, 2024
- *      Author: akira
- */
+/* File name:        led.h                                                  */
+/* File description: arquivo para configuração dos regitradores dos leds    */
+/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini      */
+/* Creation date:    28mar2024                                              */
+/* Revision date:    28mar2024                                              */
+/* ************************************************************************ */
 
 #ifndef INC_LED_H_
 #define INC_LED_H_
@@ -26,10 +26,57 @@
 #define BIT_CHECK(a,b) (!!((a) & (1ULL << (b))))
 
 enum declareLed{green1 = 1, yellow = 2, red = 3, green2 = 4, blue = 5};
+
+// **************************************************** //
+// Method name:         vLedInitLed                     //
+// Method description:  Função que inicializa os        //
+//                      registradores, habilitando o    //
+//                      clock e configurando os pinos   //
+//                                                      //
+// Input params:        n/a                             //
+// Output params:       n/a                             //
+// **************************************************** //
 void vLedInitLed ();
+
+// ***************************************************** //
+// Method name:         vLedWriteLed                     //
+// Method description:  Função que escreve o estado do   //
+//                      led                              //
+// Input params:        cLedNum:                         //
+//                      indica qual led será escrito     //
+//                      iLedWrite:                       //
+//                      indica se o led será levado para //
+//                      nível alto ou baixo              //
+// Output params:       n/a                              //
+// ***************************************************** //
 void vLedWriteLed (char, int);
+
+// ***************************************************** //
+// Method name:         vLedOnLed                        //
+// Method description:  Função que liga o led            //
+// Input params:        cLedNum:                         //
+//                                                       //
+// Output params:       n/a                              //
+// ***************************************************** //
 void vLedOnLed (char);
+
+// ***************************************************** //
+// Method name:         vLedOffLed                       //
+// Method description:  Função que desliga o led         //
+// Input params:        cLedNum:                         //
+//                                                       //
+// Output params:       n/a                              //
+// ***************************************************** //
 void vLedOffLed (char);
+
+// ******************************************************** //
+// Method name:         vLedToggleLed                       //
+// Method description:  Função que alterna o estado do led  //
+//                                                          //
+// Input params:        cLedNum:                            //
+//                                                          //
+// Output params:       n/a                                 //
+// ******************************************************** //
 void vLedToggleLed (char);
 
 #endif /* INC_LED_H_ */

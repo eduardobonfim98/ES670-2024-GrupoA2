@@ -1,9 +1,10 @@
-/*
- * buttons.h
- *
- *  Created on: Apr 3, 2024
- *      Author: akira
- */
+/* File name:        buttons.c                                              */
+/* File description: arquivo para configuração dos regitradores dos botões  */
+/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini      */
+/* Creation date:    28mar2024                                              */
+/* Revision date:    28mar2024                                              */
+/* ************************************************************************ */
+
 
 #ifndef INC_BUTTONS_H_
 #define INC_BUTTONS_H_
@@ -24,8 +25,40 @@
 #define BIT_TOGGLE(a,b) ((a) ^= (1ULL << (b)))
 #define BIT_CHECK(a,b) (!!((a) & (1ULL << (b))))
 
+/* ************************************************ */
+/* Method name: 	   vButtonsInitButtons      	*/
+/*													*/
+/* Method description: inicializa os botões         */
+/*													*/
+/* Input params:	   n/a							*/
+/*													*/
+/* Output params:	   n/a 							*/
+/* ************************************************ */
 void vButtonsInitButtons();
+
+/* *********************************************************** */
+/* Method name: 	   cButtonsGetState          	           */
+/*													           */
+/* Method description: verifica se o botão está pressionado    */
+/*													           */
+/* Input params:	   char indicando número do botão          */
+/*													           */
+/* Output params:	   estado representado por char            */
+/* *********************************************************** */
 char cButtonsGetState(char button);
+
+/* ************************************************ */
+/* Method name: 	   cButtonsGetNumber      	    */
+/*													*/
+/* Method description: retorna um char que representa
+ * 						o número do botão           */
+/*													*/
+/* Input params:	   n/a							*/
+/*													*/
+/* Output params:	   char que representa o
+ * 						número do botao				*/
+/* ************************************************ */
+char cButtonsGetNumber();
 
 //definição do enum:
 enum declareButtons{up = 1, down = 2, right = 3, left = 4, enter = 5};
