@@ -57,15 +57,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
-#define B1_EXTI_IRQn EXTI15_10_IRQn
 #define LPUART1_TX_Pin GPIO_PIN_2
 #define LPUART1_TX_GPIO_Port GPIOA
 #define LPUART1_RX_Pin GPIO_PIN_3
 #define LPUART1_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+#define Teclado_Lin4_Pin GPIO_PIN_11
+#define Teclado_Lin4_GPIO_Port GPIOB
+#define Teclado_Lin4_EXTI_IRQn EXTI15_10_IRQn
+#define Teclado_Lin3_Pin GPIO_PIN_12
+#define Teclado_Lin3_GPIO_Port GPIOB
+#define Teclado_Lin3_EXTI_IRQn EXTI15_10_IRQn
+#define Teclado_Lin2_Pin GPIO_PIN_13
+#define Teclado_Lin2_GPIO_Port GPIOB
+#define Teclado_Lin2_EXTI_IRQn EXTI15_10_IRQn
+#define Teclado_Lin1_Pin GPIO_PIN_15
+#define Teclado_Lin1_GPIO_Port GPIOB
+#define Teclado_Lin1_EXTI_IRQn EXTI15_10_IRQn
+#define Teclado_Col4_Pin GPIO_PIN_7
+#define Teclado_Col4_GPIO_Port GPIOC
+#define Teclado_Col3_Pin GPIO_PIN_8
+#define Teclado_Col3_GPIO_Port GPIOC
+#define Teclado_Col2_Pin GPIO_PIN_9
+#define Teclado_Col2_GPIO_Port GPIOC
+#define Teclado_Col1_Pin GPIO_PIN_10
+#define Teclado_Col1_GPIO_Port GPIOA
 #define T_SWDIO_Pin GPIO_PIN_13
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14
