@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "buttons.h"
 #include "led.h"
+#include "matrixKeyboard.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +47,7 @@ UART_HandleTypeDef hlpuart1;
 TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
+int teste = 0;
 
 /* USER CODE END PV */
 
@@ -69,6 +71,7 @@ static void MX_TIM6_Init(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -81,6 +84,7 @@ int main(void)
   /* USER CODE BEGIN Init */
   vLedInitLed ();
   vButtonsInitButtons();
+  vMatrixKeyboardInit();
 
   /* USER CODE END Init */
 
@@ -96,7 +100,7 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start_IT(&htim6);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,7 +108,9 @@ int main(void)
   while (1)
   {
 	void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
-
+		if(htim == htim6){
+			vMatrixKeyboardRead();
+		}
 	}
     /* USER CODE END WHILE */
 
