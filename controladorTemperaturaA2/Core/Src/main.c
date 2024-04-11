@@ -51,7 +51,7 @@
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
-xMatrixKeyboardState matrixKeyboardStruct;
+extern xMatrixKeyboardState matrixKeyboardStruct;
 
 /* USER CODE END PV */
 

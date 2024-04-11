@@ -1,9 +1,9 @@
-/*
- * matrixKeyboard.c
- *
- *  Created on: Apr 4, 2024
- *      Author: aluno
- */
+/* File name:        matrixKeyboard.c                                              */
+/* File description: arquivo para configuração do teclado matricial				   */
+/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini             */
+/* Creation date:    11abril2024                                                    */
+/* Revision date:    11abril2024                                                    */
+/* ******************************************************************************* */
 
 #include "matrixKeyboard.h"
 #include "main.h"
@@ -13,6 +13,20 @@ xMatrixKeyboardState matrixKeyboardStruct;
 
 xMatrixKeyboardTime matrixKeyboardTimerStruct;
 
+GPIO_TypeDef* col_ports[4] = {GPIOA, GPIOB, GPIOC, GPIOD};
+GPIO_TypeDef* lin_ports[4] = {GPIOA, GPIOB, GPIOC, GPIOD};
+GPIO_PinState col_pins[4] = {GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET};
+GPIO_PinState lin_pins[4] = {GPIO_PIN_SET, GPIO_PIN_SET, GPIO_PIN_SET, GPIO_PIN_SET};
+
+/* ************************************************ */
+/* Method name: 	      vMatrixKeyboardInit    	*/
+/*													*/
+/* Method description: inicializa o teclado     	 */
+/*													*/
+/* Input params:	   n/a							*/
+/*													*/
+/* Output params:	   n/a 							*/
+/* ************************************************ */
 void vMatrixKeyboardInit(){
 	HAL_TIM_Base_Start_IT(&htim6);
 
@@ -93,10 +107,21 @@ void vMatrixKeyboardInit(){
 // Initialize the keyboard state
 xMatrixKeyboardState xKeyboardState = {0}; // Initialize all members to 0
 
+
+/* ************************************************ */
+/* Method name: 	   vMatrixKeyboardRead      	*/
+/*													*/
+/* Method description: Lê o teclado                 */
+/*													*/
+/* Input params:	   n/a							*/
+/*													*/
+/* Output params:	   n/a 							*/
+/* ************************************************ */
 void vMatrixKeyboardRead() {
     // Number of column
     int i = 0;
 	// Turn on column
+
 	HAL_GPIO_WritePin(col_ports[i], col_pins[i], GPIO_PIN_SET);
 
 	// Check lines
@@ -182,6 +207,16 @@ void vMatrixKeyboardRead() {
 	i++;
 }
 
+
+/* ************************************************ */
+/* Method name: 	   vMatrixKeyboardEvent      	*/
+/*													*/
+/* Method description:          */
+/*													*/
+/* Input params:	   n/a							*/
+/*													*/
+/* Output params:	   n/a 							*/
+/* ************************************************ */
 void vMatrixKeyboardEvent(){
 
 	//Botão 1:
@@ -539,14 +574,23 @@ void vMatrixKeyboardEvent(){
 
 }
 
-__weak vMatrixKeyboardHalfSecPressedCallback (char cButton){
-	//não será implementado aqui.
+__weak void vMatrixKeyboardHalfSecPressedCallback (char cButton) {
+    // Function implementation
 }
 
-__weak vMatrixKeyboardThreeSecPressedCallback (char cButton){
-	//não será implementado aqui.
+__weak void vMatrixKeyboardThreeSecPressedCallback (char cButton) {
+    // Function implementation
 }
 
+/* ************************************************ */
+/* Method name: 	   cMatrixKeyboardGetNumber    	*/
+/*													*/
+/* Method description:         */
+/*													*/
+/* Input params:	   n/a							*/
+/*													*/
+/* Output params:	   n/a 							*/
+/* ************************************************ */
 char cMatrixKeyboardGetNumber(xMatrixKeyboardState mStruct){
 	if (mStruct.cNumberZero == 1)
 	{
@@ -612,4 +656,7 @@ char cMatrixKeyboardGetNumber(xMatrixKeyboardState mStruct){
 	{
 	  return 15;
 	}
+
+	return -1;
 }
+

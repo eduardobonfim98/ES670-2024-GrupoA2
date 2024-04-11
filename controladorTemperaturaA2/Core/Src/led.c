@@ -148,6 +148,14 @@ void vLedToggleLed (char cLedNum)
 
 }
 
+// ******************************************************** //
+// Method name:         vLedShowNumber                       //
+// Method description:    									//
+//                                                          //
+// Input params:                                  		 //
+//                                                          //
+// Output params:       n/a                                 //
+// ******************************************************** //
 void vLedShowNumber(char button){
 	int i;
 	for (i = 0; i < 4; i++){
