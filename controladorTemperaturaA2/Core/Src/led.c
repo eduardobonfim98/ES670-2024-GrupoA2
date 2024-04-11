@@ -149,10 +149,11 @@ void vLedToggleLed (char cLedNum)
 }
 
 // ******************************************************** //
-// Method name:         vLedShowNumber                       //
-// Method description:    									//
+// Method name:         vLedShowNumber                      //
+// Method description:     Esta funcao exibe                //
+//                        um numero pelo LED				//
 //                                                          //
-// Input params:                                  		 //
+// Input params:     char                             		//
 //                                                          //
 // Output params:       n/a                                 //
 // ******************************************************** //

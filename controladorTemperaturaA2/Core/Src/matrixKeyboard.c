@@ -13,6 +13,8 @@ xMatrixKeyboardState matrixKeyboardStruct;
 
 xMatrixKeyboardTime matrixKeyboardTimerStruct;
 
+int i = 0;
+
 GPIO_TypeDef* col_ports[4] = {GPIOA, GPIOB, GPIOC, GPIOD};
 GPIO_TypeDef* lin_ports[4] = {GPIOA, GPIOB, GPIOC, GPIOD};
 GPIO_PinState col_pins[4] = {GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET};
@@ -118,8 +120,6 @@ xMatrixKeyboardState xKeyboardState = {0}; // Initialize all members to 0
 /* Output params:	   n/a 							*/
 /* ************************************************ */
 void vMatrixKeyboardRead() {
-    // Number of column
-    int i = 0;
 	// Turn on column
 
 	HAL_GPIO_WritePin(col_ports[i], col_pins[i], GPIO_PIN_SET);
