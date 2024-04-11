@@ -57,12 +57,27 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define BT_Cima_Pin GPIO_PIN_1
+#define BT_Cima_GPIO_Port GPIOC
+#define BT_Cima_EXTI_IRQn EXTI1_IRQn
+#define BT_Baixo_Pin GPIO_PIN_2
+#define BT_Baixo_GPIO_Port GPIOC
+#define BT_Baixo_EXTI_IRQn EXTI2_IRQn
+#define BT_Esquerda_Pin GPIO_PIN_3
+#define BT_Esquerda_GPIO_Port GPIOC
+#define BT_Esquerda_EXTI_IRQn EXTI3_IRQn
 #define LPUART1_TX_Pin GPIO_PIN_2
 #define LPUART1_TX_GPIO_Port GPIOA
 #define LPUART1_RX_Pin GPIO_PIN_3
 #define LPUART1_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+#define BT_Direita_Pin GPIO_PIN_4
+#define BT_Direita_GPIO_Port GPIOC
+#define BT_Direita_EXTI_IRQn EXTI4_IRQn
+#define BT_Enter_Pin GPIO_PIN_0
+#define BT_Enter_GPIO_Port GPIOB
+#define BT_Enter_EXTI_IRQn EXTI0_IRQn
 #define Teclado_Lin4_Pin GPIO_PIN_11
 #define Teclado_Lin4_GPIO_Port GPIOB
 #define Teclado_Lin4_EXTI_IRQn EXTI15_10_IRQn

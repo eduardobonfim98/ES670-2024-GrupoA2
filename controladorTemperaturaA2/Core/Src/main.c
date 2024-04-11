@@ -18,6 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
+#include "tim.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,23 +42,21 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef hlpuart1;
-
-TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
-int teste = 0;
+char cWhatButton;
+char cNumber = 0;
+char cNumber500ms = 0;
+xMatrixKeyboardState matrixKeyboardStruct;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_LPUART1_UART_Init(void);
-static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -99,6 +100,7 @@ int main(void)
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
   MX_TIM6_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -107,11 +109,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
-		if(htim == htim6){
-			vMatrixKeyboardRead();
-		}
-	}
+	 cNumber = cMatrixKeyboardGetNumber(matrixKeyboardStruct);
+	 vLedShowNumber(cNumber);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -165,144 +164,55 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief LPUART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPUART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN LPUART1_Init 0 */
-
-  /* USER CODE END LPUART1_Init 0 */
-
-  /* USER CODE BEGIN LPUART1_Init 1 */
-
-  /* USER CODE END LPUART1_Init 1 */
-  hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 115200;
-  hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
-  hlpuart1.Init.StopBits = UART_STOPBITS_1;
-  hlpuart1.Init.Parity = UART_PARITY_NONE;
-  hlpuart1.Init.Mode = UART_MODE_TX_RX;
-  hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  hlpuart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetTxFifoThreshold(&hlpuart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetRxFifoThreshold(&hlpuart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_DisableFifoMode(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN LPUART1_Init 2 */
-
-  /* USER CODE END LPUART1_Init 2 */
-
-}
-
-/**
-  * @brief TIM6 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM6_Init(void)
-{
-
-  /* USER CODE BEGIN TIM6_Init 0 */
-
-  /* USER CODE END TIM6_Init 0 */
-
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM6_Init 1 */
-
-  /* USER CODE END TIM6_Init 1 */
-  htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 170-1;
-  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 9999;
-  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM6_Init 2 */
-
-  /* USER CODE END TIM6_Init 2 */
-
-}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LD2_Pin|Teclado_Col1_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, Teclado_Col4_Pin|Teclado_Col3_Pin|Teclado_Col2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : LD2_Pin Teclado_Col1_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin|Teclado_Col1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : Teclado_Lin4_Pin Teclado_Lin3_Pin Teclado_Lin2_Pin Teclado_Lin1_Pin */
-  GPIO_InitStruct.Pin = Teclado_Lin4_Pin|Teclado_Lin3_Pin|Teclado_Lin2_Pin|Teclado_Lin1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : Teclado_Col4_Pin Teclado_Col3_Pin Teclado_Col2_Pin */
-  GPIO_InitStruct.Pin = Teclado_Col4_Pin|Teclado_Col3_Pin|Teclado_Col2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
-}
-
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	switch(GPIO_Pin){
 
+		case BT_Cima_Pin:
+			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(&htim7);
+			cWhatButton = 1;
+		break;
+		case BT_Baixo_Pin:
+			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(&htim7);
+			cWhatButton = 2;
+		break;
+		case BT_Esquerda_Pin:
+			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(&htim7);
+			cWhatButton = 3;
+		break;
+		case BT_Direita_Pin:
+			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(&htim7);
+			cWhatButton = 4;
+		break;
+		case BT_Enter_Pin:
+			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(&htim7);
+			cWhatButton = 5;
+		break;
+		}
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
+	if(htim == &htim6){
+		vMatrixKeyboardRead();
+	}
+}
+
+void vMatrixKeyboardHalfSecPressedCallback (char cButton){
+	cNumber500ms += cButton;
+	if(cNumber500ms >= 16){
+		cNumber500ms = 0;
+	}
+	vLedShowNumber(cNumber500ms);
+}
+
+void vMatrixKeyboardThreeSecPressedCallback (char cButton){
+	vLedToggleLed(5);
+}
 /* USER CODE END 4 */
 
 /**
