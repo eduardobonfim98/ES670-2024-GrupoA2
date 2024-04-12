@@ -84,7 +84,7 @@ typedef struct
 
 void vMatrixKeyboardInit();
 
-xMatrixKeyboardState pMatrixKeyboardGetKeys();
+xMatrixKeyboardState* pMatrixKeyboardGetKeys();
 
 void vMatrixKeyboardRead();
 

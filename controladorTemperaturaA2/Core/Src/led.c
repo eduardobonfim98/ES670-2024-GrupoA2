@@ -161,6 +161,6 @@ void vLedShowNumber(char button){
 	int i;
 	for (i = 0; i < 4; i++){
 		int bit = BIT_CHECK(button, i);
-		vLedWriteLed(i, bit);
+		vLedWriteLed(i+1, bit);
 	}
 }

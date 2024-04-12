@@ -51,7 +51,7 @@
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
-extern xMatrixKeyboardState matrixKeyboardStruct;
+xMatrixKeyboardState Teclado;
 
 /* USER CODE END PV */
 
@@ -83,9 +83,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  vLedInitLed ();
-  vButtonsInitButtons();
-  vMatrixKeyboardInit();
+
 
   /* USER CODE END Init */
 
@@ -102,14 +100,17 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-
+  vLedInitLed ();
+  vButtonsInitButtons();
+  vMatrixKeyboardInit();
+  xMatrixKeyboardState* teclado = pMatrixKeyboardGetKeys();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	 cNumber = cMatrixKeyboardGetNumber(matrixKeyboardStruct);
+	 cNumber = cMatrixKeyboardGetNumber(*teclado);
 	 vLedShowNumber(cNumber);
     /* USER CODE END WHILE */
 
