@@ -120,8 +120,6 @@ xMatrixKeyboardState xKeyboardState = {0}; // Initialize all members to 0
 
 void vMatrixKeyboardRead(){
 
-  // aux to search witch line is up
-
   // switch the column to turn on and analyze
 
   switch (iColumn){
@@ -179,7 +177,7 @@ void vMatrixKeyboardRead(){
 
     	HAL_GPIO_WritePin(Teclado_Col2_GPIO_Port, Teclado_Col2_Pin, 1);
 		if(HAL_GPIO_ReadPin(Teclado_Lin1_GPIO_Port, Teclado_Lin1_Pin) == 1){
-		  // Column 1 and Line 1 up
+		  // Column 2 and Line 1 up
 		  matrixKeyboardStruct.cNumberTwo = 1;
 		  matrixKeyboardStruct.cNumberFive = 0;
 		  matrixKeyboardStruct.cNumberEight = 0;
@@ -187,7 +185,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin2_GPIO_Port, Teclado_Lin2_Pin) == 1){
 
-		  // Column 1 and Line 2 up
+		  // Column 2 and Line 2 up
 
 		  matrixKeyboardStruct.cNumberTwo = 0;
 		  matrixKeyboardStruct.cNumberFive = 1;
@@ -196,7 +194,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin3_GPIO_Port, Teclado_Lin3_Pin) == 1){
 
-		  // Column 1 and Line 3 up
+		  // Column 2 and Line 3 up
 
 		  matrixKeyboardStruct.cNumberTwo = 0;
 		  matrixKeyboardStruct.cNumberFive = 0;
@@ -205,7 +203,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin4_GPIO_Port, Teclado_Lin4_Pin) == 1){
 
-		  // Column 1 and Line 4 up
+		  // Column 2 and Line 4 up
 
 		  matrixKeyboardStruct.cNumberTwo = 0;
 		  matrixKeyboardStruct.cNumberFive = 0;
@@ -213,7 +211,7 @@ void vMatrixKeyboardRead(){
 		  matrixKeyboardStruct.cNumberZero = 1;
 
 		}else{
-		  // No line up at Column 1
+		  // No line up at Column 2
 			matrixKeyboardStruct.cNumberTwo = 0;
 			matrixKeyboardStruct.cNumberFive = 0;
 			matrixKeyboardStruct.cNumberEight = 0;
@@ -227,7 +225,7 @@ void vMatrixKeyboardRead(){
       // turn on column
 		HAL_GPIO_WritePin(Teclado_Col3_GPIO_Port, Teclado_Col3_Pin, 1);
 		if(HAL_GPIO_ReadPin(Teclado_Lin1_GPIO_Port, Teclado_Lin1_Pin) == 1){
-		  // Column 1 and Line 1 up
+		  // Column 3 and Line 1 up
 		  matrixKeyboardStruct.cNumberThree = 1;
 		  matrixKeyboardStruct.cNumberSix = 0;
 		  matrixKeyboardStruct.cNumberNine = 0;
@@ -235,7 +233,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin2_GPIO_Port, Teclado_Lin2_Pin) == 1){
 
-		  // Column 1 and Line 2 up
+		  // Column 3 and Line 2 up
 
 		  matrixKeyboardStruct.cNumberThree = 0;
 		  matrixKeyboardStruct.cNumberSix = 1;
@@ -244,7 +242,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin3_GPIO_Port, Teclado_Lin3_Pin) == 1){
 
-		  // Column 1 and Line 3 up
+		  // Column 3 and Line 3 up
 
 		  matrixKeyboardStruct.cNumberThree = 0;
 		  matrixKeyboardStruct.cNumberSix = 0;
@@ -253,7 +251,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin4_GPIO_Port, Teclado_Lin4_Pin) == 1){
 
-		  // Column 1 and Line 4 up
+		  // Column 3 and Line 4 up
 
 		  matrixKeyboardStruct.cNumberThree = 0;
 		  matrixKeyboardStruct.cNumberSix = 0;
@@ -261,7 +259,7 @@ void vMatrixKeyboardRead(){
 		  matrixKeyboardStruct.cSpecialCharacterHashtag = 1;
 
 		}else{
-		  // No line up at Column 1
+		  // No line up at Column 3
 			matrixKeyboardStruct.cNumberThree = 0;
 			matrixKeyboardStruct.cNumberSix = 0;
 			matrixKeyboardStruct.cNumberNine = 0;
@@ -276,7 +274,7 @@ void vMatrixKeyboardRead(){
       // turn on column
     	HAL_GPIO_WritePin(Teclado_Col4_GPIO_Port, Teclado_Col4_Pin, 1);
 		if(HAL_GPIO_ReadPin(Teclado_Lin1_GPIO_Port, Teclado_Lin1_Pin) == 1){
-		  // Column 1 and Line 1 up
+		  // Column 4 and Line 1 up
 		  matrixKeyboardStruct.cLetterA = 1;
 		  matrixKeyboardStruct.cLetterB = 0;
 		  matrixKeyboardStruct.cLetterC = 0;
@@ -284,7 +282,7 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin2_GPIO_Port, Teclado_Lin2_Pin) == 1){
 
-		  // Column 1 and Line 2 up
+		  // Column 4 and Line 2 up
 
 		  matrixKeyboardStruct.cLetterA = 0;
 		  matrixKeyboardStruct.cLetterB = 1;
@@ -293,13 +291,24 @@ void vMatrixKeyboardRead(){
 
 		}else if(HAL_GPIO_ReadPin(Teclado_Lin3_GPIO_Port, Teclado_Lin3_Pin) == 1){
 
-		  // Column 1 and Line 3 up
+		  // Column 4 and Line 3 up
 
 		  matrixKeyboardStruct.cLetterA = 0;
 		  matrixKeyboardStruct.cLetterB = 0;
 		  matrixKeyboardStruct.cLetterC = 1;
+		  matrixKeyboardStruct.cLetterD = 0;
 
-		  // No line up at Column 1
+		}else if(HAL_GPIO_ReadPin(Teclado_Lin4_GPIO_Port, Teclado_Lin4_Pin) == 1){
+
+		  // Column 4 and Line 4 up
+
+		  matrixKeyboardStruct.cLetterA = 0;
+		  matrixKeyboardStruct.cLetterB = 0;
+		  matrixKeyboardStruct.cLetterC = 0;
+		  matrixKeyboardStruct.cLetterD = 1;
+
+		}else{
+		  // No line up at Column 4
 			matrixKeyboardStruct.cLetterA = 0;
 			matrixKeyboardStruct.cLetterB = 0;
 			matrixKeyboardStruct.cLetterC = 0;
