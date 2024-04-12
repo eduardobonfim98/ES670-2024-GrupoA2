@@ -13,7 +13,7 @@ xMatrixKeyboardState matrixKeyboardStruct;
 
 xMatrixKeyboardTime matrixKeyboardTimerStruct;
 
-int iColumn = 0;
+int iColumn = 1;
 
 
 
@@ -298,18 +298,7 @@ void vMatrixKeyboardRead(){
 		  matrixKeyboardStruct.cLetterA = 0;
 		  matrixKeyboardStruct.cLetterB = 0;
 		  matrixKeyboardStruct.cLetterC = 1;
-		  matrixKeyboardStruct.cLetterD = 0;
 
-		}else if(HAL_GPIO_ReadPin(Teclado_Lin4_GPIO_Port, Teclado_Lin4_Pin) == 1){
-
-		  // Column 1 and Line 4 up
-
-		  matrixKeyboardStruct.cLetterA = 0;
-		  matrixKeyboardStruct.cLetterB = 0;
-		  matrixKeyboardStruct.cLetterC = 0;
-		  matrixKeyboardStruct.cLetterD = 1;
-
-		}else{
 		  // No line up at Column 1
 			matrixKeyboardStruct.cLetterA = 0;
 			matrixKeyboardStruct.cLetterB = 0;
