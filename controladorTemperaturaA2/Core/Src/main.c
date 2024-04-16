@@ -27,6 +27,7 @@
 #include "buttons.h"
 #include "led.h"
 #include "matrixKeyboard.h"
+#include "buttonsEvents.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,6 +53,18 @@ char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
 xMatrixKeyboardState Teclado;
+
+extern TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
+
+//flags dos botões apertados
+char cUpFlag = 0;
+char cDownFlag = 0;
+char cLeftFlag = 0;
+char cRightFlag = 0;
+char cEnterFlag = 0;
+
+//flag que indica se o timer dos botões está ativo
+char cLongPressFlag = 0;
 
 /* USER CODE END PV */
 
@@ -99,11 +112,13 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_TIM6_Init();
   MX_TIM7_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
   vLedInitLed ();
   vButtonsInitButtons();
   vMatrixKeyboardInit();
   xMatrixKeyboardState* teclado = pMatrixKeyboardGetKeys();
+  vButtonsEventsInit(&htim7, &htim16);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -167,40 +182,50 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	pTimDebouncerPointer->Instance->CNT = 0;
+	if (!cLongPressFlag){
+		HAL_TIM_Base_Start_IT(pTimPressedTimePointer);
+		cLongPressFlag = 1;
+	}
 	switch(GPIO_Pin){
 
 		case BT_Cima_Pin:
 			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(&htim7);
-			cWhatButton = 1;
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cUpFlag = 1;
 		break;
 		case BT_Baixo_Pin:
 			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(&htim7);
-			cWhatButton = 2;
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cDownFlag = 1;
 		break;
 		case BT_Esquerda_Pin:
 			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(&htim7);
-			cWhatButton = 3;
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cLeftFlag = 1;
 		break;
 		case BT_Direita_Pin:
 			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(&htim7);
-			cWhatButton = 4;
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cRightFlag = 1;
 		break;
 		case BT_Enter_Pin:
 			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(&htim7);
-			cWhatButton = 5;
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cEnterFlag = 1;
 		break;
 		}
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
-	if(htim == &htim6){
+	if(htim == &htim6)
 		vMatrixKeyboardRead();
-	}
+	else
+		if(htim == pTimDebouncerPointer)
+			timerButtonsEventsDebouncingPeriodElapsedCallback();
+		else
+			if (htim == pTimPressedTimePointer)
+				timerButtonsEventsLongPressPeriodElapsedCallback();
 }
 
 void vMatrixKeyboardHalfSecPressedCallback (char cButton){
@@ -213,6 +238,22 @@ void vMatrixKeyboardHalfSecPressedCallback (char cButton){
 
 void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 	vLedToggleLed(5);
+}
+
+void vButtonsEventCallbackPressedEvent(char cBt){
+	vLedWriteLed(1, 1);
+}
+
+void vButtonsEventCallbackReleasedEvent(char cBt){
+	vLedWriteLed(1, 0);
+}
+
+void vButtonsEventCallback500msPressedEvent(char cBt){
+	vLedToggleLed(2);
+}
+
+void vButtonsEventCallback3sPressedEvent(char cBt){
+	vLedWriteLed(5, 1);
 }
 /* USER CODE END 4 */
 
