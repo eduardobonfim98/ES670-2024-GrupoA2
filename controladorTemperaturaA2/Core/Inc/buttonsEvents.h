@@ -17,5 +17,13 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback();
 
 void timerButtonsEventsLongPressPeriodElapsedCallback();
 
+void vButtonsEventCallbackPressedEvent(char cBt);
+
+void vButtonsEventCallbackReleasedEvent(char cBt);
+
+void vButtonsEventCallback500msPressedEvent(char cBt);
+
+void vButtonsEventCallback3sPressedEvent(char cBt);
+
 #endif /* INC_BUTTONSEVENTS_H_ */
 

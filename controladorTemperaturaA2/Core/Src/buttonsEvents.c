@@ -6,9 +6,10 @@
  */
 #include "buttons.h"
 #include "buttonsEvents.h"
+#include "led.h"
 #include "main.h"
 
-TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
+extern TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
 
 extern char cWhatButton;
 
@@ -62,9 +63,9 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 		HAL_NVIC_EnableIRQ(BT_Esquerda_EXTI_IRQn);
 
 		if(HAL_GPIO_ReadPin(BT_Esquerda_GPIO_Port, BT_Esquerda_Pin))
-			vButtonsEventCallbackPressedEvent(cWhatButton);
+			vButtonsEventCallbackPressedEvent(left);
 		else
-			vButtonsEventCallbackReleasedEvent(cWhatButton);
+			vButtonsEventCallbackReleasedEvent(left);
 	}
 	if (cRightFlag){
 		__HAL_GPIO_EXTI_CLEAR_IT(BT_Direita_Pin);

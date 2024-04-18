@@ -54,7 +54,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 xMatrixKeyboardState Teclado;
 
-extern TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
+TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
 
 //flags dos botões apertados
 char cUpFlag = 0;
@@ -125,8 +125,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	 cNumber = cMatrixKeyboardGetNumber(*teclado);
-	 vLedShowNumber(cNumber);
+	  //HAL_Delay(500);
+	  //HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+
+	 //cNumber = cMatrixKeyboardGetNumber(*teclado);
+	 //vLedShowNumber(cNumber);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -179,37 +182,44 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
+;
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+
 	pTimDebouncerPointer->Instance->CNT = 0;
 	if (!cLongPressFlag){
 		HAL_TIM_Base_Start_IT(pTimPressedTimePointer);
 		cLongPressFlag = 1;
 	}
+
 	switch(GPIO_Pin){
 
 		case BT_Cima_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(1);
 			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
 			cUpFlag = 1;
 		break;
 		case BT_Baixo_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(2);
 			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
 			cDownFlag = 1;
 		break;
 		case BT_Esquerda_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(3);
 			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
 			cLeftFlag = 1;
 		break;
 		case BT_Direita_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(4);
 			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
 			cRightFlag = 1;
 		break;
 		case BT_Enter_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(0);
 			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
 			cEnterFlag = 1;
@@ -241,11 +251,12 @@ void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 }
 
 void vButtonsEventCallbackPressedEvent(char cBt){
-	vLedWriteLed(1, 1);
+	vLedToggleLed(1);
+	cUpFlag = 0;
 }
 
 void vButtonsEventCallbackReleasedEvent(char cBt){
-	vLedWriteLed(1, 0);
+
 }
 
 void vButtonsEventCallback500msPressedEvent(char cBt){
