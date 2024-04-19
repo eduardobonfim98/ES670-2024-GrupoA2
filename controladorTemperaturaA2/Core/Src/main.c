@@ -66,6 +66,10 @@ char cEnterFlag = 0;
 //flag que indica se o timer dos botões está ativo
 char cLongPressFlag = 0;
 
+//valor do LED
+int iLedValue = 0;
+int iLedBinValue = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -125,11 +129,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //HAL_Delay(500);
-	  //HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 
-	 //cNumber = cMatrixKeyboardGetNumber(*teclado);
-	 //vLedShowNumber(cNumber);
+//	 cNumber = cMatrixKeyboardGetNumber(*teclado);
+//	 vLedShowNumber(cNumber);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -184,6 +186,7 @@ void SystemClock_Config(void)
 }
 ;
 /* USER CODE BEGIN 4 */
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
 	pTimDebouncerPointer->Instance->CNT = 0;
@@ -251,8 +254,13 @@ void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 }
 
 void vButtonsEventCallbackPressedEvent(char cBt){
-	vLedToggleLed(1);
-	cUpFlag = 0;
+	if (cBt == up){
+		iLedValue += 1;
+		vLedShowNumber(iLedValue);
+	}else if(cBt == down){
+		iLedValue -= 1;
+		vLedShowNumber(iLedValue);
+	}
 }
 
 void vButtonsEventCallbackReleasedEvent(char cBt){
@@ -260,11 +268,20 @@ void vButtonsEventCallbackReleasedEvent(char cBt){
 }
 
 void vButtonsEventCallback500msPressedEvent(char cBt){
-	vLedToggleLed(2);
+	if (cBt == up){
+		iLedValue += 1;
+		vLedShowNumber(iLedValue);
+	}else if(cBt == down){
+		iLedValue -= 1;
+		vLedShowNumber(iLedValue);
+	}
 }
 
 void vButtonsEventCallback3sPressedEvent(char cBt){
-	vLedWriteLed(5, 1);
+	if (cBt == enter){
+		iLedValue = 0;
+		vLedShowNumber(iLedBinValue);
+	}
 }
 /* USER CODE END 4 */
 

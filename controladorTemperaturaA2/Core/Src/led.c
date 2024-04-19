@@ -47,7 +47,7 @@ void vLedInitLed ()
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedWriteLed (char cLedNum, int iLedWrite)
-{
+ {
 	if (iLedWrite == 1)
 	{
 		vLedOnLed(cLedNum);
@@ -157,10 +157,11 @@ void vLedToggleLed (char cLedNum)
 //                                                          //
 // Output params:       n/a                                 //
 // ******************************************************** //
-void vLedShowNumber(char button){
-	int i;
-	for (i = 0; i < 4; i++){
-		int bit = BIT_CHECK(button, i);
-		vLedWriteLed(i+1, bit);
-	}
+void vLedShowNumber(int number) {
+    // Set each LED based on the corresponding bit in 'number'
+    vLedWriteLed(green1, number & 0x01); // bit 0
+    vLedWriteLed(yellow, (number >> 1) & 0x01); // bit 1
+    vLedWriteLed(red, (number >> 2) & 0x01); // bit 2
+    vLedWriteLed(green2, (number >> 3) & 0x01); // bit 3
+    vLedWriteLed(blue, (number >> 4) & 0x01); // bit 4
 }
