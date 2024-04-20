@@ -49,9 +49,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+unsigned char c;
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
+unsigned char c;
 xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
@@ -127,15 +129,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Receive_IT(&hlpuart1, &c, 1);
   while (1)
   {
-
-//	 cNumber = cMatrixKeyboardGetNumber(*teclado);
-//	 vLedShowNumber(cNumber);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
   }
+
   /* USER CODE END 3 */
 }
 
@@ -184,8 +186,17 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-;
+
 /* USER CODE BEGIN 4 */
+
+void HAL_UART_RxCpltCallback (UART_HandleTypeDef * huart)
+{
+	  if (huart == &hlpuart1)
+	  {
+		  HAL_UART_Transmit_IT(&hlpuart1, &c, 1);
+		  HAL_UART_Receive_IT(&hlpuart1, &c, 1);
+	  }
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
