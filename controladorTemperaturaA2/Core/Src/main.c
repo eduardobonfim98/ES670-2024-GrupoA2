@@ -188,13 +188,14 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-
+	//zera o timer do debouncing para ser acionado novamente
 	pTimDebouncerPointer->Instance->CNT = 0;
+	//checagem da flag do botão pressionado por Long Press e inicialização do timer do Long Press
 	if (!cLongPressFlag){
 		HAL_TIM_Base_Start_IT(pTimPressedTimePointer);
 		cLongPressFlag = 1;
 	}
-
+	//checagem do botã pressionado, limpeza da flag da EXTI e inicialização do timer do debouncing
 	switch(GPIO_Pin){
 
 		case BT_Cima_Pin:
@@ -254,9 +255,12 @@ void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 }
 
 void vButtonsEventCallbackPressedEvent(char cBt){
+
+	//Incrementa o valor e representa pelos LEDs se o botão pressionado for up
 	if (cBt == up){
 		iLedValue += 1;
 		vLedShowNumber(iLedValue);
+	//Decrementa o valor e representa pelos LEDs se o botão pressionado for down
 	}else if(cBt == down){
 		iLedValue -= 1;
 		vLedShowNumber(iLedValue);
@@ -268,9 +272,11 @@ void vButtonsEventCallbackReleasedEvent(char cBt){
 }
 
 void vButtonsEventCallback500msPressedEvent(char cBt){
+	//Incrementa o valor e representa pelos LEDs se o botão pressionado for up
 	if (cBt == up){
 		iLedValue += 1;
 		vLedShowNumber(iLedValue);
+	//Decrementa o valor e representa pelos LEDs se o botão pressionado for down
 	}else if(cBt == down){
 		iLedValue -= 1;
 		vLedShowNumber(iLedValue);
@@ -278,6 +284,7 @@ void vButtonsEventCallback500msPressedEvent(char cBt){
 }
 
 void vButtonsEventCallback3sPressedEvent(char cBt){
+	//Se o botão pressionado for enter, zera o valor e representa pelos LEDs
 	if (cBt == enter){
 		iLedValue = 0;
 		vLedShowNumber(iLedBinValue);

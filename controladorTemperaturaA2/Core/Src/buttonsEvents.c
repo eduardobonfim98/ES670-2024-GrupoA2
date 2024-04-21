@@ -89,6 +89,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 }
 
 void timerButtonsEventsLongPressPeriodElapsedCallback(){
+	//Checagem de qual botão está pressionado e incremento da contagem de tempo pressionado.
 	if(HAL_GPIO_ReadPin(BT_Cima_GPIO_Port, BT_Cima_Pin)){
 		iBTCimaPressedTime += 10;
 	}else{
@@ -119,6 +120,7 @@ void timerButtonsEventsLongPressPeriodElapsedCallback(){
 		cLongPressFlag = 0;
 	}
 
+	//Checagem de eventos de 500ms
 	if((iBTCimaPressedTime % 500 == 0)&&(iBTCimaPressedTime != 0)){
 		vButtonsEventCallback500msPressedEvent(up);
 	}
@@ -135,6 +137,7 @@ void timerButtonsEventsLongPressPeriodElapsedCallback(){
 		vButtonsEventCallback500msPressedEvent(enter);
 	}
 
+	//Checagem de eventos de 3000ms
 	if(iBTCimaPressedTime == 3000){
 		vButtonsEventCallback3sPressedEvent(up);
 	}
