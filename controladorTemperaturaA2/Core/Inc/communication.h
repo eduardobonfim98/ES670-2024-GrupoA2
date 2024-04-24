@@ -1,12 +1,12 @@
-#ifndef __COMMUNICATION_H__
-#define __COMMUNICATION_H__
+#ifndef COMMUNICATION_H
+#define COMMUNICATION_H
 
 #include "stm32g4xx_hal.h" // Ensure you include the appropriate HAL library header for STM32G4 series.
 
 // Global variables used for UART communication
 extern UART_HandleTypeDef *pCommunicationHuart;
 extern char c;
-extern char cNumber[12];
+extern char inputBuffer[12];
 extern int iLenNumber;
 extern int iCountCommas;
 
@@ -23,6 +23,6 @@ void vCommunicationCheckChar();
 void vCommunicationProcessInput();
 
 // Function to send formatted string through UART
-void vCommunicationTransmit(UART_HandleTypeDef *huart, unsigned char *t);
+void vCommunicationTransmit(UART_HandleTypeDef *huart, const unsigned char *t);
 
-#endif // __COMMUNICATION_H__
+#endif // COMMUNICATION_H

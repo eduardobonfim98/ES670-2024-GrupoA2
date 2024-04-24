@@ -1,7 +1,6 @@
 // **************************************************** //
 // File name:         communication.c                   //
 // File description:                                    //
-//                    uma mensagem de erro.             //
 // Author name:       [Seu Nome]                        //
 // Creation date:     20apr2023                         //
 // Revision date:     27apr2023                         //
@@ -15,7 +14,7 @@
 
 UART_HandleTypeDef *pCommunicationHuart;
 char c;
-char cNumber[12];
+char inputBuffer[12] = {0}; // Changed variable name and added initialization
 int iLenNumber = 0;
 int iCountCommas = 0;
 
@@ -23,7 +22,7 @@ int iCountCommas = 0;
 void vCommunicationInitCommunication(UART_HandleTypeDef *huart)
 {
     pCommunicationHuart = huart;
-    memset(cNumber, 0, sizeof(cNumber));
+    memset(inputBuffer, 0, sizeof(inputBuffer));
     iLenNumber = 0;
     iCountCommas = 0;
     HAL_UART_Receive_IT(huart, (uint8_t *)&c, 1);
@@ -46,14 +45,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 // Verifica e processa cada caractere recebido através da UART.
 void vCommunicationCheckChar()
 {
-	if (c == ',' && iCountCommas == 0 && iLenNumber <= 4) { // Apenas uma vírgula permitida
-		iCountCommas++;
-		cNumber[iLenNumber++] = c; // Colocar vírgula no buffer
-	} else if ((c >= '0' && c <= '9') && (iLenNumber < (iCountCommas ? 8 : 4))) { // Limita tamanho antes/depois da vírgula
-		cNumber[iLenNumber++] = c; // Colocar dígito no buffer
-	} else if (c == '-' && iLenNumber == 0) { // Sinal de menos apenas no início
-		cNumber[iLenNumber++] = c;
-	}
+    if (c == ',' && iCountCommas == 0 && iLenNumber <= 4) { // Apenas uma vírgula permitida
+        iCountCommas++;
+        inputBuffer[iLenNumber++] = c; // Colocar vírgula no buffer
+    } else if ((c >= '0' && c <= '9') && (iLenNumber < (iCountCommas ? 8 : 4))) { // Limita tamanho antes/depois da vírgula
+        inputBuffer[iLenNumber++] = c; // Colocar dígito no buffer
+    } else if (c == '-' && iLenNumber == 0) { // Sinal de menos apenas no início
+        inputBuffer[iLenNumber++] = c;
+    }
 }
 
 // Processa a entrada completa armazenada no buffer.
@@ -61,10 +60,10 @@ void vCommunicationProcessInput()
 {
     // Substituir vírgula por ponto para conversão
     for (int i = 0; i < iLenNumber; i++) {
-        if (cNumber[i] == ',') cNumber[i] = '.';
+        if (inputBuffer[i] == ',') inputBuffer[i] = '.';
     }
 
-    float fNumber = atof(cNumber);
+    float fNumber = atof(inputBuffer);
     char cTransmit[100];
 
     if (fNumber < -1000 || fNumber > 1000) {
@@ -74,13 +73,13 @@ void vCommunicationProcessInput()
     }
 
     HAL_UART_Transmit_IT(pCommunicationHuart, (uint8_t *)cTransmit, strlen(cTransmit));
-    memset(cNumber, 0, sizeof(cNumber));
+    memset(inputBuffer, 0, sizeof(inputBuffer));
     iLenNumber = 0;
     iCountCommas = 0;
 }
 
 // Envia uma string formatada através da UART.
-void vCommunicationTransmit(UART_HandleTypeDef *huart, unsigned char *t)
+void vCommunicationTransmit(UART_HandleTypeDef *huart, const unsigned char *t)
 {
-    HAL_UART_Transmit_IT(huart, t, strlen(t));
+    HAL_UART_Transmit_IT(huart, (uint8_t *)t, strlen((const char *)t));
 }
