@@ -119,6 +119,7 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
+  vCommunicationInitCommunication();
   vLedInitLed ();
   vButtonsInitButtons();
   vMatrixKeyboardInit();
@@ -128,7 +129,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_UART_Receive_IT(&hlpuart1, &cc, 1);
+  /*HAL_UART_Receive_IT(&hlpuart1, &cc, 1);*/
   while (1)
   {
     /* USER CODE END WHILE */

@@ -1,10 +1,9 @@
-// **************************************************** //
-// File name:         communication.c                   //
-// File description:                                    //
-// Author name:       [Seu Nome]                        //
-// Creation date:     20apr2023                         //
-// Revision date:     27apr2023                         //
-// **************************************************** //
+/* File name:        communication.c                                              */
+/* File description: arquivo para configuração da comunicacao UART				   */
+/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini             */
+/* Creation date:    24abril2024                                                    */
+/* Revision date:    24abril2024                                                    */
+/* ******************************************************************************* */
 
 #include "communication.h"
 #include "main.h"
@@ -14,11 +13,18 @@
 
 extern UART_HandleTypeDef hlpuart1; // Assuming hlpuart1 is initialized elsewhere
 char c;
-char inputBuffer[12] = {0};
+char inputBuffer[12] = {0}; // 4 digitos pro numero, 3 pra casa decimal, 1 pra sinal de negativo
+//1 pra virgula
 int iLenNumber = 0;
 int iCountCommas = 0;
 
-// Initializes UART communication to receive data via interrupts.
+// **************************************************** //
+// Nome da função:         vCommunicationInitCommunication
+// Descrição da função:    Inicializa a comunicação UART para
+//                         receber dados via interrupções.
+// Parâmetros de entrada:  n/a
+// Parâmetros de saída:    n/a
+// **************************************************** //
 void vCommunicationInitCommunication(void)
 {
     memset(inputBuffer, 0, sizeof(inputBuffer));
@@ -27,7 +33,13 @@ void vCommunicationInitCommunication(void)
     HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
 }
 
-// Callback automatically called when a UART data is received.
+// **************************************************** //
+// Nome da função:         HAL_UART_RxCpltCallback
+// Descrição da função:    Callback chamado automaticamente
+//                         quando dados UART são recebidos.
+// Parâmetros de entrada:  UART_HandleTypeDef *huart
+// Parâmetros de saída:    n/a
+// **************************************************** //
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart == &hlpuart1)
@@ -47,7 +59,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 
 
-// Verifies and processes each character received through UART.
+// **************************************************** //
+// Nome da função:         vCommunicationCheckChar
+// Descrição da função:    Verifica e processa cada caractere
+//                         recebido através da UART.
+// Parâmetros de entrada:  n/a
+// Parâmetros de saída:    n/a
+// **************************************************** //
 void vCommunicationCheckChar()
 {
     if (c == ',' && iCountCommas == 0 && iLenNumber <= 4) {
@@ -60,11 +78,17 @@ void vCommunicationCheckChar()
     }
 }
 
-// Processes the complete input stored in the buffer.
+// **************************************************** //
+// Nome da função:         vCommunicationProcessInput
+// Descrição da função:    Processa a entrada completa armazenada
+//                         no buffer.
+// Parâmetros de entrada:  n/a
+// Parâmetros de saída:    n/a
+// **************************************************** //
 void vCommunicationProcessInput()
 {
     for (int i = 0; i < iLenNumber; i++) {
-        if (inputBuffer[i] == ',') inputBuffer[i] = '.';
+        if (inputBuffer[i] == ',') inputBuffers[i] = '.';
     }
 
     float fNumber = atof(inputBuffer);
@@ -82,7 +106,13 @@ void vCommunicationProcessInput()
     iCountCommas = 0;
 }
 
-// Sends a formatted string through UART.
+// **************************************************** //
+// Nome da função:         vCommunicationProcessInput
+// Descrição da função:    Manda a string formatada
+//                         no buffer.
+// Parâmetros de entrada:  n/a
+// Parâmetros de saída:    n/a
+// **************************************************** //
 void vCommunicationTransmit(const unsigned char *t)
 {
     HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)t, strlen((const char *)t));
