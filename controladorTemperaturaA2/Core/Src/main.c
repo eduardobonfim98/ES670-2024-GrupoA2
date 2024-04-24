@@ -62,6 +62,7 @@ char cDownFlag = 0;
 char cLeftFlag = 0;
 char cRightFlag = 0;
 char cEnterFlag = 0;
+unsigned char cc;
 
 //flag que indica se o timer dos botões está ativo
 char cLongPressFlag = 0;
@@ -127,6 +128,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Receive_IT(&hlpuart1, &cc, 1);
   while (1)
   {
     /* USER CODE END WHILE */
