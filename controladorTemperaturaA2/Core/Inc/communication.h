@@ -1,9 +1,8 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
-#include "stm32g4xx_hal.h"  // Include the correct header for STM32G4 HAL
+#include "stm32g4xx_hal.h"
 
-// Global variable for the external UART handle declaration
 extern UART_HandleTypeDef hlpuart1;
 
 void vCommunicationInitCommunication(void);
