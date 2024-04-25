@@ -13,7 +13,7 @@
 
 extern UART_HandleTypeDef hlpuart1; // Assuming hlpuart1 is initialized elsewhere
 char c;
-char inputBuffer[12] = {0}; // 4 digitos pro numero, 3 pra casa decimal, 1 pra sinal de negativo
+char inputBuffer[18] = {0}; // 4 digitos pro numero, 3 pra casa decimal, 1 pra sinal de negativo
 //1 pra virgula
 int iLenNumber = 0;
 int iCountCommas = 0;
@@ -68,10 +68,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 // **************************************************** //
 void vCommunicationCheckChar()
 {
-    if (c == ',' && iCountCommas == 0 && iLenNumber <= 4) {
+    if (c == ',' && iCountCommas == 0) {
         iCountCommas++;
         inputBuffer[iLenNumber++] = c;
-    } else if ((c >= '0' && c <= '9') && (iLenNumber < (iCountCommas ? 8 : 4))) {
+    } else if ((c >= '0' && c <= '9')) {
         inputBuffer[iLenNumber++] = c;
     } else if (c == '-' && iLenNumber == 0) {
         inputBuffer[iLenNumber++] = c;
@@ -88,7 +88,7 @@ void vCommunicationCheckChar()
 void vCommunicationProcessInput()
 {
     for (int i = 0; i < iLenNumber; i++) {
-        if (inputBuffer[i] == ',') inputBuffers[i] = '.';
+        if (inputBuffer[i] == ',') inputBuffer[i] = '.';
     }
 
     float fNumber = atof(inputBuffer);
