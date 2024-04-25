@@ -6,7 +6,6 @@
 // Global variable for the external UART handle declaration
 extern UART_HandleTypeDef hlpuart1;
 
-// Function prototypes
 void vCommunicationInitCommunication(void);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void vCommunicationCheckChar(void);
