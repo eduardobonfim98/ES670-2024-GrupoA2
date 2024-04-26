@@ -52,6 +52,7 @@
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
+unsigned char c;
 xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
@@ -119,6 +120,7 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
+  vCommunicationStateMachineInit(UART_HandleTypeDef *huart);
   vLedInitLed ();
   vButtonsInitButtons();
   vMatrixKeyboardInit();

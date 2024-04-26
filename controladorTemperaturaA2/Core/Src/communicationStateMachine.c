@@ -1,3 +1,8 @@
+#include "communicationStateMachine.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
 #define IDDLE '0'
 #define READY '1'
 #define GET '2'
@@ -8,10 +13,10 @@
 #define SET2 '7'
 
 #define MAX_VALUE_LENGTH 7
-
+extern UART_HandleTypeDef hlpuart1;
 unsigned char ucUartState = IDDLE; // Variável que armazena o estado atual da UART.
 unsigned char ucValueCount;  // Contador para o número de caracteres no valor recebido.
-
+unsigned char c;
 float fActualTemp; // Variável para armazenar a temperatura atual
 
 float fDesiredTemp; // Variável para armazenar a temperatura desejada
@@ -31,10 +36,9 @@ unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycle do he
 // Input params:        UART_HandleTypeDef *huart       //
 // Output params:       n/a                             //
 // **************************************************** //
-void vCommunicationStateMachineInitCommunication(UART_HandleTypeDef *huart)
+void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
 {
-
-  HAL_UART_Receive_IT(huart, &c, 1);
+  HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1); // TODO: nao tenho certeza se precisa disso aqui
   fActualTemp = 20.0; //t
   fDesiredTemp = 25.0; //d
   ucButtonState = 1; //i
@@ -54,6 +58,8 @@ void vCommunicationStateMachineProcessByteCommunication()
 {
     static unsigned char ucParam;
     static unsigned char ucValue[MAX_VALUE_LENGTH+1];
+    static unsigned char ucByte;
+
     if('#' == ucByte)
         ucUartState = READY;
     else if(IDDLE != ucUartState)
@@ -130,7 +136,7 @@ void vCommunicationStateMachineProcessByteCommunication()
 // ******************************************************************* //
 void vCommunicationStateMachineReturnParam(unsigned char param)
 {
-    unsigned char cTransmit[50];
+    char cTransmit[50];
 
     switch (param)
     {
@@ -164,11 +170,11 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
 // ******************************************************************* //
 void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *value)
 {
+	unsigned char cTransmit[50];
     if (param == 'd')
     {
         fDesiredTemp = atof((const char *)value);
 
-        unsigned char cTransmit[50];
         sprintf(cTransmit, "\n\rDesired Temperature set to: %.3f\n\r", fDesiredTemp);
     }
     vCommunicationStateMachineTransmit(cTransmit);
@@ -182,9 +188,7 @@ void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *valu
 // Output params:       None                                           //
 // ******************************************************************* //
 void vCommunicationStateMachineTransmit(const char* data) {
-    if (data != NULL) {
-        HAL_UART_Transmit(&hlpuart1, (uint8_t*)data, strlen(data));
-    }
+	HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)data, strlen(data));
 }
 
 
