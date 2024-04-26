@@ -119,7 +119,6 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
-  vCommunicationInitCommunication();
   vLedInitLed ();
   vButtonsInitButtons();
   vMatrixKeyboardInit();
@@ -195,9 +194,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
 
         if (c != '\n' && c != '\r') {
-            HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&c, 1);
-
-            processByteCommunication();
+            HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&c, 1); //fazer o echo
+        }
+        vCommunicationStateMachineProcessByteCommunication();
     }
 }
 
