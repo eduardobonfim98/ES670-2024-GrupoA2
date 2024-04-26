@@ -43,7 +43,7 @@ void vCommunicationInitCommunication(void)
 // Parâmetros de entrada:  UART_HandleTypeDef *huart    //
 // Parâmetros de saída:    n/a                          //
 // **************************************************** //
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void vCallbackCommunication(UART_HandleTypeDef *huart)
 {
     if (huart == &hlpuart1)
     {
