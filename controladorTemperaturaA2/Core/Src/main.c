@@ -28,6 +28,7 @@
 #include "led.h"
 #include "matrixKeyboard.h"
 #include "buttonsEvents.h"
+#include "communicationStateMachine.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,7 +53,7 @@
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
-unsigned char c;
+unsigned char t;
 xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
@@ -63,7 +64,6 @@ char cDownFlag = 0;
 char cLeftFlag = 0;
 char cRightFlag = 0;
 char cEnterFlag = 0;
-unsigned char cc;
 
 //flag que indica se o timer dos botões está ativo
 char cLongPressFlag = 0;
@@ -120,11 +120,11 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
-  vCommunicationStateMachineInit(UART_HandleTypeDef *huart);
+  vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
   vButtonsInitButtons();
   vMatrixKeyboardInit();
-  xMatrixKeyboardState* teclado = pMatrixKeyboardGetKeys();
+  //xMatrixKeyboardState* teclado = pMatrixKeyboardGetKeys();
   vButtonsEventsInit(&htim7, &htim16);
   /* USER CODE END 2 */
 
@@ -193,10 +193,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart == &hlpuart1)
     {
-        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
+        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&t, 1);
 
-        if (c != '\n' && c != '\r') {
-            HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&c, 1); //fazer o echo
+        if (t != '\n' && t != '\r') {
+            HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&t, 1); //fazer o echo
         }
         vCommunicationStateMachineProcessByteCommunication();
     }

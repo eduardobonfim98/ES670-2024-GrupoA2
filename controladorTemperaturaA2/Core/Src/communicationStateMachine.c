@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-
 #define IDDLE '0'
 #define READY '1'
 #define GET '2'
@@ -16,7 +15,7 @@
 extern UART_HandleTypeDef hlpuart1;
 unsigned char ucUartState = IDDLE; // Variável que armazena o estado atual da UART.
 unsigned char ucValueCount;  // Contador para o número de caracteres no valor recebido.
-unsigned char c;
+extern unsigned char c;
 float fActualTemp; // Variável para armazenar a temperatura atual
 
 float fDesiredTemp; // Variável para armazenar a temperatura desejada
