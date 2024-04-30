@@ -53,7 +53,8 @@
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
-unsigned char t;
+extern unsigned char c;
+
 xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
@@ -193,10 +194,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart == &hlpuart1)
     {
-        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&t, 1);
-
-        if (t != '\n' && t != '\r') {
-            HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&t, 1); //fazer o echo
+        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
+        if (c != '\n' && c != '\r') {
+            HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&c, 1);
         }
         vCommunicationStateMachineProcessByteCommunication();
     }

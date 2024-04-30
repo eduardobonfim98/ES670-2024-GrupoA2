@@ -37,7 +37,7 @@ unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycle do he
 // **************************************************** //
 void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
 {
-  HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1); // TODO: nao tenho certeza se precisa disso aqui
+  HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
   fActualTemp = 20.0; //t
   fDesiredTemp = 25.0; //d
   ucButtonState = 1; //i
@@ -142,19 +142,16 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
         case 't':  // Temperatura atual
             sprintf(cTransmit, "\n\r%c: %.3f\n\r", param, fActualTemp);
             break;
-        case 'd':  // Temperatura desejada
-            sprintf(cTransmit, "\n\r%c: %.3f\n\r", param, fDesiredTemp);
-            break;
         case 'i':  // Estado dos botões
             sprintf(cTransmit, "\n\r%c: %d\n\r", param, ucButtonState);
             break;
-        case 'c':  // Velocidade do cooler
+        case 'v':  // Velocidade do cooler
             sprintf(cTransmit, "\n\r%c: %u\n\r", param, uiCoolerSpeed);
             break;
         case 'h':  // Duty cycle do cooler
             sprintf(cTransmit, "\n\r%c: %d%%\n\r", param, ucDutyCycleHeather);
-        case 's':  // Duty cycle do cooler
-            sprintf(cTransmit, "\n\r%c: %d%%\n\r", param, uiCoolerSpeed);
+        case 'c':  // Duty cycle do cooler
+            sprintf(cTransmit, "\n\r%c: %d%%\n\r", param, ucDutyCycleCooler);
             break;
     }
     vCommunicationStateMachineTransmit(cTransmit);
