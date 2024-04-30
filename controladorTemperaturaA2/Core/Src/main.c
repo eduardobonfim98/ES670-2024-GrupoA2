@@ -50,6 +50,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+float fActualTemp;
+float fDesiredTemp;
+unsigned int uiCoolerSpeed;
+unsigned char ucButtonState;
+unsigned char ucDutyCycleCooler;
+unsigned char ucDutyCycleHeather;
+
 char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
@@ -190,17 +198,17 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-    if (huart == &hlpuart1)
-    {
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+    if (huart == &hlpuart1) {
         HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
         if (c != '\n' && c != '\r') {
             HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)&c, 1);
         }
-        vCommunicationStateMachineProcessByteCommunication();
+        vCommunicationStateMachineProcessByteCommunication(c);
     }
 }
+
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 

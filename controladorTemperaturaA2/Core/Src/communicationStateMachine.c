@@ -15,17 +15,15 @@
 extern UART_HandleTypeDef hlpuart1;
 unsigned char ucUartState = IDDLE; // Variável que armazena o estado atual da UART.
 unsigned char ucValueCount;  // Contador para o número de caracteres no valor recebido.
+extern unsigned char ucUartState;
 extern unsigned char c;
-float fActualTemp; // Variável para armazenar a temperatura atual
 
-float fDesiredTemp; // Variável para armazenar a temperatura desejada
-
-unsigned int uiCoolerSpeed; // Variável para armazenar a velocidade do cooler (0 - 100%)
-
-unsigned char ucButtonState; // Variável para armazenar o estado dos botões (bloqueados ou liberados), 1 = liberado, 0 = bloqueado
-
-unsigned char ucDutyCycleCooler; // Variável para armazenar o duty cycle do cooler (0 - 100%)
-unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycle do heather (0 - 100%)
+extern float fActualTemp; // Variável para armazenar a temperatura atual
+extern float fDesiredTemp; // Variável para armazenar a temperatura desejada
+extern unsigned int uiCoolerSpeed; // Variável para armazenar a velocidade do cooler (0 - 100%)
+extern unsigned char ucButtonState; // Variável para armazenar o estado dos botões (bloqueados ou liberados), 1 = liberado, 0 = bloqueado
+extern unsigned char ucDutyCycleCooler; // Variável para armazenar o duty cycle do cooler (0 - 100%)
+extern unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycle do heather (0 - 100%)
 
 // **************************************************** //
 // Method name:         vCommunicationInitCommunication //
@@ -53,12 +51,10 @@ void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
 // Input params:        n/a                                                         //
 // Output params:       n/a                                                         //
 // ******************************************************************************** //
-void vCommunicationStateMachineProcessByteCommunication()
+void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
 {
     static unsigned char ucParam;
     static unsigned char ucValue[MAX_VALUE_LENGTH+1];
-    static unsigned char ucByte;
-
     if('#' == ucByte)
         ucUartState = READY;
     else if(IDDLE != ucUartState)

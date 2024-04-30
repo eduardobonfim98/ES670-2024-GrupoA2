@@ -14,18 +14,23 @@
 
 #define MAX_VALUE_LENGTH 7
 
-void vCommunicationStateMachineInit(UART_HandleTypeDef *huart);
-void vCommunicationStateMachineProcessByteCommunication(void);
-void vCommunicationStateMachineReturnParam(unsigned char param);
-void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *value);
-void vCommunicationStateMachineTransmit(const char* data);
-
+extern UART_HandleTypeDef hlpuart1;
 extern unsigned char ucUartState;
+extern unsigned char ucValueCount;
+extern unsigned char c;
+
 extern float fActualTemp;
 extern float fDesiredTemp;
 extern unsigned int uiCoolerSpeed;
 extern unsigned char ucButtonState;
 extern unsigned char ucDutyCycleCooler;
 extern unsigned char ucDutyCycleHeather;
+
+// Function prototypes
+void vCommunicationStateMachineInit(UART_HandleTypeDef *huart);
+void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte);
+void vCommunicationStateMachineReturnParam(unsigned char param);
+void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *value);
+void vCommunicationStateMachineTransmit(const char* data);
 
 #endif // COMMUNICATION_STATE_MACHINE_H
