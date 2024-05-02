@@ -39,8 +39,8 @@ void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
   fActualTemp = 20.0; //t
   fDesiredTemp = 25.0; //d
   ucButtonState = 1; //i
-  uiCoolerSpeed = 50; // v
-  ucDutyCycleCooler = 50; // c
+  uiCoolerSpeed = 10; // v
+  ucDutyCycleCooler = 20; // c
   ucDutyCycleHeather = 50; // h
 }
 
@@ -94,7 +94,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                 else
                     ucUartState = IDDLE;
                 break;
-            case PARAM: // nao precisa do send porque o send nao tem arco
+            case PARAM:
                 if (';'==ucByte)
                 	vCommunicationStateMachineReturnParam(ucParam);
                 ucUartState = IDDLE;
@@ -110,7 +110,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                 }
                 else
                 {
-                    if (';'==ucByte) //nao precisa do set2 porque ja esta fazendo aqui
+                    if (';'==ucByte)
                     {
                         ucValue[ucValueCount] = '\0';
                         vCommunicationStateMachineSetParam(ucParam, ucValue);
@@ -136,18 +136,19 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
     switch (param)
     {
         case 't':  // Temperatura atual
-            sprintf(cTransmit, "\n\r%c: %.3f\n\r", param, fActualTemp);
+            sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);
             break;
         case 'i':  // Estado dos botões
-            sprintf(cTransmit, "\n\r%c: %d\n\r", param, ucButtonState);
+            sprintf(cTransmit, "%c=%d\n\r", param, ucButtonState);
             break;
         case 'v':  // Velocidade do cooler
-            sprintf(cTransmit, "\n\r%c: %u\n\r", param, uiCoolerSpeed);
+            sprintf(cTransmit, "%c=%d\n\r", param, uiCoolerSpeed);
             break;
         case 'h':  // Duty cycle do cooler
-            sprintf(cTransmit, "\n\r%c: %d%%\n\r", param, ucDutyCycleHeather);
+            sprintf(cTransmit, "%c=%d\n\r", param, ucDutyCycleHeather);
+            break;
         case 'c':  // Duty cycle do cooler
-            sprintf(cTransmit, "\n\r%c: %d%%\n\r", param, ucDutyCycleCooler);
+            sprintf(cTransmit, "%c=%d\n\r", param, ucDutyCycleCooler);
             break;
     }
     vCommunicationStateMachineTransmit(cTransmit);
@@ -167,7 +168,7 @@ void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *valu
     {
         fDesiredTemp = atof((const char *)value);
 
-        sprintf(cTransmit, "\n\rDesired Temperature set to: %.3f\n\r", fDesiredTemp);
+        sprintf(cTransmit, "\n\rDesired Temperature = %.3f\n\r", fDesiredTemp);
     }
     vCommunicationStateMachineTransmit(cTransmit);
 }
@@ -180,7 +181,7 @@ void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *valu
 // Output params:       None                                           //
 // ******************************************************************* //
 void vCommunicationStateMachineTransmit(const char* data) {
-	HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)data, strlen(data));
+	HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *) data, strlen(data));
 }
 
 
