@@ -21,6 +21,11 @@
 #define L1C0_BASE	0xC0 /* line 1, column 0 */
 #define MAX_COLUMN  15U
 
+//global variables
+char cLCDAddress;
+I2C_HandleTypeDef *hLCD;
+unsigned char ucBackLight = 1;
+
 // Function with local scope
 static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType);
 
@@ -36,6 +41,8 @@ void vLcdInitLcd(I2C_HandleTypeDef *hi2c, char cAddress)
 	unsigned char ucTemp = 0;
 
 	//TODO: register in a global variable the i2c handler and address
+	cLCDAddress = cAddress;
+	hLCD = hi2c;
 
 	// Time to the LCD's microcontroller start
 	HAL_Delay(20);
@@ -167,22 +174,11 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 	unsigned char ucMSB = 0x00;
 	unsigned char ucLSB = 0x00;
 
-
-	if (cDataType == LCD_RS_DATA){
+	if (cDataType == LCD_RS_DATA)
 		ucData = ucData | LCD_BIT_RS; //0x00000001
-	}else if(cDataType == LCD_RS_CMD){
-		ucData = ucData;//0x00000000
-	}
-	if (ucBackLight){
+
+	if (ucBackLight)
 		ucData = ucData | LCD_BIT_BACKIGHT;//0x0000100X
-	}else{
-		ucData = ucData; //0x0000000X
-	}
-	if (ucReadWrite){
-		ucData = ucData | LCD_BIT_RW; //0x0000X001X
-	}else{
-		ucData = ucData; //0x0000X00X -> nesse caso sempre Write.
-	}
 
 	// Vocês irão enviar o byte de dados ou comando em duas etapas
 	// Na primeira etapa serão enviados os 4 bits mais significativos
@@ -225,3 +221,25 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 	// variável global se o backlight deve ficar aceso ou apagado. Essa variável global será atualizada nas
 	// funções vLcdBacklighON() e vLcdBacklighOFF()
 }
+void vLcdBacklighON(){
+	ucBackLight = 1;
+}
+
+void vLcdBacklighOFF(){
+	ucBackLight = 0;
+}
+
+void vLcdSet(void){
+	vLcdSendCommand(CMD_CLEAR);
+
+	vLcdSetCursor(0,0);
+
+	vLcdWriteString("Teste Grupo A2");
+
+	vLcdSetCursor(1,0);
+
+	vLcdWriteString("Contagem: ");
+
+}
+
+

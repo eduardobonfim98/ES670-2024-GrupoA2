@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
@@ -29,6 +30,7 @@
 #include "matrixKeyboard.h"
 #include "buttonsEvents.h"
 #include "communicationStateMachine.h"
+#include "lcd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,6 +64,7 @@ char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
+char temp = 0x27;
 
 xMatrixKeyboardState Teclado;
 
@@ -80,6 +83,11 @@ char cLongPressFlag = 0;
 //valor do LED
 int iLedValue = 0;
 int iLedBinValue = 0;
+
+//variáveis do LCD
+extern char cLCDAddress;
+extern I2C_HandleTypeDef *hLCD;
+extern unsigned char ucBackLight;
 
 /* USER CODE END PV */
 
@@ -128,6 +136,7 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   MX_TIM16_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -135,12 +144,15 @@ int main(void)
   vMatrixKeyboardInit();
   //xMatrixKeyboardState* teclado = pMatrixKeyboardGetKeys();
   vButtonsEventsInit(&htim7, &htim16);
+  vLcdInitLcd(&hi2c1, 0x27);
+  vLcdSet();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -95,5 +95,9 @@ void vLcdSetCursor(unsigned char cLine, unsigned char cColumn);
 /* ************************************************ */
 void vLcdDummyText(void);
 
+void vLcdBacklighON();
+
+void vLcdBacklighOFF();
+
 
 #endif /* SOURCES_LCD_H_ */
