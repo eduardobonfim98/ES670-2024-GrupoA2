@@ -89,9 +89,14 @@ extern char cLCDAddress;
 extern I2C_HandleTypeDef *hLCD;
 extern unsigned char ucBackLight;
 char cBufferLcd[2];
-unsigned int cTimerCounter = 0;
+unsigned int uiTimerCounter = 0;
 char strCounter[16]; // String buffer to hold the counter value
 
+//Duty Cycles of Heater and Cooler
+uint32_t uiHeaterCCRValue;
+uint32_t uiCoolerCCRValue;
+float fHeaterDuty;
+float fCoolerDuty;
 
 /* USER CODE END PV */
 
@@ -142,6 +147,8 @@ int main(void)
   MX_TIM16_Init();
   MX_I2C1_Init();
   MX_TIM17_Init();
+  MX_TIM1_Init();
+  MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -158,7 +165,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  sprintf(strCounter, "%u", cTimerCounter);
+	  uiHeaterCCRValue = TIM1->CCR1;
+	  fHeaterDuty = (float)uiHeaterCCRValue;
+	  sprintf(strCounter, "%f", fHeaterDuty);
 	  vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
 	  vLcdWriteString(strCounter);
 
@@ -284,7 +293,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 				timerButtonsEventsLongPressPeriodElapsedCallback();
 			else
 				if (htim == &htim17)
-					cTimerCounter++;
+					uiTimerCounter++;
 }
 
 void vMatrixKeyboardHalfSecPressedCallback (char cButton){

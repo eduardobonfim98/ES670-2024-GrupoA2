@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Aquecedor_PWM_Pin GPIO_PIN_0
+#define Aquecedor_PWM_GPIO_Port GPIOC
 #define BT_Cima_Pin GPIO_PIN_1
 #define BT_Cima_GPIO_Port GPIOC
 #define BT_Cima_EXTI_IRQn EXTI1_IRQn
@@ -78,6 +80,8 @@ void Error_Handler(void);
 #define BT_Enter_Pin GPIO_PIN_0
 #define BT_Enter_GPIO_Port GPIOB
 #define BT_Enter_EXTI_IRQn EXTI0_IRQn
+#define Buzzer_PWM_Pin GPIO_PIN_2
+#define Buzzer_PWM_GPIO_Port GPIOB
 #define Teclado_Lin4_Pin GPIO_PIN_11
 #define Teclado_Lin4_GPIO_Port GPIOB
 #define Teclado_Lin4_EXTI_IRQn EXTI15_10_IRQn
@@ -90,6 +94,8 @@ void Error_Handler(void);
 #define Teclado_Lin1_Pin GPIO_PIN_15
 #define Teclado_Lin1_GPIO_Port GPIOB
 #define Teclado_Lin1_EXTI_IRQn EXTI15_10_IRQn
+#define Tacometro_TIM__Capture_Pin GPIO_PIN_6
+#define Tacometro_TIM__Capture_GPIO_Port GPIOC
 #define Teclado_Col4_Pin GPIO_PIN_7
 #define Teclado_Col4_GPIO_Port GPIOC
 #define Teclado_Col3_Pin GPIO_PIN_8
@@ -102,6 +108,10 @@ void Error_Handler(void);
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14
 #define T_SWCLK_GPIO_Port GPIOA
+#define Cooler_PWM_Pin GPIO_PIN_15
+#define Cooler_PWM_GPIO_Port GPIOA
+#define Tacometro_TIM__Ext_Clock_Pin GPIO_PIN_2
+#define Tacometro_TIM__Ext_Clock_GPIO_Port GPIOD
 #define T_SWO_Pin GPIO_PIN_3
 #define T_SWO_GPIO_Port GPIOB
 

@@ -38,6 +38,9 @@
         * Output
         * EVENT_OUT
         * EXTI
+     PB2   ------> S_TIM20_CH1
+     PC6   ------> S_TIM3_CH1
+     PD2   ------> S_TIM3_ETR
 */
 void MX_GPIO_Init(void)
 {
@@ -49,6 +52,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LD2_Pin|Teclado_Col1_Pin, GPIO_PIN_RESET);
@@ -75,11 +79,27 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BT_Enter_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = Buzzer_PWM_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF3_TIM20;
+  HAL_GPIO_Init(Buzzer_PWM_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin */
   GPIO_InitStruct.Pin = Teclado_Lin4_Pin|Teclado_Lin3_Pin|Teclado_Lin2_Pin|Teclado_Lin1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = Tacometro_TIM__Capture_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+  HAL_GPIO_Init(Tacometro_TIM__Capture_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PCPin PCPin PCPin */
   GPIO_InitStruct.Pin = Teclado_Col4_Pin|Teclado_Col3_Pin|Teclado_Col2_Pin;
@@ -87,6 +107,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = Tacometro_TIM__Ext_Clock_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+  HAL_GPIO_Init(Tacometro_TIM__Ext_Clock_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
