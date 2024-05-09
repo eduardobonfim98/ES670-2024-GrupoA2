@@ -1,5 +1,6 @@
 #include "communicationStateMachine.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #define IDDLE '0'
@@ -100,19 +101,18 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                 ucUartState = IDDLE;
                 break;
             case VALUE:
-                if ((ucByte>='0' && ucByte<='9') || ','==ucByte)
+                if ((ucByte >= '0' && ucByte <= '9') || ',' == ucByte || '.' == ucByte)
                 {
-                	if (',' == c)
-                      c = '.';
-
                     if (ucValueCount < MAX_VALUE_LENGTH)
-                        ucValue[ucValueCount++] = ucByte;
+                    {
+                        ucValue[ucValueCount++] = (ucByte == ',' ? '.' : ucByte);
+                    }
                 }
                 else
                 {
                     if (';'==ucByte)
                     {
-                        ucValue[ucValueCount] = '\0';
+                        ucValue[ucValueCount] = '\r';
                         vCommunicationStateMachineSetParam(ucParam, ucValue);
                     }
                     ucUartState = IDDLE;
@@ -163,12 +163,12 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
 // ******************************************************************* //
 void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *value)
 {
-	unsigned char cTransmit[50];
+	char cTransmit[50];
     if (param == 'd')
     {
         fDesiredTemp = atof((const char *)value);
-
         sprintf(cTransmit, "\n\rDesired Temperature = %.3f\n\r", fDesiredTemp);
+        fActualTemp = fDesiredTemp;
     }
     vCommunicationStateMachineTransmit(cTransmit);
 }
