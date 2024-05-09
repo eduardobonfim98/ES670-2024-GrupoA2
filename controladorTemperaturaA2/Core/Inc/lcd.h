@@ -95,9 +95,29 @@ void vLcdSetCursor(unsigned char cLine, unsigned char cColumn);
 /* ************************************************ */
 void vLcdDummyText(void);
 
+/* ************************************************ */
+/* Method name:        vLcdBacklighON               */
+/* Method description: Turn on the LCD backlight    */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdBacklighON();
 
+/* ************************************************ */
+/* Method name:        vLcdBacklighOFF              */
+/* Method description: Turn off the LCD backlight   */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdBacklighOFF();
+
+/* ************************************************ */
+/* Method name:        vLcdSet                      */
+/* Method description: Display a preset message     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdSet(void);
 
 
 #endif /* SOURCES_LCD_H_ */

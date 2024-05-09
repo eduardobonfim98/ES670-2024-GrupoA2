@@ -70,26 +70,28 @@ xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
 
-//flags dos botões apertados
+//pressed buttons flags
 char cUpFlag = 0;
 char cDownFlag = 0;
 char cLeftFlag = 0;
 char cRightFlag = 0;
 char cEnterFlag = 0;
 
-//flag que indica se o timer dos botões está ativo
+//flag that shows when a button is pressed for a long period
 char cLongPressFlag = 0;
 
-//valor do LED
+//bin value ahowed by the LEds
 int iLedValue = 0;
 int iLedBinValue = 0;
 
-//variáveis do LCD
+//LCD variables
 extern char cLCDAddress;
 extern I2C_HandleTypeDef *hLCD;
 extern unsigned char ucBackLight;
-unsigned char ucBufferLcd[2];
-unsigned char ucTimerCounter = 0;
+char cBufferLcd[2];
+unsigned int cTimerCounter = 0;
+char strCounter[16]; // String buffer to hold the counter value
+
 
 /* USER CODE END PV */
 
@@ -156,7 +158,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  vLcdWriteString(ucTimerCounter);
+	  sprintf(strCounter, "%u", cTimerCounter);
+	  vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
+	  vLcdWriteString(strCounter);
+
+	  HAL_Delay(500); // Update every 500ms
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -277,7 +284,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 				timerButtonsEventsLongPressPeriodElapsedCallback();
 			else
 				if (htim == &htim17)
-					ucTimerCounter++;
+					cTimerCounter++;
 }
 
 void vMatrixKeyboardHalfSecPressedCallback (char cButton){

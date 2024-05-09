@@ -1,11 +1,11 @@
 /* ***************************************************************** */
-/* File name:		 lcd_hal.c							 			 */
+/* File name:		 lcd.c							 			 */
 /* File description: File dedicated to the hardware abstraction layer*/
 /*                   related to the LCD HARDWARE based on the KS006U */
 /*					 controller										 */
-/* Author name:      dloubach										 */
-/* Creation date:    16out2015										 */
-/* Revision date:    03apr2023                                       */
+/* Author name:      Eduardo Siqueira, Henrique Akira, Lucas Pavarini*/
+/* Creation date:    02may2024									 */
+/* Revision date:    09may2024                                       */
 /* ***************************************************************** */
 
 #include <lcd.h>
@@ -202,7 +202,7 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 	HAL_I2C_Master_Transmit_IT(hLCD, cLCDAddress<<1, &ucData, 1);//verificar necessidade desta linha
 	HAL_Delay(2);
 
-	//troca o MSB por LSB e refaz a mesma lógica
+	//Change MSB to LSB and redo the algorithm
 	ucData = ucData & 0x0F;//0x0000X00X
 	ucData = ucData | ucLSB;//0xLLLLX00X
 
@@ -221,14 +221,33 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 	// variável global se o backlight deve ficar aceso ou apagado. Essa variável global será atualizada nas
 	// funções vLcdBacklighON() e vLcdBacklighOFF()
 }
+
+/* ************************************************ */
+/* Method name:        vLcdBacklighON               */
+/* Method description: Turn on the LCD backlight    */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdBacklighON(){
 	ucBackLight = 1;
 }
 
+/* ************************************************ */
+/* Method name:        vLcdBacklighOFF              */
+/* Method description: Turn off the LCD backlight   */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdBacklighOFF(){
 	ucBackLight = 0;
 }
 
+/* ************************************************ */
+/* Method name:        vLcdSet                      */
+/* Method description: Display a preset message     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdSet(void){
 	vLcdSendCommand(CMD_CLEAR);
 
@@ -239,9 +258,6 @@ void vLcdSet(void){
 	vLcdSetCursor(1,0);
 
 	vLcdWriteString("Contagem: ");
-
-	vLcdSetCursor(1, 10);
-
 }
 
 
