@@ -240,6 +240,8 @@ void vLcdSet(void){
 
 	vLcdWriteString("Contagem: ");
 
+	vLcdSetCursor(1, 10);
+
 }
 
 

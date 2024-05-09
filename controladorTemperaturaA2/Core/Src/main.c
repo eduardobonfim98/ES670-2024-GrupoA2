@@ -88,6 +88,8 @@ int iLedBinValue = 0;
 extern char cLCDAddress;
 extern I2C_HandleTypeDef *hLCD;
 extern unsigned char ucBackLight;
+unsigned char ucBufferLcd[2];
+unsigned char ucTimerCounter = 0;
 
 /* USER CODE END PV */
 
@@ -137,6 +139,7 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   MX_I2C1_Init();
+  MX_TIM17_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -146,13 +149,14 @@ int main(void)
   vButtonsEventsInit(&htim7, &htim16);
   vLcdInitLcd(&hi2c1, 0x27);
   vLcdSet();
+  HAL_TIM_Base_Start_IT(&htim17);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+	  vLcdWriteString(ucTimerCounter);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -271,6 +275,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 		else
 			if (htim == pTimPressedTimePointer)
 				timerButtonsEventsLongPressPeriodElapsedCallback();
+			else
+				if (htim == &htim17)
+					ucTimerCounter++;
 }
 
 void vMatrixKeyboardHalfSecPressedCallback (char cButton){
