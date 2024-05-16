@@ -31,6 +31,7 @@
 #include "buttonsEvents.h"
 #include "communicationStateMachine.h"
 #include "lcd.h"
+#include "buzzer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,14 +54,7 @@
 
 /* USER CODE BEGIN PV */
 
-float fActualTemp;
-float fDesiredTemp;
-unsigned int uiCoolerSpeed;
-unsigned char ucButtonState;
-unsigned char ucDutyCycleCooler;
-unsigned char ucDutyCycleHeather;
 
-char cWhatButton;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
@@ -95,8 +89,13 @@ char strCounter[16]; // String buffer to hold the counter value
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
-float fHeaterDuty;
-float fCoolerDuty;
+float fHeaterDuty = 0.50;
+float fCoolerDuty = 0.50;
+
+//buzzer set timer pointer, period and frequency
+extern unsigned short int usBuzzerPeriod;
+extern unsigned short int usBuzzerFrequency;
+extern TIM_HandleTypeDef *pTimerBuzzer;
 
 /* USER CODE END PV */
 
@@ -149,6 +148,7 @@ int main(void)
   MX_TIM17_Init();
   MX_TIM1_Init();
   MX_TIM8_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -159,6 +159,7 @@ int main(void)
   vLcdInitLcd(&hi2c1, 0x27);
   vLcdSet();
   HAL_TIM_Base_Start_IT(&htim17);
+  vBuzzerConfig(1000, 100, &htim5);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -310,12 +311,21 @@ void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 
 void vButtonsEventCallbackPressedEvent(char cBt){
 	if (cBt == up){
-		iLedValue += 1;
-		vLedShowNumber(iLedValue);
+		if(fCoolerDuty < 1)
+			fCoolerDuty += 0.1;
 	}else if(cBt == down){
-		iLedValue -= 1;
-		vLedShowNumber(iLedValue);
+		if(fCoolerDuty >= 0)
+			fCoolerDuty -= 0.1;
+	}else if(cBt == left){
+		if(fHeaterDuty >= 0)
+			fHeaterDuty -= 0.1;
+	}else if(cBt == right){
+		if(fHeaterDuty < 1)
+			fHeaterDuty += 0.1;
 	}
+	vBuzzerPlay();
+	HAL_Delay(100);
+	vBuzzerStop();
 }
 
 void vButtonsEventCallbackReleasedEvent(char cBt){
