@@ -20,8 +20,9 @@ void vBuzzerConfig(unsigned short int usFrequency, unsigned short int usPeriod, 
 	pTimerBuzzer = htim;
 	usBuzzerPeriod = usPeriod;
 	usBuzzerFrequency = usFrequency;
-	__HAL_TIM_SET_AUTORELOAD(pTimerBuzzer, usPeriod-1);
-	__HAL_TIM_SET_COMPARE(pTimerBuzzer, TIM_CHANNEL_1, usFrequency-1);
+	TIM20->ARR = (uint32_t)1000000/usBuzzerFrequency - 1;
+	TIM20->CCR1 = (uint32_t)(0.5*usBuzzerFrequency - 1);
+	pTimerBuzzer->Instance->ARR = 10*usBuzzerPeriod - 1;
 }
 
 /* ************************************************ */
@@ -36,7 +37,7 @@ void vBuzzerConfig(unsigned short int usFrequency, unsigned short int usPeriod, 
 void vBuzzerPlay(void){
 	pTimerBuzzer->Instance->CNT = 0;
 	HAL_TIM_Base_Start_IT(pTimerBuzzer);
-	HAL_TIM_PWM_Start(pTimerBuzzer, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim20, TIM_CHANNEL_1);
 }
 
 /* ************************************************ */
@@ -49,6 +50,6 @@ void vBuzzerPlay(void){
 /* Output params:	   n/a 							*/
 /* ************************************************ */
 void vBuzzerStop(void){
-	HAL_TIM_PWM_Stop(pTimerBuzzer, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Stop(&htim20, TIM_CHANNEL_1);
 }
 

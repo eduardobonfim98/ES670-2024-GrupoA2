@@ -29,7 +29,9 @@ TIM_HandleTypeDef *pTimerTachometer;
 void vTachometerInit(TIM_HandleTypeDef *htim, unsigned int uiPeriod){
 	pTimerTachometer = htim;
 	uiTachometerPeriod = uiPeriod;
-	__HAL_TIM_SET_AUTORELOAD(htim, uiTachometerPeriod*100-1);
+	__HAL_TIM_SET_AUTORELOAD(htim, 10*uiTachometerPeriod - 1);
+	HAL_TIM_Base_Start_IT(&htim3);
+	HAL_TIM_IC_Start(&htim3, TIM_CHANNEL_1);
 	HAL_TIM_Base_Start_IT(pTimerTachometer);
 }
 
@@ -43,6 +45,7 @@ void vTachometerInit(TIM_HandleTypeDef *htim, unsigned int uiPeriod){
 /* ************************************************ */
 void vTachometerUpdate(void){
 	fRotations = TIM3->CNT/9.0;
+	//transform the period ms to min
 	fPeriod = uiTachometerPeriod/60000.0;
 	usCoolerSpeed = fRotations/fPeriod;
 	TIM3->CNT = 0;

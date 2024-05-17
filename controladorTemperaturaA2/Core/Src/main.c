@@ -31,7 +31,10 @@
 #include "buttonsEvents.h"
 #include "communicationStateMachine.h"
 #include "lcd.h"
+#include "heaterAndCooler.h"
 #include "buzzer.h"
+#include "tachometer.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +57,12 @@
 
 /* USER CODE BEGIN PV */
 
+float fActualTemp;
+float fDesiredTemp;
+unsigned int uiCoolerSpeed;
+unsigned char ucButtonState;
+unsigned char ucDutyCycleCooler;
+unsigned char ucDutyCycleHeather;
 
 char cNumber = 0;
 char cNumber500ms = 0;
@@ -74,7 +83,7 @@ char cEnterFlag = 0;
 //flag that shows when a button is pressed for a long period
 char cLongPressFlag = 0;
 
-//bin value ahowed by the LEds
+//bin value shown by the LEds
 int iLedValue = 0;
 int iLedBinValue = 0;
 
@@ -96,6 +105,10 @@ float fCoolerDuty = 0.50;
 extern unsigned short int usBuzzerPeriod;
 extern unsigned short int usBuzzerFrequency;
 extern TIM_HandleTypeDef *pTimerBuzzer;
+
+//tachometer rotations
+extern unsigned short int usCoolerSpeed;
+int teste;
 
 /* USER CODE END PV */
 
@@ -149,6 +162,9 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM8_Init();
   MX_TIM5_Init();
+  MX_TIM20_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -160,19 +176,22 @@ int main(void)
   vLcdSet();
   HAL_TIM_Base_Start_IT(&htim17);
   vBuzzerConfig(1000, 100, &htim5);
+  setupPWM();
+  vCoolerfanPWMDuty(fCoolerDuty);
+  vHeaterPWMDuty(fHeaterDuty);
+  vTachometerInit(&htim4, 500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  uiHeaterCCRValue = TIM1->CCR1;
-	  fHeaterDuty = (float)uiHeaterCCRValue;
-	  sprintf(strCounter, "%f", fHeaterDuty);
+	  teste = TIM3->CNT;
+	  sprintf(strCounter, "%hu", usCoolerSpeed);
 	  vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
 	  vLcdWriteString(strCounter);
-
 	  HAL_Delay(500); // Update every 500ms
+
 
     /* USER CODE END WHILE */
 
@@ -295,6 +314,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 			else
 				if (htim == &htim17)
 					uiTimerCounter++;
+				else
+					if (htim == &htim5)
+						vBuzzerStop();
+					else
+						if (htim == &htim4)
+							vTachometerUpdate();
 }
 
 void vMatrixKeyboardHalfSecPressedCallback (char cButton){
@@ -311,21 +336,27 @@ void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 
 void vButtonsEventCallbackPressedEvent(char cBt){
 	if (cBt == up){
-		if(fCoolerDuty < 1)
+		if(fCoolerDuty < 1){
 			fCoolerDuty += 0.1;
+			vCoolerfanPWMDuty(fCoolerDuty);
+		}
 	}else if(cBt == down){
-		if(fCoolerDuty >= 0)
+		if(fCoolerDuty >= 0){
 			fCoolerDuty -= 0.1;
+			vCoolerfanPWMDuty(fCoolerDuty);
+		}
 	}else if(cBt == left){
-		if(fHeaterDuty >= 0)
+		if(fHeaterDuty >= 0){
 			fHeaterDuty -= 0.1;
+			vHeaterPWMDuty(fHeaterDuty);
+		}
 	}else if(cBt == right){
-		if(fHeaterDuty < 1)
+		if(fHeaterDuty < 1){
 			fHeaterDuty += 0.1;
+			vHeaterPWMDuty(fHeaterDuty);
+		}
 	}
 	vBuzzerPlay();
-	HAL_Delay(100);
-	vBuzzerStop();
 }
 
 void vButtonsEventCallbackReleasedEvent(char cBt){
