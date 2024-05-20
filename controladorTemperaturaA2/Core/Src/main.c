@@ -192,6 +192,16 @@ int main(void)
 	  vLcdWriteString(strCounter);
 	  HAL_Delay(500); // Update every 500ms
 
+	  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
+	  HAL_ADC_Start(&hadc1); // Inicie a conversão ADC
+	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Aguarde a conversão terminar
+	  adc_value = HAL_ADC_GetValue(&hadc1); // Obtenha o valor da conversão
+
+	  // Imprima o valor do ADC no console
+	  printf("ADC Value: %lu\n", adc_value);
+
+	  HAL_Delay(500); // Atualize a cada 500ms
+
 
     /* USER CODE END WHILE */
 
