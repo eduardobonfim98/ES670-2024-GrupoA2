@@ -1,9 +1,14 @@
-/*
- * tachometer.c
- *
- *  Created on: May 15, 2024
- *      Author: akira
- */
+/* ******************************************************************************* */
+/* File name:        tachometer.c                                                  */
+/* File description: This file contains the implementation of functions            */
+/*                   for initializing and updating a tachometer using              */
+/*                   a timer on an STM32 microcontroller. The tachometer           */
+/*                   measures the rotational speed of a cooler and calculates      */
+/*                   the speed in rotations per minute.                            */
+/* Author name:      Henrique Akagi, Eduardo Siqueira, and Lucas Pavarini          */
+/* Creation date:    May 15, 2024                                                  */
+/* Revision date:    n/a                                                           */
+/* ******************************************************************************* */
 
 #include "tim.h"
 #include "main.h"
@@ -18,13 +23,14 @@ unsigned int uiTachometerPeriod;
 TIM_HandleTypeDef *pTimerTachometer;
 
 /* ************************************************ */
-/* Method name: 	   vTachometerInit      		*/
-/*													*/
-/* Method description: inicializa o tacometro   	*/
-/*													*/
-/* Input params:	   timer do tacometro e periodo
- * 						do tacometro				*/
-/* Output params:	   n/a 							*/
+/* Method name:       vTachometerInit               */
+/*                                                      */
+/* Method description: Initializes the tachometer   */
+/*                                                      */
+/* Input params:      htim - pointer to the tachometer timer */
+/*                    uiPeriod - period of the tachometer */
+/*                                                      */
+/* Output params:     n/a                             */
 /* ************************************************ */
 void vTachometerInit(TIM_HandleTypeDef *htim, unsigned int uiPeriod){
 	pTimerTachometer = htim;
@@ -36,12 +42,13 @@ void vTachometerInit(TIM_HandleTypeDef *htim, unsigned int uiPeriod){
 }
 
 /* ************************************************ */
-/* Method name: 	   vTachometerUpdate      	*/
-/*													*/
-/* Method description: update do tacometro   		*/
-/*													*/
-/* Input params:	    n/a 						*/
-/* Output params:	   n/a 							*/
+/* Method name:       vTachometerUpdate             */
+/*                                                      */
+/* Method description: Updates the tachometer readings */
+/*                                                      */
+/* Input params:      n/a                           */
+/*                                                      */
+/* Output params:     n/a                           */
 /* ************************************************ */
 void vTachometerUpdate(void){
 	fRotations = TIM3->CNT/9.0;
