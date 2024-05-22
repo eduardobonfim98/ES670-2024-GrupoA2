@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "usart.h"
 #include "tim.h"
@@ -63,7 +65,9 @@ unsigned int uiCoolerSpeed;
 unsigned char ucButtonState;
 unsigned char ucDutyCycleCooler;
 unsigned char ucDutyCycleHeather;
-
+extern ADC_HandleTypeDef hadc1;
+uint32_t adc_value;
+uint32_t adc2_value;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
@@ -120,6 +124,13 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+    if (hadc->Instance == ADC1) {
+        adc2_value = HAL_ADC_GetValue(hadc);
+        // Process the adc_value as needed
+        printf("ADC Value: %lu\n", adc2_value);
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -153,6 +164,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LPUART1_UART_Init();
   MX_TIM6_Init();
   MX_TIM7_Init();
@@ -165,6 +177,7 @@ int main(void)
   MX_TIM20_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -180,24 +193,23 @@ int main(void)
   vCoolerfanPWMDuty(fCoolerDuty);
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
+  HAL_ADC_Start_IT(&hadc1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  teste = TIM3->CNT;
-	  sprintf(strCounter, "%hu", usCoolerSpeed);
-	  vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
-	  vLcdWriteString(strCounter);
-	  HAL_Delay(500); // Update every 500ms
+	  //teste = TIM3->CNT;
+	  //sprintf(strCounter, "%hu", usCoolerSpeed);
+	  //vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
+	  //vLcdWriteString(strCounter);
 
 	  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
 	  HAL_ADC_Start(&hadc1); // Inicie a conversão ADC
 	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Aguarde a conversão terminar
 	  adc_value = HAL_ADC_GetValue(&hadc1); // Obtenha o valor da conversão
 
-	  // Imprima o valor do ADC no console
 	  printf("ADC Value: %lu\n", adc_value);
 
 	  HAL_Delay(500); // Atualize a cada 500ms
