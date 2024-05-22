@@ -193,7 +193,8 @@ int main(void)
   vCoolerfanPWMDuty(fCoolerDuty);
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
-  HAL_ADC_Start_IT(&hadc1);
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
+  HAL_ADC_Start_IT(&hadc1); // Inicie a conversão ADC no modo de interrupção
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -205,12 +206,12 @@ int main(void)
 	  //vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
 	  //vLcdWriteString(strCounter);
 
-	  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
-	  HAL_ADC_Start(&hadc1); // Inicie a conversão ADC
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Aguarde a conversão terminar
-	  adc_value = HAL_ADC_GetValue(&hadc1); // Obtenha o valor da conversão
+	  //HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
+	  //HAL_ADC_Start(&hadc1); // Inicie a conversão ADC
+	  //HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Aguarde a conversão terminar
+	  //adc_value = HAL_ADC_GetValue(&hadc1); // Obtenha o valor da conversão
 
-	  printf("ADC Value: %lu\n", adc_value);
+	  //printf("ADC Value: %lu\n", adc_value);
 
 	  HAL_Delay(500); // Atualize a cada 500ms
 
