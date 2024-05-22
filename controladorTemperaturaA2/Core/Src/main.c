@@ -65,9 +65,11 @@ unsigned int uiCoolerSpeed;
 unsigned char ucButtonState;
 unsigned char ucDutyCycleCooler;
 unsigned char ucDutyCycleHeather;
+//uint32_t adc_value;
+//uint32_t adc2_value;
 extern ADC_HandleTypeDef hadc1;
-uint32_t adc_value;
-uint32_t adc2_value;
+// uint16_t adc_buffer[10]; // Buffer para armazenar os valores ADC lidos via DMA
+uint16_t adc_value = 0;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
@@ -126,11 +128,11 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
     if (hadc->Instance == ADC1) {
-        adc2_value = HAL_ADC_GetValue(hadc);
-        // Process the adc_value as needed
-        printf("ADC Value: %lu\n", adc2_value);
+        // Callback quando a conversão estiver completa
+        printf("ADC Conversion Complete. Value: %lu\n", adc_value);
     }
 }
+
 
 /* USER CODE END 0 */
 
@@ -193,19 +195,25 @@ int main(void)
   vCoolerfanPWMDuty(fCoolerDuty);
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
-  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
-  HAL_ADC_Start_IT(&hadc1); // Inicie a conversão ADC no modo de interrupção
+
+
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  HAL_ADC_Start_DMA(&hadc1, &adc_value, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  while (1) {
+      HAL_Delay(5000); // Atualiza a cada segundo
+      printf("ADC Value: %lu\n", adc_value);
+  }
+	  //lab9?
 	  //teste = TIM3->CNT;
 	  //sprintf(strCounter, "%hu", usCoolerSpeed);
 	  //vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
 	  //vLcdWriteString(strCounter);
 
+	  //ADC Pooling
 	  //HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
 	  //HAL_ADC_Start(&hadc1); // Inicie a conversão ADC
 	  //HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Aguarde a conversão terminar
@@ -213,17 +221,17 @@ int main(void)
 
 	  //printf("ADC Value: %lu\n", adc_value);
 
-	  HAL_Delay(500); // Atualize a cada 500ms
+	  //HAL_Delay(500); // Atualize a cada 500ms
 
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
-  }
 
-  /* USER CODE END 3 */
 }
+  /* USER CODE END 3 */
+
 
 /**
   * @brief System Clock Configuration
