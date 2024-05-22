@@ -1,6 +1,6 @@
 #MicroXplorer Configuration settings - do not modify
 ADC1.Channel-1\#ChannelRegularConversion=ADC_CHANNEL_1
-ADC1.ClockPrescaler=ADC_CLOCK_ASYNC_DIV4
+ADC1.ClockPrescaler=ADC_CLOCK_ASYNC_DIV64
 ADC1.CommonPathInternal=null|null|null|null
 ADC1.IPParameters=Rank-1\#ChannelRegularConversion,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,OffsetNumber-1\#ChannelRegularConversion,NbrOfConversionFlag,ClockPrescaler,NbrOfConversion,master,CommonPathInternal
 ADC1.NbrOfConversion=1
@@ -466,4 +466,6 @@ VP_TIM8_VS_ClockSourceINT.Mode=Internal
 VP_TIM8_VS_ClockSourceINT.Signal=TIM8_VS_ClockSourceINT
 board=NUCLEO-G474RE
 boardIOC=true
+isbadioc=false
+isbadioc=false
 isbadioc=false
