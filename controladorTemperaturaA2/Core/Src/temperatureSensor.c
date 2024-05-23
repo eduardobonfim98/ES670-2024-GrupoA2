@@ -35,6 +35,6 @@ void vTemperatureSensorInit(ADC_HandleTypeDef *hadc1){
 /* Output params:      float                                */
 /* ******************************************************** */
 float fTemperatureSensorGetTemperature(){
-	fTemperatura = ((325.0*(float) adc_value)/4095);
+	fTemperatura = (float) ((325.0*(float) adc_value)/4095);
 	return fTemperatura;
 }

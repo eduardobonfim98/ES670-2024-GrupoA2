@@ -123,12 +123,13 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    if (hadc->Instance == ADC1) {
-        // Callback quando a conversão estiver completa
-        printf("ADC Value: %u\n", adc_value);
-    }
-}
+//Aqui acho que é so pra interrupcao
+//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+//    if (hadc->Instance == ADC1) {
+//        // Callback quando a conversão estiver completa
+//        printf("ADC Value: %u\n", adc_value);
+//    }
+//}
 
 
 /* USER CODE END 0 */
@@ -193,6 +194,7 @@ int main(void)
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
 
+  //Iniciar a lib
   vTemperatureSensorInit(&hadc1);
 
   /* USER CODE END 2 */
@@ -201,8 +203,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
       HAL_Delay(1000); // Atualiza a cada segundo
-      fTemperatureSensorGetTemperature();
       printf("ADC Value: %u\n", adc_value);
+
+      vLcdWrite2Lcd((unsigned int) fTemperatureSensorGetTemperature());
+
+      HAL_Delay(1000);
+      unsigned char ucTemperature[32];
+      sprintf(ucTemperature, "\n\rTemp: %.3f\n\r", fTemperatureSensorGetTemperature());
+      vCommunicationStateMachineTransmit(&hlpuart1, ucTemperature);
 
 
 	  //lab9?
