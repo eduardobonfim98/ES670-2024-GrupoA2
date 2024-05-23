@@ -69,7 +69,7 @@ unsigned char ucDutyCycleHeather;
 //uint32_t adc2_value;
 extern ADC_HandleTypeDef hadc1;
 // uint16_t adc_buffer[10]; // Buffer para armazenar os valores ADC lidos via DMA
-uint16_t adc_value = 0;
+extern uint16_t adc_value;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
@@ -231,7 +231,7 @@ int main(void)
 
 }
   /* USER CODE END 3 */
-
+}
 
 /**
   * @brief System Clock Configuration
