@@ -32,6 +32,7 @@
 #include "matrixKeyboard.h"
 #include "buttonsEvents.h"
 #include "communicationStateMachine.h"
+#include "temperatureSensor.h"
 #include "lcd.h"
 #include "heaterAndCooler.h"
 #include "buzzer.h"
@@ -202,15 +203,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-      HAL_Delay(1000); // Atualiza a cada segundo
-      printf("ADC Value: %u\n", adc_value);
-
-      vLcdWrite2Lcd((unsigned int) fTemperatureSensorGetTemperature());
-
-      HAL_Delay(1000);
-      unsigned char ucTemperature[32];
+      char ucTemperature[32];
       sprintf(ucTemperature, "\n\rTemp: %.3f\n\r", fTemperatureSensorGetTemperature());
-      vCommunicationStateMachineTransmit(&hlpuart1, ucTemperature);
+      vCommunicationStateMachineTransmit(ucTemperature);
 
 
 	  //lab9?

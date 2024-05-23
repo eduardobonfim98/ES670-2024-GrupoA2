@@ -1,5 +1,7 @@
+#ifndef TEMPERATURE_SENSOR_H
+#define TEMPERATURE_SENSOR_H
 
-
+#include "stm32g4xx_hal.h"
 
 /* **************************************************** */
 /* Method name:        vTemperatureSensorInit           */
@@ -12,7 +14,6 @@
 /* **************************************************** */
 void vTemperatureSensorInit(ADC_HandleTypeDef *hadc);
 
-
 /* ******************************************************** */
 /* Method name:        fTemperatureSensorGetTemperature     */
 /*                                                          */
@@ -22,3 +23,5 @@ void vTemperatureSensorInit(ADC_HandleTypeDef *hadc);
 /* Output params:      float                                */
 /* ******************************************************** */
 float fTemperatureSensorGetTemperature();
+
+#endif // TEMPERATURE_SENSOR_H
