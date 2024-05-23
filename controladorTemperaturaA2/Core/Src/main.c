@@ -105,7 +105,7 @@ char strCounter[16]; // String buffer to hold the counter value
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
 float fHeaterDuty = 0.50;
-float fCoolerDuty = 0.50;
+float fCoolerDuty = 0.80;
 
 //buzzer set timer pointer, period and frequency
 extern unsigned short int usBuzzerPeriod;
@@ -115,6 +115,10 @@ extern TIM_HandleTypeDef *pTimerBuzzer;
 //tachometer rotations
 extern unsigned short int usCoolerSpeed;
 int teste;
+
+//Temperature Sensor variables
+extern float fTemperature;
+char ucTemperature[32];
 
 /* USER CODE END PV */
 
@@ -173,6 +177,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_ADC1_Init();
+  MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
   vCommunicationStateMachineInit(&hlpuart1);
   vLedInitLed ();
@@ -187,6 +192,7 @@ int main(void)
   vCoolerfanPWMDuty(fCoolerDuty);
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
+  HAL_TIM_Base_Start_IT(&htim15);
 
   //Iniciar o conversor AD
   vTemperatureSensorInit(&hadc1);
@@ -196,10 +202,13 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-      char ucTemperature[32];
-      sprintf(ucTemperature, "\n\rTemp: %.3f\n\r", fTemperatureSensorGetTemperature());
-      HAL_Delay(1000);
-      vCommunicationStateMachineTransmit(ucTemperature);
+
+      HAL_Delay(500);
+      fTemperature = fTemperatureSensorGetTemperature();
+      sprintf(strCounter, "%.3f", fTemperature);
+      vLcdWriteString(strCounter);
+      vLcdSetCursor(1,6);
+
 
     /* USER CODE END WHILE */
 
@@ -328,7 +337,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 					else
 						if (htim == &htim4)
 							vTachometerUpdate();
-}
+						else
+							if (htim == &htim15){
+								sprintf(ucTemperature, "\n\rTemp: %.3f\n\r", fTemperatureSensorGetTemperature());
+								vCommunicationStateMachineTransmit(ucTemperature);
+							}
+	}
 
 void vMatrixKeyboardHalfSecPressedCallback (char cButton){
 	cNumber500ms += cButton;

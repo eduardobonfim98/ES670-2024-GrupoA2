@@ -257,7 +257,5 @@ void vLcdSet(void){
 
 	vLcdSetCursor(1,0);
 
-	vLcdWriteString("Contagem: ");
+	vLcdWriteString("Temp: ");
 }
-
-
