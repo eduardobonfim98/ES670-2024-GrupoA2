@@ -1,7 +1,9 @@
 /* File name:        temperatureSensor.c                            */
-/* File description:  		*/
-/*								*/
-/* Author name:      	            */
+/* File description: This file contains the functions for           */
+/*                   initializing and reading the temperature       */
+/*                   sensor values using ADC.                       */
+/*                                                                 */
+/* Author names:     Eduardo Siqueira, Henrique Akira, Lucas Pavarini*/
 /* Creation date:    22may2024                                      */
 /* Revision date:    22may2024                                      */
 /* ***************************************************************** */

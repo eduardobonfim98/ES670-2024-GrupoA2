@@ -75,7 +75,7 @@ xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
 
-//conversor AD
+//AD Conversor
 extern ADC_HandleTypeDef hadc1;
 extern unsigned long int adc_value;
 
@@ -104,8 +104,8 @@ char strCounter[16]; // String buffer to hold the counter value
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
-float fHeaterDuty = 0.50;
-float fCoolerDuty = 0.80;
+float fHeaterDuty = 0.00;
+float fCoolerDuty = 0.00;
 
 //buzzer set timer pointer, period and frequency
 extern unsigned short int usBuzzerPeriod;
@@ -179,23 +179,43 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
+
+  //Communication State Machine
   vCommunicationStateMachineInit(&hlpuart1);
+
+  //Led
   vLedInitLed ();
+
+  //Buttons
   vButtonsInitButtons();
+
+  //MatrixKeyboard
   vMatrixKeyboardInit();
+
+  //Buttons Event
   vButtonsEventsInit(&htim7, &htim16);
+
+  //Lcd
   vLcdInitLcd(&hi2c1, 0x27);
   vLcdSet();
+
+  //Initialize Timer of counter (currently not being used)
   HAL_TIM_Base_Start_IT(&htim17);
-  vBuzzerConfig(1000, 100, &htim5);
+
+  //Buzzer
+  vBuzzerConfig(1000, 100, &htim5); // Input params: usFrequency - usPeriod - pointer to the buzzer timer
+
+  //Heater and Cooler
   setupPWM();
   vCoolerfanPWMDuty(fCoolerDuty);
   vHeaterPWMDuty(fHeaterDuty);
+
+  //Tachmeter
   vTachometerInit(&htim4, 500);
-  HAL_TIM_Base_Start_IT(&htim15);
 
   //Iniciar o conversor AD
   vTemperatureSensorInit(&hadc1);
+  HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   /* USER CODE END 2 */
 
