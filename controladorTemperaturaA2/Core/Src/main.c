@@ -213,9 +213,13 @@ int main(void)
   //Tachmeter
   vTachometerInit(&htim4, 500);
 
-  //Iniciar o conversor AD
+  //Inicialize AD conversor
   vTemperatureSensorInit(&hadc1);
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
+
+  //PID configuration
+  vPidInit(fKp, fKi, fKd, usIntSizeMs, fOutputSaturation);
+
 
   /* USER CODE END 2 */
 
@@ -225,7 +229,7 @@ int main(void)
 
       HAL_Delay(500);
       fTemperature = fTemperatureSensorGetTemperature();
-      sprintf(strCounter, "%.3f", fTemperature);
+      sprintf(strCounter, "%.2f", fTemperature);
       vLcdWriteString(strCounter);
       vLcdSetCursor(1,6);
 
@@ -359,7 +363,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 							vTachometerUpdate();
 						else
 							if (htim == &htim15){
-								sprintf(ucTemperature, "\n\rTemp: %.3f\n\r", fTemperatureSensorGetTemperature());
+								sprintf(ucTemperature, "\n\rTemp: %.2f\n\r", fTemperatureSensorGetTemperature());
 								vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
