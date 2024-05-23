@@ -65,11 +65,8 @@ unsigned int uiCoolerSpeed;
 unsigned char ucButtonState;
 unsigned char ucDutyCycleCooler;
 unsigned char ucDutyCycleHeather;
-//uint32_t adc_value;
-//uint32_t adc2_value;
 extern ADC_HandleTypeDef hadc1;
-// uint16_t adc_buffer[10]; // Buffer para armazenar os valores ADC lidos via DMA
-extern uint16_t adc_value;
+extern unsigned long int adc_value;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
@@ -129,7 +126,7 @@ void SystemClock_Config(void);
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
     if (hadc->Instance == ADC1) {
         // Callback quando a conversão estiver completa
-        printf("ADC Conversion Complete. Value: %lu\n", adc_value);
+        printf("ADC Value: %u\n", adc_value);
     }
 }
 
@@ -196,17 +193,18 @@ int main(void)
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
 
+  vTemperatureSensorInit(&hadc1);
 
-  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-  HAL_ADC_Start_DMA(&hadc1, &adc_value, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-      HAL_Delay(5000); // Atualiza a cada segundo
-      printf("ADC Value: %lu\n", adc_value);
-  }
+      HAL_Delay(1000); // Atualiza a cada segundo
+      fTemperatureSensorGetTemperature();
+      printf("ADC Value: %u\n", adc_value);
+
+
 	  //lab9?
 	  //teste = TIM3->CNT;
 	  //sprintf(strCounter, "%hu", usCoolerSpeed);

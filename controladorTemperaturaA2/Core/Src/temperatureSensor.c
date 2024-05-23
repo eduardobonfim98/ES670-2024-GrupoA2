@@ -9,7 +9,7 @@
 
 #include "adc.h"
 
-uint16_t adc_value = 0;
+unsigned long int  adc_value = 0;
 float fTemperatura;
 
 /* **************************************************** */
@@ -21,9 +21,9 @@ float fTemperatura;
 /* Input params:       ADC_HandleTypeDef *hadc          */
 /* Output params:      n/a                              */
 /* **************************************************** */
-void vTemperatureSensorInit(ADC_HandleTypeDef *hadc){
-	HAL_ADC_Start_DMA(hadc, &adc_value, 1);
-
+void vTemperatureSensorInit(ADC_HandleTypeDef *hadc1){
+	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+	HAL_ADC_Start_DMA(hadc1, &adc_value, 1);
 }
 
 /* ******************************************************** */
@@ -35,6 +35,6 @@ void vTemperatureSensorInit(ADC_HandleTypeDef *hadc){
 /* Output params:      float                                */
 /* ******************************************************** */
 float fTemperatureSensorGetTemperature(){
-	fTemperatura = (((adc_value*3.25)/4095)*100);
+	fTemperatura = ((325.0*(float) adc_value)/4095);
 	return fTemperatura;
 }
