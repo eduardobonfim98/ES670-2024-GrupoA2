@@ -11,7 +11,7 @@
 #include "temperatureSensor.h"
 
 unsigned long int  adc_value = 0;
-float fTemperatura;
+float fTemperature;
 
 /* **************************************************** */
 /* Method name:        vTemperatureSensorInit           */
@@ -36,6 +36,6 @@ void vTemperatureSensorInit(ADC_HandleTypeDef *hadc1){
 /* Output params:      float                                */
 /* ******************************************************** */
 float fTemperatureSensorGetTemperature(){
-	fTemperatura = (float) ((325.0*(float) adc_value)/4095);
-	return fTemperatura;
+	fTemperature = (float) ((325.0*(float) adc_value)/4095);
+	return fTemperature;
 }

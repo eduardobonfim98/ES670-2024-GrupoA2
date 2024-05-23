@@ -66,8 +66,6 @@ unsigned int uiCoolerSpeed;
 unsigned char ucButtonState;
 unsigned char ucDutyCycleCooler;
 unsigned char ucDutyCycleHeather;
-extern ADC_HandleTypeDef hadc1;
-extern unsigned long int adc_value;
 char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
@@ -76,6 +74,10 @@ char temp = 0x27;
 xMatrixKeyboardState Teclado;
 
 TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
+
+//conversor AD
+extern ADC_HandleTypeDef hadc1;
+extern unsigned long int adc_value;
 
 //pressed buttons flags
 char cUpFlag = 0;
@@ -124,14 +126,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//Aqui acho que é so pra interrupcao
-//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-//    if (hadc->Instance == ADC1) {
-//        // Callback quando a conversão estiver completa
-//        printf("ADC Value: %u\n", adc_value);
-//    }
-//}
-
 
 /* USER CODE END 0 */
 
@@ -184,7 +178,6 @@ int main(void)
   vLedInitLed ();
   vButtonsInitButtons();
   vMatrixKeyboardInit();
-  //xMatrixKeyboardState* teclado = pMatrixKeyboardGetKeys();
   vButtonsEventsInit(&htim7, &htim16);
   vLcdInitLcd(&hi2c1, 0x27);
   vLcdSet();
@@ -195,7 +188,7 @@ int main(void)
   vHeaterPWMDuty(fHeaterDuty);
   vTachometerInit(&htim4, 500);
 
-  //Iniciar a lib
+  //Iniciar o conversor AD
   vTemperatureSensorInit(&hadc1);
 
   /* USER CODE END 2 */
@@ -205,25 +198,8 @@ int main(void)
   while (1) {
       char ucTemperature[32];
       sprintf(ucTemperature, "\n\rTemp: %.3f\n\r", fTemperatureSensorGetTemperature());
+      HAL_Delay(1000);
       vCommunicationStateMachineTransmit(ucTemperature);
-
-
-	  //lab9?
-	  //teste = TIM3->CNT;
-	  //sprintf(strCounter, "%hu", usCoolerSpeed);
-	  //vLcdSetCursor(1, 10);  // Set cursor to line 1, column 0
-	  //vLcdWriteString(strCounter);
-
-	  //ADC Pooling
-	  //HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED); // Calibra o ADC para compensar offset
-	  //HAL_ADC_Start(&hadc1); // Inicie a conversão ADC
-	  //HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Aguarde a conversão terminar
-	  //adc_value = HAL_ADC_GetValue(&hadc1); // Obtenha o valor da conversão
-
-	  //printf("ADC Value: %lu\n", adc_value);
-
-	  //HAL_Delay(500); // Atualize a cada 500ms
-
 
     /* USER CODE END WHILE */
 
