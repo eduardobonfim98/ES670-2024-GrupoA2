@@ -136,9 +136,7 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
     switch (param)
     {
         case 't':  // Temperatura atual
-            sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);
-            break;
-        case 'i':  // Estado dos botões
+            sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);ççmçlsmçlkmfçfkwçfkwçfkfçk
             sprintf(cTransmit, "%c=%d\n\r", param, ucButtonState);
             break;
         case 'v':  // Velocidade do cooler

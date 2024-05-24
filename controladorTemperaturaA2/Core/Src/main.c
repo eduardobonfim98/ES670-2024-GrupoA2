@@ -218,7 +218,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID configuration
-  vPidInit(fKp, fKi, fKd, usIntSizeMs, fOutputSaturation);
+  //vPidInit(fKp, fKi, fKd, usIntSizeMs, fOutputSaturation);
 
 
   /* USER CODE END 2 */
