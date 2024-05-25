@@ -104,7 +104,7 @@ char strCounter[16]; // String buffer to hold the counter value
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
-float fHeaterDuty = 0.00;
+float fHeaterDuty = 0.70;
 float fCoolerDuty = 0.00;
 
 //buzzer set timer pointer, period and frequency
@@ -118,7 +118,8 @@ int teste;
 
 //Temperature Sensor variables
 extern float fTemperature;
-char ucTemperature[32];
+char ucTemperature[50];
+float timeCounter = 0.0f;
 
 /* USER CODE END PV */
 
@@ -363,8 +364,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 							vTachometerUpdate();
 						else
 							if (htim == &htim15){
-								sprintf(ucTemperature, "\n\rTemp: %.2f\n\r", fTemperatureSensorGetTemperature());
-								vCommunicationStateMachineTransmit(ucTemperature);
+						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
+						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
+
+						        sprintf(ucTemperature, "X: %.1f, Y: %.2f\n\r", timeCounter, temperature);
+						        vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
 
