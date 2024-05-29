@@ -25,18 +25,11 @@ float fError, fDifference, fOut;
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vPidInit(float fKp, float fKi, float fKd, float fKc, float fTd, float fTi, unsigned short usIntSizeMs, float fOutputSaturation)
+void vPidInit(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
 {
-	/*Paralellel*/
 	xPidConfig.fKp = fKp;
 	xPidConfig.fKd = fKd;
 	xPidConfig.fKi = fKi;
-
-	/*Interactive*/
-	xPidConfig.fKc = fKc;
-	xPidConfig.fTd = fTd;
-	xPidConfig.fTi = fTi;
-
 	xPidConfig.fError_previous = 0;
 	xPidConfig.fError_sum = 0.0;
 
@@ -192,56 +185,9 @@ float fPidUpdateData(float fSensorValue, float fSetValue)
     // Output Saturation
 	if(fOut > xPidConfig.fOutputSaturation)
 		fOut = xPidConfig.fOutputSaturation;
-	else 
-		if (fOut < 0)
-			fOut = 0;
-
-	return fOut;
-}
-
-
-/* ************************************************** */
-/* Method name:        fPidUpdateDataInteractive      */
-/* Method description: Update the control output      */
-/*                     using the reference and sensor */
-/*                     value in interactive mode      */
-/* Input params:       fSensorValue: Value read from  */
-/*                     the sensor                     */
-/*                     fReferenceValue: Value used as */
-/*                     control reference              */
-/* Output params:      float: New Control effort      */
-/* ************************************************** */
-float fPidUpdateDataInteractive(float fSensorValue, float fSetValue)
-{
-	float fError, fDifference, fOut;
-
-	// Proportional error
-	fError = fSetValue - fSensorValue;
-
-	//Ingtegral error
-	xPidConfig.fError_sum = xPidConfig.fError_sum - fIntegratorBuffer[usIntegratorCount] + fError;
-
-	fIntegratorBuffer[usIntegratorCount] = fError;
-
-	if(++usIntegratorCount >= xPidConfig.usIntegratorSize)
-		usIntegratorCount = 0;
-
-	// Differential error
-	fDifference = (fError - xPidConfig.fError_previous);
-
-	fOut = xPidConfig.fKc * (fError + ((1/xPidConfig.fTi) * xPidConfig.fError_sum * UPDATE_RATE))
-		 * (1 + (xPidConfig.fTd)*fDifference / UPDATE_RATE);
-
-
-	xPidConfig.fError_previous = fError;
-
-    // Output Saturation
-	if(fOut > xPidConfig.fOutputSaturation)
-		fOut = xPidConfig.fOutputSaturation;
 	else
 		if (fOut < 0)
 			fOut = 0;
 
 	return fOut;
 }
-

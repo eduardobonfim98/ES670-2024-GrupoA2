@@ -24,6 +24,7 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
+#include "pid.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -70,6 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
+float fSetPoint;
 
 xMatrixKeyboardState Teclado;
 
@@ -104,7 +106,7 @@ char strCounter[16]; // String buffer to hold the counter value
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
-float fHeaterDuty = 0.70;
+float fHeaterDuty = 0.00;
 float fCoolerDuty = 0.00;
 
 //buzzer set timer pointer, period and frequency
@@ -121,17 +123,6 @@ extern float fTemperature;
 char ucTemperature[50];
 float timeCounter = 0.0f;
 
-//PID
-extern float fKp;
-extern float fKi;
-extern float fKd;
-extern unsigned short usIntSizeMs;
-extern float fOutputSaturation;
-extern float fKc;
-extern float fTi;
-extern float fTd;
-extern float fSensorValue;
-extern float fSetValue;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -220,7 +211,7 @@ int main(void)
   //Heater and Cooler
   setupPWM();
   vCoolerfanPWMDuty(fCoolerDuty);
-  vHeaterPWMDuty(fHeaterDuty);
+  //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
   vTachometerInit(&htim4, 500);
@@ -229,10 +220,8 @@ int main(void)
   vTemperatureSensorInit(&hadc1);
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
-  //PID configuration
-  vPidInit(fKp, fKi, fKd, fKc, fTd, fTi, usIntSizeMs, fOutputSaturation);
-  fPidUpdateDataInteractive(fSensorValue, fSetValue);
-
+  //PID
+  vPidInit(31.32, 2.5, 98, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -245,6 +234,7 @@ int main(void)
       sprintf(strCounter, "%.2f", fTemperature);
       vLcdWriteString(strCounter);
       vLcdSetCursor(1,6);
+      vTemperatureControl(60);
 
 
     /* USER CODE END WHILE */
@@ -441,6 +431,16 @@ void vButtonsEventCallback3sPressedEvent(char cBt){
 		vLedShowNumber(iLedBinValue);
 	}
 }
+
+void vTemperatureControl(float fSetPoint)
+{
+  float fSensorValue, fcontrolEffort;
+
+  fSensorValue = fTemperatureSensorGetTemperature();
+  fcontrolEffort = fPidUpdateData(fSensorValue, fSetPoint);
+  vHeaterPWMDuty(fcontrolEffort);
+}
+
 /* USER CODE END 4 */
 
 /**
