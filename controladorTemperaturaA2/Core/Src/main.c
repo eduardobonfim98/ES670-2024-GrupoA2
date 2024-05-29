@@ -121,6 +121,17 @@ extern float fTemperature;
 char ucTemperature[50];
 float timeCounter = 0.0f;
 
+//PID
+extern float fKp;
+extern float fKi;
+extern float fKd;
+extern unsigned short usIntSizeMs;
+extern float fOutputSaturation;
+extern float fKc;
+extern float fTi;
+extern float fTd;
+extern float fSensorValue;
+extern float fSetValue;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -219,7 +230,8 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID configuration
-  //vPidInit(fKp, fKi, fKd, usIntSizeMs, fOutputSaturation);
+  vPidInit(fKp, fKi, fKd, fKc, fTd, fTi, usIntSizeMs, fOutputSaturation);
+  fPidUpdateDataInteractive(fSensorValue, fSetValue);
 
 
   /* USER CODE END 2 */

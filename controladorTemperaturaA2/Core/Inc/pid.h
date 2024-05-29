@@ -20,6 +20,7 @@ typedef struct pid_data_type {
 	float fError_sum;            		// integrator cumulative error
 	unsigned short usIntegratorSize; 	//integrator window size
 	float fOutputSaturation;            // output saturation
+	float fKc, fTi, fTd;
 } pid_data_type;
 
 
@@ -29,7 +30,7 @@ typedef struct pid_data_type {
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vPidInit(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation);
+void vPidInit(float fKp, float fKi, float fKd, float fKc, float fTd, float fTi, unsigned short usIntSizeMs, float fOutputSaturation);
 
 
 /* ************************************************** */

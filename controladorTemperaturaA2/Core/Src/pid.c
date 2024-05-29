@@ -25,7 +25,7 @@ float fError, fDifference, fOut;
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vPidInit(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
+void vPidInit(float fKp, float fKi, float fKd, float fKc, float fTd, float fTi, unsigned short usIntSizeMs, float fOutputSaturation)
 {
 	/*Paralellel*/
 	xPidConfig.fKp = fKp;
@@ -33,9 +33,9 @@ void vPidInit(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float
 	xPidConfig.fKi = fKi;
 
 	/*Interactive*/
-	/*xPidConfig.fKc = fKc;
+	xPidConfig.fKc = fKc;
 	xPidConfig.fTd = fTd;
-	xPidConfig.fTi = fTi;*/
+	xPidConfig.fTi = fTi;
 
 	xPidConfig.fError_previous = 0;
 	xPidConfig.fError_sum = 0.0;
@@ -229,8 +229,8 @@ float fPidUpdateDataInteractive(float fSensorValue, float fSetValue)
 	// Differential error
 	fDifference = (fError - xPidConfig.fError_previous);
 
-	/*fOut = xPidConfig.fKc * (fError + ((1/xPidConfig.fTi) * xPidConfig.fError_sum * UPDATE_RATE))
-		 * (1 + (xPidConfig.fTd)*fDifference / UPDATE_RATE);*/
+	fOut = xPidConfig.fKc * (fError + ((1/xPidConfig.fTi) * xPidConfig.fError_sum * UPDATE_RATE))
+		 * (1 + (xPidConfig.fTd)*fDifference / UPDATE_RATE);
 
 
 	xPidConfig.fError_previous = fError;
