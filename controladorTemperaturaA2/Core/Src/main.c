@@ -128,7 +128,7 @@ float timeCounter = 0.0f;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void vTemperatureControl(float fSetPoint);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -210,7 +210,7 @@ int main(void)
 
   //Heater and Cooler
   setupPWM();
-  vCoolerfanPWMDuty(fCoolerDuty);
+  //vCoolerfanPWMDuty(fCoolerDuty);
   //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
@@ -221,7 +221,13 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(31.32, 2.5, 98, 0.01, 1);
+  //vPidInit(31, 2.5, 98, 0.01, 1); //primeiro teste, nao bateu o setpoint
+  vPidInit(45, 5, 98, 0.01, 1); //bateu
+  //vPidInit(15.68, 1.25, 49, 0.01, 1); //quinto teste, dividindo o Kc por 2, mas provavelmente nao vai chegar, pq mesmo com o dobro de Kp nao chegou
+  //vPidInit(80, 2.5, 98, 0.01, 1); // segundo teste
+  //vPidInit(80, 2.5, 0, 0.01, 1); // terceiro teste
+  //vPidInit(8, 0.01, 0, 0.01, 1); // quarto teste
+  //vPidInit(200, 2.5, 98, 0.01, 1); //primeiro teste
 
   /* USER CODE END 2 */
 
@@ -234,7 +240,9 @@ int main(void)
       sprintf(strCounter, "%.2f", fTemperature);
       vLcdWriteString(strCounter);
       vLcdSetCursor(1,6);
-      vTemperatureControl(60);
+
+      /* Temperature Control */
+      //vTemperatureControl(50);
 
 
     /* USER CODE END WHILE */
