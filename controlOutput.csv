@@ -1,472 +1,5 @@
 =~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2024.05.30 17:00:42 =~=~=~=~=~=~=~=~=~=~=~=
-X: 296.8, Y: 32.54
-, Control Effort: 1.00
-X: 296.9, Y: 32.62
-, Control Effort: 1.00
-X: 297.0, Y: 32.54
-, Control Effort: 1.00
-X: 297.1, Y: 32.54
-, Control Effort: 1.00
-X: 297.2, Y: 32.62
-, Control Effort: 1.00
-X: 297.3, Y: 32.54
-, Control Effort: 1.00
-X: 297.4, Y: 32.54
-, Control Effort: 1.00
-X: 297.5, Y: 32.54
-, Control Effort: 1.00
-X: 297.6, Y: 32.62
-, Control Effort: 1.00
-X: 297.7, Y: 32.62
-, Control Effort: 1.00
-X: 297.8, Y: 32.54
-, Control Effort: 1.00
-X: 297.9, Y: 32.62
-, Control Effort: 1.00
-X: 298.0, Y: 32.70
-, Control Effort: 1.00
-X: 298.1, Y: 32.54
-, Control Effort: 1.00
-X: 298.2, Y: 32.54
-, Control Effort: 1.00
-X: 298.3, Y: 32.62
-, Control Effort: 1.00
-X: 298.4, Y: 32.54
-, Control Effort: 1.00
-X: 298.5, Y: 32.62
-, Control Effort: 1.00
-X: 298.6, Y: 32.62
-, Control Effort: 1.00
-X: 298.7, Y: 32.62
-, Control Effort: 1.00
-X: 298.8, Y: 32.70
-, Control Effort: 1.00
-X: 298.9, Y: 32.62
-, Control Effort: 1.00
-X: 299.0, Y: 32.62
-, Control Effort: 1.00
-X: 299.1, Y: 32.62
-, Control Effort: 1.00
-X: 299.2, Y: 32.62
-, Control Effort: 1.00
-X: 299.3, Y: 32.54
-, Control Effort: 1.00
-X: 299.4, Y: 32.62
-, Control Effort: 1.00
-X: 299.5, Y: 32.62
-, Control Effort: 1.00
-X: 299.6, Y: 32.62
-, Control Effort: 1.00
-X: 299.7, Y: 32.62
-, Control Effort: 1.00
-X: 299.8, Y: 32.62
-, Control Effort: 1.00
-X: 299.9, Y: 32.62
-, Control Effort: 1.00
-X: 300.0, Y: 32.62
-, Control Effort: 1.00
-X: 300.1, Y: 32.70
-, Control Effort: 1.00
-X: 300.2, Y: 32.54
-, Control Effort: 1.00
-X: 300.3, Y: 32.62
-, Control Effort: 1.00
-X: 300.4, Y: 32.70
-, Control Effort: 1.00
-X: 300.5, Y: 32.62
-, Control Effort: 1.00
-X: 300.6, Y: 32.70
-, Control Effort: 1.00
-X: 300.7, Y: 32.62
-, Control Effort: 1.00
-X: 300.8, Y: 32.62
-, Control Effort: 1.00
-X: 300.9, Y: 32.62
-, Control Effort: 1.00
-X: 301.0, Y: 32.54
-, Control Effort: 1.00
-X: 301.1, Y: 32.62
-, Control Effort: 1.00
-X: 301.2, Y: 32.62
-, Control Effort: 1.00
-X: 301.3, Y: 32.62
-, Control Effort: 1.00
-X: 301.4, Y: 32.62
-, Control Effort: 1.00
-X: 301.5, Y: 32.62
-, Control Effort: 1.00
-X: 301.6, Y: 32.62
-, Control Effort: 1.00
-X: 301.7, Y: 32.62
-, Control Effort: 1.00
-X: 301.8, Y: 32.62
-, Control Effort: 1.00
-X: 301.9, Y: 32.70
-, Control Effort: 1.00
-X: 302.0, Y: 32.70
-, Control Effort: 1.00
-X: 302.1, Y: 32.62
-, Control Effort: 1.00
-X: 302.2, Y: 32.70
-, Control Effort: 1.00
-X: 302.3, Y: 32.62
-, Control Effort: 1.00
-X: 302.4, Y: 32.54
-, Control Effort: 1.00
-X: 302.5, Y: 32.62
-, Control Effort: 1.00
-X: 302.6, Y: 32.54
-, Control Effort: 1.00
-X: 302.7, Y: 32.62
-, Control Effort: 1.00
-X: 302.8, Y: 32.54
-, Control Effort: 1.00
-X: 302.9, Y: 32.70
-, Control Effort: 1.00
-X: 303.0, Y: 32.70
-, Control Effort: 1.00
-X: 303.1, Y: 32.70
-, Control Effort: 1.00
-X: 303.2, Y: 32.62
-, Control Effort: 1.00
-X: 303.3, Y: 32.70
-, Control Effort: 1.00
-X: 303.4, Y: 32.62
-, Control Effort: 1.00
-X: 303.5, Y: 32.70
-, Control Effort: 1.00
-X: 303.6, Y: 32.62
-, Control Effort: 1.00
-X: 303.7, Y: 32.62
-, Control Effort: 1.00
-X: 303.8, Y: 32.62
-, Control Effort: 1.00
-X: 303.9, Y: 32.62
-, Control Effort: 1.00
-X: 304.0, Y: 32.54
-, Control Effort: 1.00
-X: 304.1, Y: 32.70
-, Control Effort: 1.00
-X: 304.2, Y: 32.62
-, Control Effort: 1.00
-X: 304.3, Y: 32.62
-, Control Effort: 1.00
-X: 304.4, Y: 32.62
-, Control Effort: 1.00
-X: 304.5, Y: 32.70
-, Control Effort: 1.00
-X: 304.6, Y: 32.70
-, Control Effort: 1.00
-X: 304.7, Y: 32.70
-, Control Effort: 1.00
-X: 304.8, Y: 32.70
-, Control Effort: 1.00
-X: 304.9, Y: 32.70
-, Control Effort: 1.00
-X: 305.0, Y: 32.62
-, Control Effort: 1.00
-X: 305.1, Y: 32.62
-, Control Effort: 1.00
-X: 305.2, Y: 32.70
-, Control Effort: 1.00
-X: 305.3, Y: 32.70
-, Control Effort: 1.00
-X: 305.4, Y: 32.70
-, Control Effort: 1.00
-X: 305.5, Y: 32.62
-, Control Effort: 1.00
-X: 305.6, Y: 32.70
-, Control Effort: 1.00
-X: 305.7, Y: 32.62
-, Control Effort: 1.00
-X: 305.8, Y: 32.78
-, Control Effort: 1.00
-X: 305.9, Y: 32.70
-, Control Effort: 1.00
-X: 306.0, Y: 32.70
-, Control Effort: 1.00
-X: 306.1, Y: 32.62
-, Control Effort: 1.00
-X: 306.2, Y: 32.70
-, Control Effort: 1.00
-X: 306.3, Y: 32.70
-, Control Effort: 1.00
-X: 306.4, Y: 32.70
-, Control Effort: 1.00
-X: 306.5, Y: 32.62
-, Control Effort: 1.00
-X: 306.6, Y: 32.70
-, Control Effort: 1.00
-X: 306.7, Y: 32.62
-, Control Effort: 1.00
-X: 306.8, Y: 32.70
-, Control Effort: 1.00
-X: 306.9, Y: 32.70
-, Control Effort: 1.00
-X: 307.0, Y: 32.78
-, Control Effort: 1.00
-X: 307.1, Y: 32.62
-, Control Effort: 1.00
-X: 307.2, Y: 32.70
-, Control Effort: 1.00
-X: 307.3, Y: 32.70
-, Control Effort: 1.00
-X: 307.4, Y: 32.78
-, Control Effort: 1.00
-X: 307.5, Y: 32.70
-, Control Effort: 1.00
-X: 307.6, Y: 32.70
-, Control Effort: 1.00
-X: 307.7, Y: 32.70
-, Control Effort: 1.00
-X: 307.8, Y: 32.70
-, Control Effort: 1.00
-X: 307.9, Y: 32.70
-, Control Effort: 1.00
-X: 308.0, Y: 32.62
-, Control Effort: 1.00
-X: 308.1, Y: 32.70
-, Control Effort: 1.00
-X: 308.2, Y: 32.70
-, Control Effort: 1.00
-X: 308.3, Y: 32.70
-, Control Effort: 1.00
-X: 308.4, Y: 32.70
-, Control Effort: 1.00
-X: 308.5, Y: 32.70
-, Control Effort: 1.00
-X: 308.6, Y: 32.78
-, Control Effort: 1.00
-X: 308.7, Y: 32.70
-, Control Effort: 1.00
-X: 308.8, Y: 32.70
-, Control Effort: 1.00
-X: 308.9, Y: 32.70
-, Control Effort: 1.00
-X: 309.0, Y: 32.70
-, Control Effort: 1.00
-X: 309.1, Y: 32.70
-, Control Effort: 1.00
-X: 309.2, Y: 32.78
-, Control Effort: 1.00
-X: 309.3, Y: 32.86
-, Control Effort: 1.00
-X: 309.4, Y: 32.70
-, Control Effort: 1.00
-X: 309.5, Y: 32.70
-, Control Effort: 1.00
-X: 309.6, Y: 32.70
-, Control Effort: 1.00
-X: 309.7, Y: 32.70
-, Control Effort: 1.00
-X: 309.8, Y: 32.70
-, Control Effort: 1.00
-X: 309.9, Y: 32.70
-, Control Effort: 1.00
-X: 310.0, Y: 32.70
-, Control Effort: 1.00
-X: 310.1, Y: 32.62
-, Control Effort: 1.00
-X: 310.2, Y: 32.70
-, Control Effort: 1.00
-X: 310.3, Y: 32.70
-, Control Effort: 1.00
-X: 310.4, Y: 32.62
-, Control Effort: 1.00
-X: 310.5, Y: 32.70
-, Control Effort: 1.00
-X: 310.6, Y: 32.70
-, Control Effort: 1.00
-X: 310.7, Y: 32.70
-, Control Effort: 1.00
-X: 310.8, Y: 32.70
-, Control Effort: 1.00
-X: 310.9, Y: 32.78
-, Control Effort: 1.00
-X: 311.0, Y: 32.62
-, ContX: 328.7, Y: 32.54
-, Control Effort: 1.00
-X: 328.8, Y: 32.54
-, Control Effort: 1.00
-X: 328.9, Y: 32.54
-, Control Effort: 1.00
-X: 329.0, Y: 32.54
-, Control Effort: 1.00
-X: 329.1, Y: 32.54
-, Control Effort: 1.00
-X: 329.2, Y: 32.54
-, Control Effort: 1.00
-X: 329.3, Y: 32.54
-, Control Effort: 1.00
-X: 329.4, Y: 32.54
-, Control Effort: 1.00
-X: 329.5, Y: 32.54
-, Control Effort: 1.00
-X: 329.6, Y: 32.54
-, Control Effort: 1.00
-X: 329.7, Y: 32.46
-, Control Effort: 1.00
-X: 329.8, Y: 32.62
-, Control Effort: 1.00
-X: 329.9, Y: 32.54
-, Control Effort: 1.00
-X: 330.0, Y: 32.54
-, Control Effort: 1.00
-X: 330.1, Y: 32.54
-, Control Effort: 1.00
-X: 330.2, Y: 32.54
-, Control Effort: 1.00
-X: 330.3, Y: 32.54
-, Control Effort: 1.00
-X: 330.4, Y: 32.54
-, Control Effort: 1.00
-X: 330.5, Y: 32.54
-, Control Effort: 1.00
-X: 330.6, Y: 32.54
-, Control Effort: 1.00
-X: 330.7, Y: 32.46
-, Control Effort: 1.00
-X: 330.8, Y: 32.54
-, Control Effort: 1.00
-X: 330.9, Y: 32.54
-, Control Effort: 1.00
-X: 331.0, Y: 32.62
-, Control Effort: 1.00
-X: 331.1, Y: 32.54
-, Control Effort: 1.00
-X: 331.2, Y: 32.46
-, Control Effort: 1.00
-X: 331.3, Y: 32.54
-, Control Effort: 1.00
-X: 331.4, Y: 32.46
-, Control Effort: 1.00
-X: 331.5, Y: 32.54
-, Control Effort: 1.00
-X: 331.6, Y: 32.54
-, Control Effort: 1.00
-X: 331.7, Y: 32.54
-, Control Effort: 1.00
-X: 331.8, Y: 32.54
-, Control Effort: 1.00
-X: 331.9, Y: 32.54
-, Control Effort: 1.00
-X: 332.0, Y: 32.54
-, Control Effort: 1.00
-X: 332.1, Y: 32.54
-, Control Effort: 1.00
-X: 332.2, Y: 32.54
-, Control Effort: 1.00
-X: 332.3, Y: 32.54
-, Control Effort: 1.00
-X: 332.4, Y: 32.46
-, Control Effort: 1.00
-X: 332.5, Y: 32.54
-, Control Effort: 1.00
-X: 332.6, Y: 32.46
-, Control Effort: 1.00
-X: 332.7, Y: 32.46
-, Control Effort: 1.00
-X: 332.8, Y: 32.46
-, Control Effort: 1.00
-X: 332.9, Y: 32.54
-, Control Effort: 1.00
-X: 333.0, Y: 32.46
-, Control Effort: 1.00
-X: 333.1, Y: 32.46
-, Control Effort: 1.00
-X: 333.2, Y: 32.46
-, Control Effort: 1.00
-X: 333.3, Y: 32.46
-, Control Effort: 1.00
-X: 333.4, Y: 32.54
-, Control Effort: 1.00
-X: 333.5, Y: 32.54
-, Control Effort: 1.00
-X: 333.6, Y: 32.54
-, Control Effort: 1.00
-X: 333.7, Y: 32.46
-, Control Effort: 1.00
-X: 333.8, Y: 32.54
-, Control Effort: 1.00
-X: 333.9, Y: 32.54
-, Control Effort: 1.00
-X: 334.0, Y: 32.46
-, Control Effort: 1.00
-X: 334.1, Y: 32.46
-, Control Effort: 1.00
-X: 334.2, Y: 32.46
-, Control Effort: 1.00
-X: 334.3, Y: 32.46
-, Control Effort: 1.00
-X: 334.4, Y: 32.46
-, Control Effort: 1.00
-X: 334.5, Y: 32.46
-, Control Effort: 1.00
-X: 334.6, Y: 32.46
-, Control Effort: 1.00
-X: 334.7, Y: 32.54
-, Control Effort: 1.00
-X: 334.8, Y: 32.46
-, Control Effort: 1.00
-X: 334.9, Y: 32.54
-, Control Effort: 1.00
-X: 335.0, Y: 32.46
-, Control Effort: 1.00
-X: 335.1, Y: 32.46
-, Control Effort: 1.00
-X: 335.2, Y: 32.46
-, Control Effort: 1.00
-X: 335.3, Y: 32.46
-, Control Effort: 1.00
-X: 335.4, Y: 32.46
-, Control Effort: 1.00
-X: 335.5, Y: 32.46
-, Control Effort: 1.00
-X: 335.6, Y: 32.46
-, Control Effort: 1.00
-X: 335.7, Y: 32.46
-, Control Effort: 1.00
-X: 335.8, Y: 32.46
-, Control Effort: 1.00
-X: 335.9, Y: 32.46
-, Control Effort: 1.00
-X: 336.0, Y: 32.54
-, Control Effort: 1.00
-X: 336.1, Y: 32.46
-, Control Effort: 1.00
-X: 336.2, Y: 32.54
-, Control Effort: 1.00
-X: 336.3, Y: 32.46
-, Control Effort: 1.00
-X: 336.4, Y: 32.46
-, Control Effort: 1.00
-X: 336.5, Y: 32.46
-, Control Effort: 1.00
-X: 336.6, Y: 32.54
-, Control Effort: 1.00
-X: 336.7, Y: 32.54
-, Control Effort: 1.00
-X: 336.8, Y: 32.46
-, Control Effort: 1.00
-X: 336.9, Y: 32.54
-, Control Effort: 1.00
-X: 337.0, Y: 32.46
-, Control Effort: 1.00
-X: 337.1, Y: 32.46
-, Control Effort: 1.00
-X: 337.2, Y: 32.46
-, Control Effort: 1.00
-X: 337.3, Y: 32.54
-, Control Effort: 1.00
-X: 337.4, Y: 32.46
-, Control Effort: 1.00
-X: 337.5, Y: 32.46
-, Control Effort: 1.00
-X: 337.6, Y: 32.38
-, Control Effort: 1.00
-X: 337.7, Y: 32.38
-, Control Effort: 1.00
-X: 0.1, Y: 0.00
+X: 0.1, Y: 0.00
 , Control Effort: 0.00
 X: 0.2, Y: 33.02
 , Control Effort: 1.00
