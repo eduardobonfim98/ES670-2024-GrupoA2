@@ -71,7 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint;
+float fSetPoint = 45;
 
 xMatrixKeyboardState Teclado;
 
@@ -107,7 +107,7 @@ char strCounter[16]; // String buffer to hold the counter value
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
 float fHeaterDuty = 0.00;
-float fCoolerDuty = 0.00;
+float fCoolerDuty = 1.00;
 
 //buzzer set timer pointer, period and frequency
 extern unsigned short int usBuzzerPeriod;
@@ -128,7 +128,7 @@ float timeCounter = 0.0f;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void vTemperatureControl(float fSetPoint);
+float vTemperatureControl();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -221,8 +221,8 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  //vPidInit(31, 2.5, 98, 0.01, 1); //primeiro teste, nao bateu o setpoint
-  vPidInit(45, 5, 98, 0.01, 1); //bateu
+  vPidInit(400	, 4.6	, 98, 0.01, 1); //primeiro teste, nao bateu o setpoint
+  //vPidInit(45, 5, 98, 0.01, 1); //bateu
   //vPidInit(15.68, 1.25, 49, 0.01, 1); //quinto teste, dividindo o Kc por 2, mas provavelmente nao vai chegar, pq mesmo com o dobro de Kp nao chegou
   //vPidInit(80, 2.5, 98, 0.01, 1); // segundo teste
   //vPidInit(80, 2.5, 0, 0.01, 1); // terceiro teste
@@ -242,7 +242,7 @@ int main(void)
       vLcdSetCursor(1,6);
 
       /* Temperature Control */
-      //vTemperatureControl(50);
+      vTemperatureControl();
 
 
     /* USER CODE END WHILE */
@@ -377,7 +377,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
 						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
-						        sprintf(ucTemperature, "X: %.1f, Y: %.2f\n\r", timeCounter, temperature);
+						        sprintf(ucTemperature, "X: %.1f, Y: %.2f\n\r, Control Effort: %.2f\n\r", timeCounter, temperature, vTemperatureControl());
 						        vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
@@ -440,13 +440,14 @@ void vButtonsEventCallback3sPressedEvent(char cBt){
 	}
 }
 
-void vTemperatureControl(float fSetPoint)
+float vTemperatureControl()
 {
   float fSensorValue, fcontrolEffort;
 
   fSensorValue = fTemperatureSensorGetTemperature();
   fcontrolEffort = fPidUpdateData(fSensorValue, fSetPoint);
   vHeaterPWMDuty(fcontrolEffort);
+  return fcontrolEffort;
 }
 
 /* USER CODE END 4 */
