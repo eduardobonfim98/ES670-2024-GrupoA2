@@ -71,7 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint = 50;
+float fSetPoint = 55;
 
 xMatrixKeyboardState Teclado;
 
