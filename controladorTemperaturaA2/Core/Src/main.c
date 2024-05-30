@@ -71,7 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint = 45;
+float fSetPoint = 50;
 
 xMatrixKeyboardState Teclado;
 
@@ -221,13 +221,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(400	, 4.6	, 98, 0.01, 1); //primeiro teste, nao bateu o setpoint
-  //vPidInit(45, 5, 98, 0.01, 1); //bateu
-  //vPidInit(15.68, 1.25, 49, 0.01, 1); //quinto teste, dividindo o Kc por 2, mas provavelmente nao vai chegar, pq mesmo com o dobro de Kp nao chegou
-  //vPidInit(80, 2.5, 98, 0.01, 1); // segundo teste
-  //vPidInit(80, 2.5, 0, 0.01, 1); // terceiro teste
-  //vPidInit(8, 0.01, 0, 0.01, 1); // quarto teste
-  //vPidInit(200, 2.5, 98, 0.01, 1); //primeiro teste
+  vPidInit(400, 4.6	,98, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -377,7 +371,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
 						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
-						        sprintf(ucTemperature, "X: %.1f, Y: %.2f\n\r, Control Effort: %.2f\n\r", timeCounter, temperature, vTemperatureControl());
+						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r, Control: %.2f\n\r", timeCounter, temperature, vTemperatureControl());
 						        vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
