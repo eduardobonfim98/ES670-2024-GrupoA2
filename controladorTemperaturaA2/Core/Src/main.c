@@ -221,7 +221,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(31.35, 2.5, 130, 0.01, 1);
+  vPidInit(15.67, 1.25, 49, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -236,7 +236,7 @@ int main(void)
       vLcdSetCursor(1,6);
 
       /* Temperature Control */
-      //vTemperatureControl();
+      vTemperatureControl();
 
 
     /* USER CODE END WHILE */
