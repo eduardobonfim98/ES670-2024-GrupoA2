@@ -236,7 +236,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
 
-      HAL_Delay(500);
+      HAL_Delay(1000);
+      vLcdSetCursor(0,3);
+      vLcdWriteString("     ");
+      vLcdSetCursor(0,11);
+      vLcdWriteString("     ");
+      vLcdSetCursor(1,3);
+      vLcdWriteString("     ");
+      vLcdSetCursor(1,11);
+      vLcdWriteString("     ");
       sprintf(cStrKp, "%.1f", xPidConfig.fKp);
       vLcdSetCursor(0,3);
       vLcdWriteString(cStrKp);
@@ -392,7 +400,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
 						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r, Control: %.2f\n\r", timeCounter, temperature, vTemperatureControl());
-						        vCommunicationStateMachineTransmit(ucTemperature);
+						        //vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
 
