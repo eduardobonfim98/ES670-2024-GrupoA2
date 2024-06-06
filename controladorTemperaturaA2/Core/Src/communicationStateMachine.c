@@ -1,4 +1,5 @@
 #include "communicationStateMachine.h"
+#include "pid.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>

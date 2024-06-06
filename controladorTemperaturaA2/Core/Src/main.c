@@ -228,7 +228,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(15.67, 1.25, 49, 0.01, 1);
+  vPidInit(400, 4.6, 98, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -243,11 +243,11 @@ int main(void)
 
       sprintf(cStrKi, "%.1f", xPidConfig.fKi);
       vLcdSetCursor(0,11);
-      vLcdWriteString(cStrKp);
+      vLcdWriteString(cStrKi);
 
       sprintf(cStrKd, "%.1f", xPidConfig.fKd);
       vLcdSetCursor(1,3);
-      vLcdWriteString(cStrKp);
+      vLcdWriteString(cStrKd);
 
       fTemperature = fTemperatureSensorGetTemperature();
       sprintf(strCounter, "%.1f", fTemperature);
