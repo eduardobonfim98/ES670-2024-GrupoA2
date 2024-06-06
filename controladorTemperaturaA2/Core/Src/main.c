@@ -123,6 +123,13 @@ extern float fTemperature;
 char ucTemperature[50];
 float timeCounter = 0.0f;
 
+//Struct for PID
+extern pid_data_type xPidConfig;
+//buffers for PID printing
+char cStrKp[16];
+char cStrKi[16];
+char cStrKd[16];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -230,10 +237,23 @@ int main(void)
   while (1) {
 
       HAL_Delay(500);
+      sprintf(cStrKp, "%.1f", xPidConfig.fKp);
+      vLcdSetCursor(0,3);
+      vLcdWriteString(cStrKp);
+
+      sprintf(cStrKi, "%.1f", xPidConfig.fKi);
+      vLcdSetCursor(0,11);
+      vLcdWriteString(cStrKp);
+
+      sprintf(cStrKd, "%.1f", xPidConfig.fKd);
+      vLcdSetCursor(1,3);
+      vLcdWriteString(cStrKp);
+
       fTemperature = fTemperatureSensorGetTemperature();
-      sprintf(strCounter, "%.2f", fTemperature);
+      sprintf(strCounter, "%.1f", fTemperature);
+      vLcdSetCursor(1,11);
       vLcdWriteString(strCounter);
-      vLcdSetCursor(1,6);
+
 
       /* Temperature Control */
       vTemperatureControl();

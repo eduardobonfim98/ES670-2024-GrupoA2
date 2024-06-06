@@ -20,6 +20,7 @@ extern unsigned char c;
 
 extern float fActualTemp; // Variável para armazenar a temperatura atual
 extern float fDesiredTemp; // Variável para armazenar a temperatura desejada
+extern pid_data_type xPidConfig;
 extern unsigned int uiCoolerSpeed; // Variável para armazenar a velocidade do cooler (0 - 100%)
 extern unsigned char ucButtonState; // Variável para armazenar o estado dos botões (bloqueados ou liberados), 1 = liberado, 0 = bloqueado
 extern unsigned char ucDutyCycleCooler; // Variável para armazenar o duty cycle do cooler (0 - 100%)
@@ -85,7 +86,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                     ucUartState = IDDLE;
                 break;
             case SET:
-                if ('d'==ucByte)
+                if ('t'==ucByte || 'p'==ucByte || 'i'==ucByte || 'd'==ucByte)
                 {
                     ucParam = ucByte;
                     ucValueCount = 0;
@@ -162,11 +163,23 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
 void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *value)
 {
 	unsigned char cTransmit[50];
-    if (param == 'd')
+    if (param == 't')
     {
         fDesiredTemp = atof((const char *)value);
 
         sprintf(cTransmit, "\n\rDesired Temperature = %.3f\n\r", fDesiredTemp);
+    }else if (param == 'p'){
+    	xPidConfig.fKp = atof((const char *)value);
+
+    	sprintf(cTransmit, "\n\rKp = %.3f\n\r", xPidConfig.fKp);
+    }else if (param == 'i'){
+    	xPidConfig.fKi = atof((const char *)value);
+
+    	sprintf(cTransmit, "\n\rKi = %.3f\n\r", xPidConfig.fKi);
+    }else if (param == 'd'){
+    	xPidConfig.fKd = atof((const char *)value);
+
+    	sprintf(cTransmit, "\n\rKd = %.3f\n\r", xPidConfig.fKd);
     }
     vCommunicationStateMachineTransmit(cTransmit);
 }

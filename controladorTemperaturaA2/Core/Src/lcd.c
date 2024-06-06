@@ -253,9 +253,9 @@ void vLcdSet(void){
 
 	vLcdSetCursor(0,0);
 
-	vLcdWriteString("Teste Grupo A2");
+	vLcdWriteString("kp:     ki:");
 
 	vLcdSetCursor(1,0);
 
-	vLcdWriteString("Temp: ");
+	vLcdWriteString("kd:     T:");
 }
