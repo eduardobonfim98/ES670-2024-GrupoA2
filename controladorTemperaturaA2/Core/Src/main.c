@@ -217,7 +217,7 @@ int main(void)
 
   //Heater and Cooler
   setupPWM();
-  vCoolerfanPWMDuty(fCoolerDuty);
+  //vCoolerfanPWMDuty(fCoolerDuty);
   //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
@@ -228,7 +228,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(400, 4.6, 98, 0.01, 1);
+  vPidInit(50, 2.5, 200, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -400,7 +400,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
 						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r, Control: %.2f\n\r", timeCounter, temperature, vTemperatureControl());
-						        //vCommunicationStateMachineTransmit(ucTemperature);
+						        vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
 
