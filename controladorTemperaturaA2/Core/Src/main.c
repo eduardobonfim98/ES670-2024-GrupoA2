@@ -71,7 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint = 40;
+float fSetPoint = 60;
 
 xMatrixKeyboardState Teclado;
 
@@ -218,7 +218,7 @@ int main(void)
   //Heater and Cooler
   setupPWM();
 
-  //vCoolerfanPWMDuty(fCoolerDuty);
+  vCoolerfanPWMDuty(fCoolerDuty);
   //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
@@ -229,7 +229,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(40, 0.5, 2, 0.01, 1);
+  vPidInit(32, 0.5, 2, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -265,7 +265,7 @@ int main(void)
 
 
       /* Temperature Control */
-      vTemperatureControl();
+      //vTemperatureControl();
 
 
     /* USER CODE END WHILE */
