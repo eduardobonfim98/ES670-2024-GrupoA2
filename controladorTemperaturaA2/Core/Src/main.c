@@ -218,7 +218,7 @@ int main(void)
   //Heater and Cooler
   setupPWM();
 
-  vCoolerfanPWMDuty(fCoolerDuty);
+  //vCoolerfanPWMDuty(fCoolerDuty);
   //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
@@ -265,7 +265,7 @@ int main(void)
 
 
       /* Temperature Control */
-      //vTemperatureControl();
+      vTemperatureControl();
 
 
     /* USER CODE END WHILE */
