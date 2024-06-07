@@ -71,7 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint = 55;
+float fSetPoint = 40;
 
 xMatrixKeyboardState Teclado;
 
@@ -217,7 +217,8 @@ int main(void)
 
   //Heater and Cooler
   setupPWM();
-  //vCoolerfanPWMDuty(fCoolerDuty);
+
+  vCoolerfanPWMDuty(fCoolerDuty);
   //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
@@ -228,7 +229,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(50, 2.5, 200, 0.01, 1);
+  vPidInit(320, 8, 240, 0.01, 1);
 
   /* USER CODE END 2 */
 
@@ -264,7 +265,7 @@ int main(void)
 
 
       /* Temperature Control */
-      vTemperatureControl();
+      //vTemperatureControl();
 
 
     /* USER CODE END WHILE */
@@ -399,7 +400,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
 						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
-						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r, Control: %.2f\n\r", timeCounter, temperature, vTemperatureControl());
+						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r", timeCounter, temperature);
+
 						        vCommunicationStateMachineTransmit(ucTemperature);
 							}
 	}
