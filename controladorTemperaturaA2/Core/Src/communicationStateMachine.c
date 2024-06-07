@@ -78,7 +78,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                 }
                 break;
             case GET:
-                if ('t'==ucByte || 'i'==ucByte ||
+                if ('t'==ucByte || 'b'==ucByte ||
                     'c'==ucByte || 'h'==ucByte || 'v'==ucByte)
                 {
                     ucParam = ucByte;
@@ -89,7 +89,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                 break;
             case SET:
             	//p = proporcional q = integrativo r = derivativo
-                if ('p'==ucByte || 'q'==ucByte || 'r'==ucByte)
+                if ('p'==ucByte || 'i'==ucByte || 'd'==ucByte)
                 {
                     ucParam = ucByte;
                     ucValueCount = 0;
@@ -141,6 +141,8 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
     {
         case 't':  // Temperatura atual
             sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);
+            break;
+        case 'b':  // Estado dos botões
             sprintf(cTransmit, "%c=%d\n\r", param, ucButtonState);
             break;
         case 'v':  // Velocidade do cooler
@@ -170,11 +172,11 @@ void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *valu
     	xPidConfig.fKp = atof((const char *)value);
 
     	sprintf((char*)cTransmit, "\n\rKp = %.3f\n\r", xPidConfig.fKp);
-    }else if (param == 'q'){
+    }else if (param == 'i'){
     	xPidConfig.fKi = atof((const char *)value);
 
     	sprintf((char*)cTransmit, "\n\rKi = %.3f\n\r", xPidConfig.fKi);
-    }else if (param == 'r'){
+    }else if (param == 'd'){
     	xPidConfig.fKd = atof((const char *)value);
 
     	sprintf((char*)cTransmit, "\n\rKd = %.3f\n\r", xPidConfig.fKd);
