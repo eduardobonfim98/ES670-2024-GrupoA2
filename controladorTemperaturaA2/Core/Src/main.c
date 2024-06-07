@@ -71,7 +71,7 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint = 40;
+float fSetPoint = 70;
 
 xMatrixKeyboardState Teclado;
 
@@ -229,7 +229,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
 
   //PID
-  vPidInit(150, 1, 90, 0.01, 1);
+  vPidInit(400, 5, 98, 0.01, 1);
 
   /* USER CODE END 2 */
 
