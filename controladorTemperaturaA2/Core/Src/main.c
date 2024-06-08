@@ -25,6 +25,7 @@
 #include "tim.h"
 #include "gpio.h"
 #include "pid.h"
+#include <stdbool.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -71,7 +72,15 @@ char cNumber = 0;
 char cNumber500ms = 0;
 extern unsigned char c;
 char temp = 0x27;
-float fSetPoint = 60;
+
+float fPrintCoolerDuty;
+float fPrintHeaterDuty;
+
+float fSetPoint = 30;
+bool bCoolerActivated = false;
+float fHysteresis = 0.05 ; // Histerese de 2 graus, faixa
+// A zona morta (histerese) é uma faixa de temperatura em torno do setpoint onde não haverá acionamento do cooler
+//O objetivo é evitar acionamento desnecessario do cooler por erro estacionario ou overshoot
 
 xMatrixKeyboardState Teclado;
 
@@ -106,8 +115,8 @@ char strCounter[16]; // String buffer to hold the counter value
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
-float fHeaterDuty = 0.00;
-float fCoolerDuty = 1.00;
+float fCoolerDuty;
+float fHeaterDuty;
 
 //buzzer set timer pointer, period and frequency
 extern unsigned short int usBuzzerPeriod;
@@ -142,14 +151,18 @@ void vCoolerControl(float currentTemp, float setPoint);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-void vCoolerControl(float currentTemp, float setPoint) {
-    if (currentTemp > setPoint) {
+void vCoolerOn(float currentTemp, float setPoint) {
         vCoolerfanPWMDuty(1.0); // Liga o cooler na potência máxima
-        while (fTemperatureSensorGetTemperature() > (setPoint * 0.9)) {
-            HAL_Delay(50); // Espera um pouco antes de checar novamente
-        }
+        vHeaterPWMDuty(0.0);
+        fPrintCoolerDuty = 1.0;
+        fPrintHeaterDuty = 0.0;
+        bCoolerActivated = true; // Atualiza o estado do cooler
+}
+
+void vCoolerOff(float currentTemp, float setPoint) {
+        fPrintCoolerDuty = 0.0;
         vCoolerfanPWMDuty(0.0); // Desliga o cooler
-    }
+        bCoolerActivated = false; // Atualiza o estado do cooler
 }
 
 /* USER CODE END 0 */
@@ -275,15 +288,16 @@ int main(void)
       vLcdWriteString(strCounter);
 
 
-      // Controle de temperatura
-      if (fSetPoint < fTemperature) {
-          vCoolerControl(fTemperature, fSetPoint);
+      if (!bCoolerActivated && fTemperature > (fSetPoint + fHysteresis * fSetPoint)) {
+          vCoolerOn(fTemperature, fSetPoint);
+
+      } else if (bCoolerActivated && fTemperature < (fSetPoint - fHysteresis * fSetPoint)) {
+          vCoolerOff(fTemperature, fSetPoint);
+          vTemperatureControl();
+
       } else {
-
-
           vTemperatureControl();
       }
-
 
     /* USER CODE END WHILE */
 
@@ -417,7 +431,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
 						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
-						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r", timeCounter, temperature);
+						        sprintf(ucTemperature, "t: %.1f, T: %.2f, H: %.1f, C: %.1f, \n\r", timeCounter, temperature, fPrintHeaterDuty, fPrintCoolerDuty);
 
 						        vCommunicationStateMachineTransmit(ucTemperature);
 							}
@@ -488,6 +502,7 @@ float vTemperatureControl()
   fSensorValue = fTemperatureSensorGetTemperature();
   fcontrolEffort = fPidUpdateData(fSensorValue, fSetPoint);
   vHeaterPWMDuty(fcontrolEffort);
+  fPrintHeaterDuty = fcontrolEffort;
   return fcontrolEffort;
 }
 
