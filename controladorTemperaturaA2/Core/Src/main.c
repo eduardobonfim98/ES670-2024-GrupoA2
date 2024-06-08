@@ -136,10 +136,21 @@ char cStrKd[16];
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 float vTemperatureControl();
+void vCoolerControl(float currentTemp, float setPoint);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+void vCoolerControl(float currentTemp, float setPoint) {
+    if (currentTemp > setPoint) {
+        vCoolerfanPWMDuty(1.0); // Liga o cooler na potência máxima
+        while (fTemperatureSensorGetTemperature() > (setPoint * 0.9)) {
+            HAL_Delay(50); // Espera um pouco antes de checar novamente
+        }
+        vCoolerfanPWMDuty(0.0); // Desliga o cooler
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -264,8 +275,14 @@ int main(void)
       vLcdWriteString(strCounter);
 
 
-      /* Temperature Control */
-      vTemperatureControl();
+      // Controle de temperatura
+      if (fSetPoint < fTemperature) {
+          vCoolerControl(fTemperature, fSetPoint);
+      } else {
+
+
+          vTemperatureControl();
+      }
 
 
     /* USER CODE END WHILE */
