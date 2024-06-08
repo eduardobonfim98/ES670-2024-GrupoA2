@@ -79,4 +79,6 @@ void vLedOffLed (char);
 // ******************************************************** //
 void vLedToggleLed (char);
 
+void vLedShowNumber(int button);
+
 #endif /* INC_LED_H_ */

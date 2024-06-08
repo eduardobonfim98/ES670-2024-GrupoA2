@@ -18,11 +18,27 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
+#include "i2c.h"
+#include "usart.h"
+#include "tim.h"
+#include "gpio.h"
+#include "pid.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "buttons.h"
 #include "led.h"
+#include "matrixKeyboard.h"
+#include "buttonsEvents.h"
+#include "communicationStateMachine.h"
+#include "temperatureSensor.h"
+#include "lcd.h"
+#include "heaterAndCooler.h"
+#include "buzzer.h"
+#include "tachometer.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,21 +54,88 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef hlpuart1;
 
 /* USER CODE BEGIN PV */
+
+float fActualTemp;
+float fDesiredTemp;
+unsigned int uiCoolerSpeed;
+unsigned char ucButtonState;
+unsigned char ucDutyCycleCooler;
+unsigned char ucDutyCycleHeather;
+char cNumber = 0;
+char cNumber500ms = 0;
+extern unsigned char c;
+char temp = 0x27;
+float fSetPoint = 60;
+
+xMatrixKeyboardState Teclado;
+
+TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
+
+//AD Conversor
+extern ADC_HandleTypeDef hadc1;
+extern unsigned long int adc_value;
+
+//pressed buttons flags
+char cUpFlag = 0;
+char cDownFlag = 0;
+char cLeftFlag = 0;
+char cRightFlag = 0;
+char cEnterFlag = 0;
+
+//flag that shows when a button is pressed for a long period
+char cLongPressFlag = 0;
+
+//bin value shown by the LEds
+int iLedValue = 0;
+int iLedBinValue = 0;
+
+//LCD variables
+extern char cLCDAddress;
+extern I2C_HandleTypeDef *hLCD;
+extern unsigned char ucBackLight;
+char cBufferLcd[2];
+unsigned int uiTimerCounter = 0;
+char strCounter[16]; // String buffer to hold the counter value
+
+//Duty Cycles of Heater and Cooler
+uint32_t uiHeaterCCRValue;
+uint32_t uiCoolerCCRValue;
+float fHeaterDuty = 0.00;
+float fCoolerDuty = 1.00;
+
+//buzzer set timer pointer, period and frequency
+extern unsigned short int usBuzzerPeriod;
+extern unsigned short int usBuzzerFrequency;
+extern TIM_HandleTypeDef *pTimerBuzzer;
+
+//tachometer rotations
+extern unsigned short int usCoolerSpeed;
+int teste;
+
+//Temperature Sensor variables
+extern float fTemperature;
+char ucTemperature[50];
+float timeCounter = 0.0f;
+
+//Struct for PID
+extern pid_data_type xPidConfig;
+//buffers for PID printing
+char cStrKp[16];
+char cStrKi[16];
+char cStrKd[16];
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_LPUART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
-
+float vTemperatureControl();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -66,6 +149,7 @@ static void MX_LPUART1_UART_Init(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -76,8 +160,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  vLedInitLed ();
-  vButtonsInitButtons();
+
 
   /* USER CODE END Init */
 
@@ -90,38 +173,107 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LPUART1_UART_Init();
+  MX_TIM6_Init();
+  MX_TIM7_Init();
+  MX_TIM16_Init();
+  MX_I2C1_Init();
+  MX_TIM17_Init();
+  MX_TIM1_Init();
+  MX_TIM8_Init();
+  MX_TIM5_Init();
+  MX_TIM20_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
+  MX_ADC1_Init();
+  MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
+
+  //Communication State Machine
+  vCommunicationStateMachineInit(&hlpuart1);
+
+  //Led
+  vLedInitLed ();
+
+  //Buttons
+  vButtonsInitButtons();
+
+  //MatrixKeyboard
+  vMatrixKeyboardInit();
+
+  //Buttons Event
+  vButtonsEventsInit(&htim7, &htim16);
+
+  //Lcd
+  vLcdInitLcd(&hi2c1, 0x27);
+  vLcdSet();
+
+  //Initialize Timer of counter (currently not being used)
+  HAL_TIM_Base_Start_IT(&htim17);
+
+  //Buzzer
+  vBuzzerConfig(1000, 100, &htim5); // Input params: usFrequency - usPeriod - pointer to the buzzer timer
+
+  //Heater and Cooler
+  setupPWM();
+
+  //vCoolerfanPWMDuty(fCoolerDuty);
+  //vHeaterPWMDuty(fHeaterDuty);
+
+  //Tachmeter
+  vTachometerInit(&htim4, 500);
+
+  //Inicialize AD conversor
+  vTemperatureSensorInit(&hadc1);
+  HAL_TIM_Base_Start_IT(&htim15); //Interruption for setting the frequency of the uart communication
+
+  //PID
+  vPidInit(32, 0.5, 2, 0.01, 1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-	  if (cButtonsGetState(up)){
-	  		vLedWriteLed(green1, 1);
-	  	}else if (cButtonsGetState(down)){
-	  		vLedWriteLed(green1, 0);
-	  		vLedOnLed(yellow);
-	  	}else if (cButtonsGetState(right)){
-	  		vLedOffLed(yellow);
-	  		vLedOnLed(red);
-	  		HAL_Delay(1000);
-	  		vLedOffLed(red);
-	  	}else if (cButtonsGetState(left)){
-	  		vLedToggleLed(green2);
-	  		HAL_Delay(500);
-	  		vLedToggleLed(green2);
-	  	}else if (cButtonsGetState(enter)){
-	  		vLedToggleLed(blue);
-	  		HAL_Delay(500);
-	  		vLedToggleLed(blue);
-	  	}
+  while (1) {
+
+      HAL_Delay(1000);
+      vLcdSetCursor(0,3);
+      vLcdWriteString("     ");
+      vLcdSetCursor(0,11);
+      vLcdWriteString("     ");
+      vLcdSetCursor(1,3);
+      vLcdWriteString("     ");
+      vLcdSetCursor(1,11);
+      vLcdWriteString("     ");
+      sprintf(cStrKp, "%.1f", xPidConfig.fKp);
+      vLcdSetCursor(0,3);
+      vLcdWriteString(cStrKp);
+
+      sprintf(cStrKi, "%.1f", xPidConfig.fKi);
+      vLcdSetCursor(0,11);
+      vLcdWriteString(cStrKi);
+
+      sprintf(cStrKd, "%.1f", xPidConfig.fKd);
+      vLcdSetCursor(1,3);
+      vLcdWriteString(cStrKd);
+
+      fTemperature = fTemperatureSensorGetTemperature();
+      sprintf(strCounter, "%.1f", fTemperature);
+      vLcdSetCursor(1,11);
+      vLcdWriteString(strCounter);
+
+
+      /* Temperature Control */
+      vTemperatureControl();
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+
+
+}
   /* USER CODE END 3 */
 }
 
@@ -171,95 +323,156 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief LPUART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPUART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN LPUART1_Init 0 */
-
-  /* USER CODE END LPUART1_Init 0 */
-
-  /* USER CODE BEGIN LPUART1_Init 1 */
-
-  /* USER CODE END LPUART1_Init 1 */
-  hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 115200;
-  hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
-  hlpuart1.Init.StopBits = UART_STOPBITS_1;
-  hlpuart1.Init.Parity = UART_PARITY_NONE;
-  hlpuart1.Init.Mode = UART_MODE_TX_RX;
-  hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  hlpuart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetTxFifoThreshold(&hlpuart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetRxFifoThreshold(&hlpuart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_DisableFifoMode(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN LPUART1_Init 2 */
-
-  /* USER CODE END LPUART1_Init 2 */
-
-}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
-}
-
 /* USER CODE BEGIN 4 */
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+    if (huart == &hlpuart1) {
+        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
+        vCommunicationStateMachineProcessByteCommunication(c);
+    }
+}
+
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+
+	pTimDebouncerPointer->Instance->CNT = 0;
+	if (!cLongPressFlag){
+		HAL_TIM_Base_Start_IT(pTimPressedTimePointer);
+		cLongPressFlag = 1;
+	}
+
+	switch(GPIO_Pin){
+
+		case BT_Cima_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(1);
+			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cUpFlag = 1;
+		break;
+		case BT_Baixo_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(2);
+			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cDownFlag = 1;
+		break;
+		case BT_Esquerda_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(3);
+			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cLeftFlag = 1;
+		break;
+		case BT_Direita_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(4);
+			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cRightFlag = 1;
+		break;
+		case BT_Enter_Pin:
+			__HAL_GPIO_EXTI_CLEAR_IT(0);
+			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cEnterFlag = 1;
+		break;
+		}
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
+	if(htim == &htim6)
+		vMatrixKeyboardRead();
+	else
+		if(htim == pTimDebouncerPointer)
+			timerButtonsEventsDebouncingPeriodElapsedCallback();
+		else
+			if (htim == pTimPressedTimePointer)
+				timerButtonsEventsLongPressPeriodElapsedCallback();
+			else
+				if (htim == &htim17)
+					uiTimerCounter++;
+				else
+					if (htim == &htim5)
+						vBuzzerStop();
+					else
+						if (htim == &htim4)
+							vTachometerUpdate();
+						else
+							if (htim == &htim15){
+						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
+						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
+
+						        sprintf(ucTemperature, "t: %.1f, T: %.2f\n\r", timeCounter, temperature);
+
+						        vCommunicationStateMachineTransmit(ucTemperature);
+							}
+	}
+
+void vMatrixKeyboardHalfSecPressedCallback (char cButton){
+	cNumber500ms += cButton;
+	if(cNumber500ms >= 16){
+		cNumber500ms = 0;
+	}
+	vLedShowNumber(cNumber500ms);
+}
+
+void vMatrixKeyboardThreeSecPressedCallback (char cButton){
+	vLedToggleLed(5);
+}
+
+void vButtonsEventCallbackPressedEvent(char cBt){
+	if (cBt == up){
+		if(fCoolerDuty < 1){
+			fCoolerDuty += 0.1;
+			vCoolerfanPWMDuty(fCoolerDuty);
+		}
+	}else if(cBt == down){
+		if(fCoolerDuty >= 0){
+			fCoolerDuty -= 0.1;
+			vCoolerfanPWMDuty(fCoolerDuty);
+		}
+	}else if(cBt == left){
+		if(fHeaterDuty >= 0){
+			fHeaterDuty -= 0.1;
+			vHeaterPWMDuty(fHeaterDuty);
+		}
+	}else if(cBt == right){
+		if(fHeaterDuty < 1){
+			fHeaterDuty += 0.1;
+			vHeaterPWMDuty(fHeaterDuty);
+		}
+	}
+	vBuzzerPlay();
+}
+
+void vButtonsEventCallbackReleasedEvent(char cBt){
+
+}
+
+void vButtonsEventCallback500msPressedEvent(char cBt){
+	if (cBt == up){
+		iLedValue += 1;
+		vLedShowNumber(iLedValue);
+	}else if(cBt == down){
+		iLedValue -= 1;
+		vLedShowNumber(iLedValue);
+	}
+}
+
+void vButtonsEventCallback3sPressedEvent(char cBt){
+	if (cBt == enter){
+		iLedValue = 0;
+		vLedShowNumber(iLedBinValue);
+	}
+}
+
+float vTemperatureControl()
+{
+  float fSensorValue, fcontrolEffort;
+
+  fSensorValue = fTemperatureSensorGetTemperature();
+  fcontrolEffort = fPidUpdateData(fSensorValue, fSetPoint);
+  vHeaterPWMDuty(fcontrolEffort);
+  return fcontrolEffort;
+}
 
 /* USER CODE END 4 */
 

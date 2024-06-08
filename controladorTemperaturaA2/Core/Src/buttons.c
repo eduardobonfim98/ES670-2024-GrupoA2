@@ -5,7 +5,7 @@
 /* Revision date:    28mar2024                                              */
 /* ************************************************************************ */
 
-#include "STM32g474xx.h";
+#include "main.h"
 #include "buttons.h"
 
 /* ************************************************ */
@@ -46,44 +46,45 @@ void vButtonsInitButtons(){
 /* *********************************************************** */
 char cButtonsGetState(char button){
 
-	switch(button){
-
-	case up:
-		if(BIT_CHECK(GPIOC->IDR, 1)){
-			return 1;
-		}else{
-			return 0;
-		}
-		break;
-	case down:
-		if(BIT_CHECK(GPIOC->IDR, 2)){
-			return 1;
-		}else{
-			return 0;
-		}
-		break;
-	case left:
-		if(BIT_CHECK(GPIOC->IDR, 3)){
-			return 1;
-		}else{
-			return 0;
-		}
-		break;
-	case right:
-		if(BIT_CHECK(GPIOC->IDR, 4)){
-			return 1;
-		}else{
-			return 0;
-		}
-		break;
-	case enter:
-		if(BIT_CHECK(GPIOB->IDR, 0)){
-			return 1;
-		}else{
-			return 0;
-		}
-		break;
-	}
+    switch(button){
+    case up:
+        if(BIT_CHECK(GPIOC->IDR, 1)){
+            return 1;
+        }else{
+            return 0;
+        }
+        break;
+    case down:
+        if(BIT_CHECK(GPIOC->IDR, 2)){
+            return 1;
+        }else{
+            return 0;
+        }
+        break;
+    case left:
+        if(BIT_CHECK(GPIOC->IDR, 3)){
+            return 1;
+        }else{
+            return 0;
+        }
+        break;
+    case right:
+        if(BIT_CHECK(GPIOC->IDR, 4)){
+            return 1;
+        }else{
+            return 0;
+        }
+        break;
+    case enter:
+        if(BIT_CHECK(GPIOB->IDR, 0)){
+            return 1;
+        }else{
+            return 0;
+        }
+        break;
+    default:
+        return 0; // Default case to handle unexpected button values
+    }
 }
 
 /* ************************************************ */

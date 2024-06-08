@@ -47,7 +47,7 @@ void vLedInitLed ()
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedWriteLed (char cLedNum, int iLedWrite)
-{
+ {
 	if (iLedWrite == 1)
 	{
 		vLedOnLed(cLedNum);
@@ -146,4 +146,22 @@ void vLedToggleLed (char cLedNum)
 			break;
 	}
 
+}
+
+// ******************************************************** //
+// Method name:         vLedShowNumber                      //
+// Method description:     Esta funcao exibe                //
+//                        um numero pelo LED				//
+//                                                          //
+// Input params:     char                             		//
+//                                                          //
+// Output params:       n/a                                 //
+// ******************************************************** //
+void vLedShowNumber(int number) {
+    // Set each LED based on the corresponding bit in 'number'
+    vLedWriteLed(green1, number & 0x01); // bit 0
+    vLedWriteLed(yellow, (number >> 1) & 0x01); // bit 1
+    vLedWriteLed(red, (number >> 2) & 0x01); // bit 2
+    vLedWriteLed(green2, (number >> 3) & 0x01); // bit 3
+    vLedWriteLed(blue, (number >> 4) & 0x01); // bit 4
 }
