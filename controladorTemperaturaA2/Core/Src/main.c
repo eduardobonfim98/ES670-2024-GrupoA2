@@ -76,9 +76,10 @@ char temp = 0x27;
 float fPrintCoolerDuty;
 float fPrintHeaterDuty;
 
-float fSetPoint = 50;
+float fSetPoint = 30;
 bool bCoolerActivated = false;
 float fHysteresis = 0.05 ; // Histerese de 2 graus, faixa
+
 // A zona morta (histerese) é uma faixa de temperatura em torno do setpoint onde não haverá acionamento do cooler
 //O objetivo é evitar acionamento desnecessario do cooler por erro estacionario ou overshoot
 
