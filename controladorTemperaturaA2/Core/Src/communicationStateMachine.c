@@ -24,7 +24,6 @@ extern float fActualTemp; // Variável para armazenar a temperatura atual
 extern float fDesiredTemp; // Variável para armazenar a temperatura desejada
 extern pid_data_type xPidConfig;
 extern unsigned int uiCoolerSpeed; // Variável para armazenar a velocidade do cooler (0 - 100%)
-extern unsigned char ucButtonState; // Variável para armazenar o estado dos botões (bloqueados ou liberados), 1 = liberado, 0 = bloqueado
 extern unsigned char ucDutyCycleCooler; // Variável para armazenar o duty cycle do cooler (0 - 100%)
 extern unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycle do heather (0 - 100%)
 
@@ -41,7 +40,6 @@ void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
   HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
   fActualTemp = 20.0; //t
   fDesiredTemp = 25.0; //d
-  ucButtonState = 1; //i
   uiCoolerSpeed = 10; // v
   ucDutyCycleCooler = 20; // c
   ucDutyCycleHeather = 50; // h
@@ -78,8 +76,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
                 }
                 break;
             case GET:
-                if ('t'==ucByte || 'b'==ucByte ||
-                    'c'==ucByte || 'h'==ucByte || 'v'==ucByte)
+                if ('t'==ucByte || 'c'==ucByte || 'h'==ucByte || 'v'==ucByte)
                 {
                     ucParam = ucByte;
                     ucUartState = PARAM;
@@ -141,9 +138,6 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
     {
         case 't':  // Temperatura atual
             sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);
-            break;
-        case 'b':  // Estado dos botões
-            sprintf(cTransmit, "%c=%d\n\r", param, ucButtonState);
             break;
         case 'v':  // Velocidade do cooler
             sprintf(cTransmit, "%c=%d\n\r", param, uiCoolerSpeed);
