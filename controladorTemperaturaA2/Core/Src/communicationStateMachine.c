@@ -16,7 +16,7 @@
 #define MAX_VALUE_LENGTH 7
 extern UART_HandleTypeDef hlpuart1;
 unsigned char ucUartState = IDDLE; // Variável que armazena o estado atual da UART.
-unsigned char ucValueCount;  // Contador para o número de caracteres no valor recebido.
+unsigned char ucValueCount; // Contador para o número de caracteres no valor recebido.
 extern unsigned char ucUartState;
 extern unsigned char c;
 
@@ -35,14 +35,13 @@ extern unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycl
 // Input params:        UART_HandleTypeDef *huart       //
 // Output params:       n/a                             //
 // **************************************************** //
-void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
-{
-  HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
-  fActualTemp = 20.0; //t
-  fDesiredTemp = 25.0; //d
-  uiCoolerSpeed = 10; // v
-  ucDutyCycleCooler = 20; // c
-  ucDutyCycleHeather = 50; // h
+void vCommunicationStateMachineInit(UART_HandleTypeDef *huart) {
+	HAL_UART_Receive_IT(&hlpuart1, (uint8_t*) &c, 1);
+	fActualTemp = 20.0; //t
+	fDesiredTemp = 25.0; //d
+	uiCoolerSpeed = 10; // v
+	ucDutyCycleCooler = 20; // c
+	ucDutyCycleHeather = 50; // h
 }
 
 // ******************************************************************************** //
@@ -52,77 +51,65 @@ void vCommunicationStateMachineInit(UART_HandleTypeDef *huart)
 // Input params:        n/a                                                         //
 // Output params:       n/a                                                         //
 // ******************************************************************************** //
-void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
-{
-    static unsigned char ucParam;
-    static unsigned char ucValue[MAX_VALUE_LENGTH+1];
-    if('#' == ucByte)
-        ucUartState = READY;
-    else if(IDDLE != ucUartState)
-    {
-        switch(ucUartState)
-        {
-            case READY:
-                switch(ucByte)
-                {
-                    case 'g':
-                        ucUartState = GET;
-                        break;
-                    case 's':
-                        ucUartState = SET;
-                        break;
-                    default:
-                        ucUartState = IDDLE;
-                }
-                break;
-            case GET:
-                if ('t'==ucByte || 'c'==ucByte || 'h'==ucByte || 'v'==ucByte)
-                {
-                    ucParam = ucByte;
-                    ucUartState = PARAM;
-                }
-                else
-                    ucUartState = IDDLE;
-                break;
-            case SET:
-            	//p = proporcional q = integrativo r = derivativo
-                if ('p'==ucByte || 'i'==ucByte || 'd'==ucByte)
-                {
-                    ucParam = ucByte;
-                    ucValueCount = 0;
-                    ucUartState = VALUE;
-                }
-                else
-                    ucUartState = IDDLE;
-                break;
-            case PARAM:
-                if (';'==ucByte)
-                	vCommunicationStateMachineReturnParam(ucParam);
-                ucUartState = IDDLE;
-                break;
-            case VALUE:
-                if ((ucByte>='0' && ucByte<='9') || ','==ucByte)
-                {
-                	if (',' == c)
-                      c = '.';
+void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte) {
+	static unsigned char ucParam;
+	static unsigned char ucValue[MAX_VALUE_LENGTH + 1];
+	if ('#' == ucByte)
+		ucUartState = READY;
+	else if (IDDLE != ucUartState) {
+		switch (ucUartState) {
+		case READY:
+			switch (ucByte) {
+			case 'g':
+				ucUartState = GET;
+				break;
+			case 's':
+				ucUartState = SET;
+				break;
+			default:
+				ucUartState = IDDLE;
+			}
+			break;
+		case GET:
+			if ('t' == ucByte || 'c' == ucByte || 'h' == ucByte
+					|| 'v' == ucByte) {
+				ucParam = ucByte;
+				ucUartState = PARAM;
+			} else
+				ucUartState = IDDLE;
+			break;
+		case SET:
+			//p = proporcional q = integrativo r = derivativo
+			if ('p' == ucByte || 'i' == ucByte || 'd' == ucByte) {
+				ucParam = ucByte;
+				ucValueCount = 0;
+				ucUartState = VALUE;
+			} else
+				ucUartState = IDDLE;
+			break;
+		case PARAM:
+			if (';' == ucByte)
+				vCommunicationStateMachineReturnParam(ucParam);
+			ucUartState = IDDLE;
+			break;
+		case VALUE:
+			if ((ucByte >= '0' && ucByte <= '9') || ',' == ucByte) {
+				if (',' == c)
+					c = '.';
 
-                    if (ucValueCount < MAX_VALUE_LENGTH)
-                        ucValue[ucValueCount++] = ucByte;
-                }
-                else
-                {
-                    if (';'==ucByte)
-                    {
-                        ucValue[ucValueCount] = '\0';
-                        vCommunicationStateMachineSetParam(ucParam, ucValue);
-                    }
-                    ucUartState = IDDLE;
-                }
-                break;
-        }
-    }
+				if (ucValueCount < MAX_VALUE_LENGTH)
+					ucValue[ucValueCount++] = ucByte;
+			} else {
+				if (';' == ucByte) {
+					ucValue[ucValueCount] = '\0';
+					vCommunicationStateMachineSetParam(ucParam, ucValue);
+				}
+				ucUartState = IDDLE;
+			}
+			break;
+		}
+	}
 }
-
 
 // ******************************************************************* //
 // Method name:         vCommunicationStateMachineReturnParam          //
@@ -130,26 +117,24 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte)
 // Input params:        unsigned char param                            //
 // Output params:       n/a                                            //
 // ******************************************************************* //
-void vCommunicationStateMachineReturnParam(unsigned char param)
-{
-    char cTransmit[50];
+void vCommunicationStateMachineReturnParam(unsigned char param) {
+	char cTransmit[50];
 
-    switch (param)
-    {
-        case 't':  // Temperatura atual
-            sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);
-            break;
-        case 'v':  // Velocidade do cooler
-            sprintf(cTransmit, "%c=%d\n\r", param, uiCoolerSpeed);
-            break;
-        case 'h':  // Duty cycle do cooler
-            sprintf(cTransmit, "%c=%d\n\r", param, ucDutyCycleHeather);
-            break;
-        case 'c':  // Duty cycle do cooler
-            sprintf(cTransmit, "%c=%d\n\r", param, ucDutyCycleCooler);
-            break;
-    }
-    vCommunicationStateMachineTransmit(cTransmit);
+	switch (param) {
+	case 't':  // Temperatura atual
+		sprintf(cTransmit, "%c=%.3f\n\r", param, fActualTemp);
+		break;
+	case 'v':  // Velocidade do cooler
+		sprintf(cTransmit, "%c=%d\n\r", param, uiCoolerSpeed);
+		break;
+	case 'h':  // Duty cycle do cooler
+		sprintf(cTransmit, "%c=%d\n\r", param, ucDutyCycleHeather);
+		break;
+	case 'c':  // Duty cycle do cooler
+		sprintf(cTransmit, "%c=%d\n\r", param, ucDutyCycleCooler);
+		break;
+	}
+	vCommunicationStateMachineTransmit(cTransmit);
 }
 
 // ******************************************************************* //
@@ -159,23 +144,23 @@ void vCommunicationStateMachineReturnParam(unsigned char param)
 // Input params:        unsigned char param, unsigned char *value      //
 // Output params:       None                                           //
 // ******************************************************************* //
-void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *value)
-{
+void vCommunicationStateMachineSetParam(unsigned char param,
+		unsigned char *value) {
 	unsigned char cTransmit[50];
-    if (param == 'p'){
-    	xPidConfig.fKp = atof((const char *)value);
+	if (param == 'p') {
+		xPidConfig.fKp = atof((const char*) value);
 
-    	sprintf((char*)cTransmit, "\n\rKp = %.3f\n\r", xPidConfig.fKp);
-    }else if (param == 'i'){
-    	xPidConfig.fKi = atof((const char *)value);
+		sprintf((char*) cTransmit, "\n\rKp = %.3f\n\r", xPidConfig.fKp);
+	} else if (param == 'i') {
+		xPidConfig.fKi = atof((const char*) value);
 
-    	sprintf((char*)cTransmit, "\n\rKi = %.3f\n\r", xPidConfig.fKi);
-    }else if (param == 'd'){
-    	xPidConfig.fKd = atof((const char *)value);
+		sprintf((char*) cTransmit, "\n\rKi = %.3f\n\r", xPidConfig.fKi);
+	} else if (param == 'd') {
+		xPidConfig.fKd = atof((const char*) value);
 
-    	sprintf((char*)cTransmit, "\n\rKd = %.3f\n\r", xPidConfig.fKd);
-    }
-    vCommunicationStateMachineTransmit((char*)cTransmit);
+		sprintf((char*) cTransmit, "\n\rKd = %.3f\n\r", xPidConfig.fKd);
+	}
+	vCommunicationStateMachineTransmit((char*) cTransmit);
 }
 
 // ******************************************************************* //
@@ -185,8 +170,7 @@ void vCommunicationStateMachineSetParam(unsigned char param, unsigned char *valu
 // Input params:        unsigned char param, unsigned char *value      //
 // Output params:       None                                           //
 // ******************************************************************* //
-void vCommunicationStateMachineTransmit(const char* data) {
-	HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *) data, strlen(data));
+void vCommunicationStateMachineTransmit(const char *data) {
+	HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*) data, strlen(data));
 }
-
 
