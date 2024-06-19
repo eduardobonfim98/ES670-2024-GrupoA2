@@ -243,19 +243,38 @@ void vLcdBacklighOFF(){
 }
 
 /* ************************************************ */
-/* Method name:        vLcdSet                      */
+/* Method name:        vLcdSet1                      */
 /* Method description: Display a preset message     */
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdSet(void){
+void vLcdSet1(void){
 	vLcdSendCommand(CMD_CLEAR);
 
 	vLcdSetCursor(0,0);
 
-	vLcdWriteString("kp:     ki:");
+	vLcdWriteString("TEMP:   SET:    ");
 
 	vLcdSetCursor(1,0);
 
-	vLcdWriteString("kd:     T:");
+	vLcdWriteString("RPM:            ");
 }
+
+/* ************************************************ */
+/* Method name:        vLcdSet2                      */
+/* Method description: Display a preset message     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdSet2(void){
+	vLcdSendCommand(CMD_CLEAR);
+
+	vLcdSetCursor(0,0);
+
+	vLcdWriteString("He:");
+
+	vLcdSetCursor(1,0);
+
+	vLcdWriteString("Co:");
+}
+

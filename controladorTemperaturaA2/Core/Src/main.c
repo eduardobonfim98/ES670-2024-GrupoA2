@@ -24,8 +24,6 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
-#include "pid.h"
-#include <stdbool.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -109,9 +107,12 @@ int iLedBinValue = 0;
 extern char cLCDAddress;
 extern I2C_HandleTypeDef *hLCD;
 extern unsigned char ucBackLight;
-char cBufferLcd[2];
-unsigned int uiTimerCounter = 0;
-char strCounter[16]; // String buffer to hold the counter value
+char cSetBuffer[16];  // String buffer to hold the Set Point value
+char cTempBuffer[16]; // String buffer to hold the temperature value
+char cRPMBuffer[16];  // String buffer to hold the cooler speed value
+char cHeaterBuffer[16]; //String buffer to hold the Heater duty cycle value
+char cCoolerBuffer[16]; //String buffer to hold the Cooler duty cycle value
+char cLcdMenu = 0;    // Flag indicating what set menu the LCD is showing
 
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
@@ -232,7 +233,6 @@ int main(void)
 
   //Lcd
   vLcdInitLcd(&hi2c1, 0x27);
-  vLcdSet();
 
   //Initialize Timer of counter (currently not being used)
   HAL_TIM_Base_Start_IT(&htim17);
@@ -262,31 +262,26 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
 
-      HAL_Delay(1000);
-      vLcdSetCursor(0,3);
-      vLcdWriteString("     ");
-      vLcdSetCursor(0,11);
-      vLcdWriteString("     ");
-      vLcdSetCursor(1,3);
-      vLcdWriteString("     ");
-      vLcdSetCursor(1,11);
-      vLcdWriteString("     ");
-      sprintf(cStrKp, "%.1f", xPidConfig.fKp);
-      vLcdSetCursor(0,3);
-      vLcdWriteString(cStrKp);
+	  //verify if the LCD will display the temperature menu or the duty cycle menu
+	  if(cLcdMenu == 0)
+		  vPeriodicTask1();
+	  else if (cLcdMenu == 1)
+		  vPeriodicTask2();
 
-      sprintf(cStrKi, "%.1f", xPidConfig.fKi);
-      vLcdSetCursor(0,11);
-      vLcdWriteString(cStrKi);
-
-      sprintf(cStrKd, "%.1f", xPidConfig.fKd);
-      vLcdSetCursor(1,3);
-      vLcdWriteString(cStrKd);
-
-      fTemperature = fTemperatureSensorGetTemperature();
-      sprintf(strCounter, "%.1f", fTemperature);
-      vLcdSetCursor(1,11);
-      vLcdWriteString(strCounter);
+	  //checks the temperature and show the heat level by color
+      if (fTemperature <= 40){
+    	  vLedOffLed(red);
+    	  vLedOffLed(yellow);
+    	  vLedOnLed(green1);
+      }else if (fTemperature <= 60){
+    	  vLedOffLed(red);
+    	  vLedOnLed(yellow);
+    	  vLedOffLed(green1);
+      }else if (fTemperature <= 90){
+    	  vLedOnLed(red);
+    	  vLedOffLed(yellow);
+    	  vLedOffLed(green1);
+      }
 
 
       if (!bCoolerActivated && fTemperature > (fSetPoint + fHysteresis * fSetPoint)) {
@@ -438,7 +433,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 							}
 	}
 
-void vMatrixKeyboardHalfSecPressedCallback (char cButton){
+/*void vMatrixKeyboardHalfSecPressedCallback (char cButton){
 	cNumber500ms += cButton;
 	if(cNumber500ms >= 16){
 		cNumber500ms = 0;
@@ -448,29 +443,16 @@ void vMatrixKeyboardHalfSecPressedCallback (char cButton){
 
 void vMatrixKeyboardThreeSecPressedCallback (char cButton){
 	vLedToggleLed(5);
-}
+}*/
 
+//the up and down buttons increment/decrement the set point by 1 units
 void vButtonsEventCallbackPressedEvent(char cBt){
-	if (cBt == up){
-		if(fCoolerDuty < 1){
-			fCoolerDuty += 0.1;
-			vCoolerfanPWMDuty(fCoolerDuty);
-		}
-	}else if(cBt == down){
-		if(fCoolerDuty >= 0){
-			fCoolerDuty -= 0.1;
-			vCoolerfanPWMDuty(fCoolerDuty);
-		}
-	}else if(cBt == left){
-		if(fHeaterDuty >= 0){
-			fHeaterDuty -= 0.1;
-			vHeaterPWMDuty(fHeaterDuty);
-		}
-	}else if(cBt == right){
-		if(fHeaterDuty < 1){
-			fHeaterDuty += 0.1;
-			vHeaterPWMDuty(fHeaterDuty);
-		}
+	if(cBt == down){
+		if(fSetPoint > 0)
+			fSetPoint -= 1;
+	}else if(cBt == up){
+		if(fSetPoint < 90)
+			fSetPoint += 1;
 	}
 	vBuzzerPlay();
 }
@@ -479,20 +461,28 @@ void vButtonsEventCallbackReleasedEvent(char cBt){
 
 }
 
+//the up and down buttons increment/decrement the set point by 10 units
 void vButtonsEventCallback500msPressedEvent(char cBt){
 	if (cBt == up){
-		iLedValue += 1;
-		vLedShowNumber(iLedValue);
+		if(fSetPoint < 80)
+			fSetPoint += 10;
+		else
+			fSetPoint = 90;
 	}else if(cBt == down){
-		iLedValue -= 1;
-		vLedShowNumber(iLedValue);
-	}
+		if(fSetPoint < 10)
+			fSetPoint = 0;
+		else
+			fSetPoint -= 10;
+	vBuzzerPlay();
 }
 
+//Toogle the LCD menu display
 void vButtonsEventCallback3sPressedEvent(char cBt){
 	if (cBt == enter){
-		iLedValue = 0;
-		vLedShowNumber(iLedBinValue);
+		if(cLcdMenu == 0)
+			cLcdMenu = 1;
+		else
+			cLcdMenu = 0;
 	}
 }
 
@@ -505,6 +495,43 @@ float vTemperatureControl()
   vHeaterPWMDuty(fcontrolEffort);
   fPrintHeaterDuty = fcontrolEffort;
   return fcontrolEffort;
+}
+
+//hold the temperature and the set point on a buffer and show on LCD display
+void vPeriodicTask1(){
+	vLcdSet1();
+    fTemperature = fTemperatureSensorGetTemperature();
+    sprintf(cTempBuffer, "%.0f", fTemperature);
+    vLcdSetCursor(0,5);
+    vLcdWriteString(cTempBuffer);
+    vLcdSetCursor(0,7);
+    vLcdWriteString(" ");
+
+    sprintf(cSetBuffer, "%.0f", fSetPoint);
+    vLcdSetCursor(0,12);
+    vLcdWriteString(cSetBuffer);
+    vLcdSetCursor(0,14);
+    vLcdWriteString("  ");
+
+    sprintf(cRPMBuffer, "%hu", usCoolerSpeed);
+    vLcdSetCursor(0,12);
+    vLcdWriteString(cRPMBuffer);
+}
+
+//hold the Heater and Cooler duty cycles on a buffer and show on LCD display
+void vPeriodicTask2(){
+	vLcdSet2();
+    sprintf(cHeaterBuffer, "%.2f", fHeaterDuty);
+    vLcdSetCursor(0,3);
+    vLcdWriteString(cHeaterBuffer);
+    vLcdSetCursor(0,7);
+    vLcdWriteString("% ");
+
+    sprintf(cCoolerBuffer, "%.2f", fCoolerDuty);
+    vLcdSetCursor(0,3);
+    vLcdWriteString(cCoolerBuffer);
+    vLcdSetCursor(0,7);
+    vLcdWriteString("% ");
 }
 
 /* USER CODE END 4 */

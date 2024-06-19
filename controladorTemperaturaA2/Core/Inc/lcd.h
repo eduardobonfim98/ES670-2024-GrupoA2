@@ -112,12 +112,20 @@ void vLcdBacklighON();
 void vLcdBacklighOFF();
 
 /* ************************************************ */
-/* Method name:        vLcdSet                      */
+/* Method name:        vLcdSet1                      */
 /* Method description: Display a preset message     */
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdSet(void);
+void vLcdSet1(void);
+
+/* ************************************************ */
+/* Method name:        vLcdSet2                      */
+/* Method description: Display a preset message     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdSet2(void);
 
 
 #endif /* SOURCES_LCD_H_ */
