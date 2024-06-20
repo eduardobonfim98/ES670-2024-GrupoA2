@@ -37,7 +37,9 @@
 #include "heaterAndCooler.h"
 #include "buzzer.h"
 #include "tachometer.h"
+#include "pid.h"
 #include <stdio.h>
+#include <stdbool.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,6 +115,7 @@ char cRPMBuffer[16];  // String buffer to hold the cooler speed value
 char cHeaterBuffer[16]; //String buffer to hold the Heater duty cycle value
 char cCoolerBuffer[16]; //String buffer to hold the Cooler duty cycle value
 char cLcdMenu = 0;    // Flag indicating what set menu the LCD is showing
+char cMenuChanged = 0; //Flag indicating that the menu has changed
 
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
@@ -148,6 +151,8 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 float vTemperatureControl();
 void vCoolerControl(float currentTemp, float setPoint);
+void vPeriodicTask1();
+void vPeriodicTask2();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -233,6 +238,7 @@ int main(void)
 
   //Lcd
   vLcdInitLcd(&hi2c1, 0x27);
+  vLcdSendCommand(CMD_CLEAR);
 
   //Initialize Timer of counter (currently not being used)
   HAL_TIM_Base_Start_IT(&htim17);
@@ -256,12 +262,18 @@ int main(void)
   //PID
   vPidInit(32, 0.5, 2, 0.01, 1);
 
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
 
+	  //clear the display if menu has changed
+	  if (cMenuChanged == 1){
+		  vLcdSendCommand(CMD_CLEAR);
+		  cMenuChanged = 0;
+	  }
 	  //verify if the LCD will display the temperature menu or the duty cycle menu
 	  if(cLcdMenu == 0)
 		  vPeriodicTask1();
@@ -414,23 +426,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 			if (htim == pTimPressedTimePointer)
 				timerButtonsEventsLongPressPeriodElapsedCallback();
 			else
-				if (htim == &htim17)
-					uiTimerCounter++;
+				if (htim == &htim5)
+					vBuzzerStop();
 				else
-					if (htim == &htim5)
-						vBuzzerStop();
+					if (htim == &htim4)
+						vTachometerUpdate();
 					else
-						if (htim == &htim4)
-							vTachometerUpdate();
-						else
-							if (htim == &htim15){
-						        float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
-						        timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
+						if (htim == &htim15){
+							float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
+							timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
-						        sprintf(ucTemperature, "t: %.1f, T: %.2f, H: %.1f, C: %.1f, \n\r", timeCounter, temperature, fPrintHeaterDuty, fPrintCoolerDuty);
+							sprintf(ucTemperature, "t: %.1f, T: %.2f, H: %.1f, C: %.1f, \n\r", timeCounter, temperature, fPrintHeaterDuty, fPrintCoolerDuty);
 
-						        vCommunicationStateMachineTransmit(ucTemperature);
-							}
+							vCommunicationStateMachineTransmit(ucTemperature);
+						}
 	}
 
 /*void vMatrixKeyboardHalfSecPressedCallback (char cButton){
@@ -454,26 +463,25 @@ void vButtonsEventCallbackPressedEvent(char cBt){
 		if(fSetPoint < 90)
 			fSetPoint += 1;
 	}
-	vBuzzerPlay();
 }
 
 void vButtonsEventCallbackReleasedEvent(char cBt){
-
+	vBuzzerPlay();
 }
 
 //the up and down buttons increment/decrement the set point by 10 units
 void vButtonsEventCallback500msPressedEvent(char cBt){
 	if (cBt == up){
 		if(fSetPoint < 80)
-			fSetPoint += 10;
+			fSetPoint = fSetPoint + 10;
 		else
 			fSetPoint = 90;
 	}else if(cBt == down){
 		if(fSetPoint < 10)
 			fSetPoint = 0;
 		else
-			fSetPoint -= 10;
-	vBuzzerPlay();
+			fSetPoint = fSetPoint - 10;
+	}
 }
 
 //Toogle the LCD menu display
@@ -483,6 +491,8 @@ void vButtonsEventCallback3sPressedEvent(char cBt){
 			cLcdMenu = 1;
 		else
 			cLcdMenu = 0;
+		cMenuChanged = 1;
+		vBuzzerPlay();
 	}
 }
 
@@ -507,27 +517,29 @@ void vPeriodicTask1(){
     vLcdSetCursor(0,7);
     vLcdWriteString(" ");
 
-    sprintf(cSetBuffer, "%.0f", fSetPoint);
-    vLcdSetCursor(0,12);
-    vLcdWriteString(cSetBuffer);
-    vLcdSetCursor(0,14);
-    vLcdWriteString("  ");
+	sprintf(cSetBuffer, "%.0f", fSetPoint);
+	vLcdSetCursor(0,12);
+	vLcdWriteString(cSetBuffer);
+	vLcdSetCursor(0,14);
+	vLcdWriteString("  ");
 
     sprintf(cRPMBuffer, "%hu", usCoolerSpeed);
-    vLcdSetCursor(0,12);
+    vLcdSetCursor(1,4);
     vLcdWriteString(cRPMBuffer);
+
+    HAL_Delay(1000);
 }
 
 //hold the Heater and Cooler duty cycles on a buffer and show on LCD display
 void vPeriodicTask2(){
 	vLcdSet2();
-    sprintf(cHeaterBuffer, "%.2f", fHeaterDuty);
+    sprintf(cHeaterBuffer, "%.2f", fPrintHeaterDuty);
     vLcdSetCursor(0,3);
     vLcdWriteString(cHeaterBuffer);
     vLcdSetCursor(0,7);
     vLcdWriteString("% ");
 
-    sprintf(cCoolerBuffer, "%.2f", fCoolerDuty);
+    sprintf(cCoolerBuffer, "%.2f", fPrintCoolerDuty);
     vLcdSetCursor(0,3);
     vLcdWriteString(cCoolerBuffer);
     vLcdSetCursor(0,7);

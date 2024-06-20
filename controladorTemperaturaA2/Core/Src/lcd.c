@@ -249,7 +249,6 @@ void vLcdBacklighOFF(){
 /* Output params:      n/a                          */
 /* ************************************************ */
 void vLcdSet1(void){
-	vLcdSendCommand(CMD_CLEAR);
 
 	vLcdSetCursor(0,0);
 
@@ -267,7 +266,6 @@ void vLcdSet1(void){
 /* Output params:      n/a                          */
 /* ************************************************ */
 void vLcdSet2(void){
-	vLcdSendCommand(CMD_CLEAR);
 
 	vLcdSetCursor(0,0);
 

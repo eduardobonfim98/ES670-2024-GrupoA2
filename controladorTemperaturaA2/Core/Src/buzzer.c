@@ -49,8 +49,8 @@ void vBuzzerConfig(unsigned short int usFrequency, unsigned short int usPeriod, 
 /* ************************************************ */
 void vBuzzerPlay(void){
 	pTimerBuzzer->Instance->CNT = 0;
-	HAL_TIM_Base_Start_IT(pTimerBuzzer);
 	HAL_TIM_PWM_Start(&htim20, TIM_CHANNEL_1);
+	HAL_TIM_Base_Start_IT(pTimerBuzzer);
 }
 
 /* ************************************************ */

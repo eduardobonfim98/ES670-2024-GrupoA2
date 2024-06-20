@@ -48,6 +48,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 			vButtonsEventCallbackPressedEvent(up);
 		else
 			vButtonsEventCallbackReleasedEvent(up);
+		cUpFlag = 0;
 	}
 	if (cDownFlag){
 		__HAL_GPIO_EXTI_CLEAR_IT(BT_Baixo_Pin);
@@ -57,6 +58,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 			vButtonsEventCallbackPressedEvent(down);
 		else
 			vButtonsEventCallbackReleasedEvent(down);
+		cDownFlag = 0;
 	}
 	if (cLeftFlag){
 		__HAL_GPIO_EXTI_CLEAR_IT(BT_Esquerda_Pin);
@@ -66,6 +68,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 			vButtonsEventCallbackPressedEvent(left);
 		else
 			vButtonsEventCallbackReleasedEvent(left);
+		cLeftFlag = 0;
 	}
 	if (cRightFlag){
 		__HAL_GPIO_EXTI_CLEAR_IT(BT_Direita_Pin);
@@ -75,6 +78,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 			vButtonsEventCallbackPressedEvent(right);
 		else
 			vButtonsEventCallbackReleasedEvent(right);
+		cRightFlag = 0;
 	}
 	if (cEnterFlag){
 		__HAL_GPIO_EXTI_CLEAR_IT(BT_Enter_Pin);
@@ -84,6 +88,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 			vButtonsEventCallbackPressedEvent(enter);
 		else
 			vButtonsEventCallbackReleasedEvent(enter);
+		cEnterFlag = 0;
 	}
 
 }
