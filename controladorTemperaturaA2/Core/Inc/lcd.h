@@ -127,5 +127,13 @@ void vLcdSet1(void);
 /* ************************************************ */
 void vLcdSet2(void);
 
+/* ************************************************ */
+/* Method name:        vLcdSet3                      */
+/* Method description: Display a preset message     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdSet3(void);
+
 
 #endif /* SOURCES_LCD_H_ */

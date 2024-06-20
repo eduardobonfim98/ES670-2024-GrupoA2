@@ -93,7 +93,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte) {
 			ucUartState = IDDLE;
 			break;
 		case VALUE:
-			if ((ucByte >= '0' && ucByte <= '9') || ',' == ucByte) {
+			if ((ucByte >= '0' && ucByte <= '9') || ',' == ucByte|| '.' == ucByte ) {
 				if (',' == c)
 					c = '.';
 
@@ -147,6 +147,7 @@ void vCommunicationStateMachineReturnParam(unsigned char param) {
 void vCommunicationStateMachineSetParam(unsigned char param,
 		unsigned char *value) {
 	unsigned char cTransmit[50];
+
 	if (param == 'p') {
 		xPidConfig.fKp = atof((const char*) value);
 

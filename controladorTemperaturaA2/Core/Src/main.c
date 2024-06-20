@@ -153,6 +153,7 @@ float vTemperatureControl();
 void vCoolerControl(float currentTemp, float setPoint);
 void vPeriodicTask1();
 void vPeriodicTask2();
+void vPeriodicTask3();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -170,6 +171,80 @@ void vCoolerOff(float currentTemp, float setPoint) {
         fPrintCoolerDuty = 0.0;
         vCoolerfanPWMDuty(0.0); // Desliga o cooler
         bCoolerActivated = false; // Atualiza o estado do cooler
+}
+
+float vTemperatureControl()
+{
+  float fSensorValue, fcontrolEffort;
+
+  fSensorValue = fTemperatureSensorGetTemperature();
+  fcontrolEffort = fPidUpdateData(fSensorValue, fSetPoint);
+  vHeaterPWMDuty(fcontrolEffort);
+  fPrintHeaterDuty = fcontrolEffort;
+  return fcontrolEffort;
+}
+
+//hold the temperature and the set point on a buffer and show on LCD display
+void vPeriodicTask1(){
+	vLcdSet1();
+    sprintf(cTempBuffer, "%.f", fTemperature);
+    vLcdSetCursor(0,5);
+    vLcdWriteString(cTempBuffer);
+    vLcdSetCursor(0,7);
+    vLcdWriteString(" ");
+
+	sprintf(cSetBuffer, "%.f", fSetPoint);
+	vLcdSetCursor(0,12);
+	vLcdWriteString(cSetBuffer);
+	vLcdSetCursor(0,14);
+	vLcdWriteString("  ");
+
+    sprintf(cRPMBuffer, "%hu", usCoolerSpeed);
+    vLcdSetCursor(1,4);
+    vLcdWriteString(cRPMBuffer);
+}
+
+//hold the Heater and Cooler duty cycles on a buffer and show on LCD display
+void vPeriodicTask2(){
+	vLcdSet2();
+    sprintf(cTempBuffer, "%.f", fTemperature);
+    vLcdSetCursor(0,5);
+    vLcdWriteString(cTempBuffer);
+    vLcdSetCursor(0,7);
+    vLcdWriteString(" ");
+
+	sprintf(cSetBuffer, "%.f", fSetPoint);
+	vLcdSetCursor(0,12);
+	vLcdWriteString(cSetBuffer);
+	vLcdSetCursor(0,14);
+	vLcdWriteString("  ");
+
+    sprintf(cHeaterBuffer, "%.f", fPrintHeaterDuty*100);
+    vLcdSetCursor(1,3);
+    vLcdWriteString(cHeaterBuffer);
+    vLcdSetCursor(1,6);
+    vLcdWriteString("%");
+
+    sprintf(cCoolerBuffer, "%.f", fPrintCoolerDuty*100);
+    vLcdSetCursor(1,11);
+    vLcdWriteString(cCoolerBuffer);
+    vLcdSetCursor(1,14);
+    vLcdWriteString("%");
+}
+
+void vPeriodicTask3(){
+	vLcdSet3();
+    sprintf(cStrKp, "%.1f", xPidConfig.fKp);
+    vLcdSetCursor(0,3);
+    vLcdWriteString(cStrKp);
+
+    sprintf(cStrKi, "%.1f", xPidConfig.fKi);
+    vLcdSetCursor(0,11);
+    vLcdWriteString(cStrKi);
+
+    sprintf(cStrKd, "%.1f", xPidConfig.fKd);
+    vLcdSetCursor(1,3);
+    vLcdWriteString(cStrKd);
 }
 
 /* USER CODE END 0 */
@@ -269,6 +344,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
 
+	  fTemperature = fTemperatureSensorGetTemperature();
 	  //clear the display if menu has changed
 	  if (cMenuChanged == 1){
 		  vLcdSendCommand(CMD_CLEAR);
@@ -279,6 +355,8 @@ int main(void)
 		  vPeriodicTask1();
 	  else if (cLcdMenu == 1)
 		  vPeriodicTask2();
+	  else if (cLcdMenu == 2)
+		  vPeriodicTask3();
 
 	  //checks the temperature and show the heat level by color
       if (fTemperature <= 40){
@@ -384,34 +462,39 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	switch(GPIO_Pin){
 
 		case BT_Cima_Pin:
+			cUpFlag = 1;
 			__HAL_GPIO_EXTI_CLEAR_IT(1);
 			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
-			cUpFlag = 1;
+
 		break;
 		case BT_Baixo_Pin:
+			cDownFlag = 1;
 			__HAL_GPIO_EXTI_CLEAR_IT(2);
 			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
-			cDownFlag = 1;
+
 		break;
 		case BT_Esquerda_Pin:
+			cLeftFlag = 1;
 			__HAL_GPIO_EXTI_CLEAR_IT(3);
 			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
-			cLeftFlag = 1;
+
 		break;
 		case BT_Direita_Pin:
+			cRightFlag = 1;
 			__HAL_GPIO_EXTI_CLEAR_IT(4);
 			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
-			cRightFlag = 1;
+
 		break;
 		case BT_Enter_Pin:
+			cEnterFlag = 1;
 			__HAL_GPIO_EXTI_CLEAR_IT(0);
 			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);
 			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
-			cEnterFlag = 1;
+
 		break;
 		}
 }
@@ -436,9 +519,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 							float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
 							timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
 
-							sprintf(ucTemperature, "t: %.1f, T: %.2f, H: %.1f, C: %.1f, \n\r", timeCounter, temperature, fPrintHeaterDuty, fPrintCoolerDuty);
+							//sprintf(ucTemperature, "t: %.1f, T: %.2f, H: %.1f, C: %.1f, \n\r", timeCounter, temperature, fPrintHeaterDuty, fPrintCoolerDuty);
 
-							vCommunicationStateMachineTransmit(ucTemperature);
+							//vCommunicationStateMachineTransmit(ucTemperature);
 						}
 	}
 
@@ -489,61 +572,12 @@ void vButtonsEventCallback3sPressedEvent(char cBt){
 	if (cBt == enter){
 		if(cLcdMenu == 0)
 			cLcdMenu = 1;
+		else if (cLcdMenu == 1)
+			cLcdMenu = 2;
 		else
 			cLcdMenu = 0;
 		cMenuChanged = 1;
-		vBuzzerPlay();
 	}
-}
-
-float vTemperatureControl()
-{
-  float fSensorValue, fcontrolEffort;
-
-  fSensorValue = fTemperatureSensorGetTemperature();
-  fcontrolEffort = fPidUpdateData(fSensorValue, fSetPoint);
-  vHeaterPWMDuty(fcontrolEffort);
-  fPrintHeaterDuty = fcontrolEffort;
-  return fcontrolEffort;
-}
-
-//hold the temperature and the set point on a buffer and show on LCD display
-void vPeriodicTask1(){
-	vLcdSet1();
-    fTemperature = fTemperatureSensorGetTemperature();
-    sprintf(cTempBuffer, "%.0f", fTemperature);
-    vLcdSetCursor(0,5);
-    vLcdWriteString(cTempBuffer);
-    vLcdSetCursor(0,7);
-    vLcdWriteString(" ");
-
-	sprintf(cSetBuffer, "%.0f", fSetPoint);
-	vLcdSetCursor(0,12);
-	vLcdWriteString(cSetBuffer);
-	vLcdSetCursor(0,14);
-	vLcdWriteString("  ");
-
-    sprintf(cRPMBuffer, "%hu", usCoolerSpeed);
-    vLcdSetCursor(1,4);
-    vLcdWriteString(cRPMBuffer);
-
-    HAL_Delay(1000);
-}
-
-//hold the Heater and Cooler duty cycles on a buffer and show on LCD display
-void vPeriodicTask2(){
-	vLcdSet2();
-    sprintf(cHeaterBuffer, "%.2f", fPrintHeaterDuty);
-    vLcdSetCursor(0,3);
-    vLcdWriteString(cHeaterBuffer);
-    vLcdSetCursor(0,7);
-    vLcdWriteString("% ");
-
-    sprintf(cCoolerBuffer, "%.2f", fPrintCoolerDuty);
-    vLcdSetCursor(0,3);
-    vLcdWriteString(cCoolerBuffer);
-    vLcdSetCursor(0,7);
-    vLcdWriteString("% ");
 }
 
 /* USER CODE END 4 */

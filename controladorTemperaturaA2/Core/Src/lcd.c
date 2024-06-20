@@ -269,10 +269,27 @@ void vLcdSet2(void){
 
 	vLcdSetCursor(0,0);
 
-	vLcdWriteString("He:");
+	vLcdWriteString("TEMP:   SET:    ");
 
 	vLcdSetCursor(1,0);
 
-	vLcdWriteString("Co:");
+	vLcdWriteString("He:     Co:");
+}
+
+/* ************************************************ */
+/* Method name:        vLcdSet3                      */
+/* Method description: Display a preset message     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdSet3(void){
+
+	vLcdSetCursor(0,0);
+
+	vLcdWriteString("Kp:     Ki:");
+
+	vLcdSetCursor(1,0);
+
+	vLcdWriteString("Kd:");
 }
 
