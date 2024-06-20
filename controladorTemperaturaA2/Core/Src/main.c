@@ -439,55 +439,58 @@ void SystemClock_Config(void)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart == &hlpuart1) {
-        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);
-        vCommunicationStateMachineProcessByteCommunication(c);
+        HAL_UART_Receive_IT(&hlpuart1, (uint8_t *)&c, 1);// Re-enable the UART receive interrupt to receive the next byte
+        vCommunicationStateMachineProcessByteCommunication(c); // Process the received byte using the communication state machine
     }
 }
 
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
+	// Reset the counter of the debounce timer
 	pTimDebouncerPointer->Instance->CNT = 0;
+	// If the button is not in long press mode
 	if (!cLongPressFlag){
-		HAL_TIM_Base_Start_IT(pTimPressedTimePointer);
-		cLongPressFlag = 1;
+		HAL_TIM_Base_Start_IT(pTimPressedTimePointer);// Start the timer to measure the button press duration
+		cLongPressFlag = 1;// Set the long press flag
 	}
 
+	// Check which button was pressed through the corresponding GPIO pin
 	switch(GPIO_Pin){
 
 		case BT_Cima_Pin:
-			cUpFlag = 1;
-			__HAL_GPIO_EXTI_CLEAR_IT(1);
-			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cUpFlag = 1; // Set the flag for the "up" button pressed
+			__HAL_GPIO_EXTI_CLEAR_IT(1);// Clear the interrupt flag for the pin
+			HAL_NVIC_DisableIRQ(BT_Cima_EXTI_IRQn);// Disable the interrupt for the "up" pin
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);// Start the debounce timer
 
 		break;
 		case BT_Baixo_Pin:
-			cDownFlag = 1;
-			__HAL_GPIO_EXTI_CLEAR_IT(2);
-			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cDownFlag = 1; // Set the flag for the "down" button pressed
+			__HAL_GPIO_EXTI_CLEAR_IT(2);// Clear the interrupt flag for the pin
+			HAL_NVIC_DisableIRQ(BT_Baixo_EXTI_IRQn);// Disable the interrupt for the "down" pin
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);// Start the debounce timer
 
 		break;
 		case BT_Esquerda_Pin:
-			cLeftFlag = 1;
-			__HAL_GPIO_EXTI_CLEAR_IT(3);
-			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cLeftFlag = 1; // Set the flag for the "left" button pressed
+			__HAL_GPIO_EXTI_CLEAR_IT(3);// Clear the interrupt flag for the pin
+			HAL_NVIC_DisableIRQ(BT_Esquerda_EXTI_IRQn);// Disable the interrupt for the "left" pin
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);// Start the debounce timer
 
 		break;
 		case BT_Direita_Pin:
-			cRightFlag = 1;
-			__HAL_GPIO_EXTI_CLEAR_IT(4);
-			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cRightFlag = 1; // Set the flag for the "right" button pressed
+			__HAL_GPIO_EXTI_CLEAR_IT(4);// Clear the interrupt flag for the pin
+			HAL_NVIC_DisableIRQ(BT_Direita_EXTI_IRQn);// Disable the interrupt for the "right" pin
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);// Start the debounce timer
 
 		break;
 		case BT_Enter_Pin:
-			cEnterFlag = 1;
-			__HAL_GPIO_EXTI_CLEAR_IT(0);
-			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);
-			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);
+			cEnterFlag = 1; // Set the flag for the "enter" button pressed
+			__HAL_GPIO_EXTI_CLEAR_IT(0);// Clear the interrupt flag for the pin
+			HAL_NVIC_DisableIRQ(BT_Enter_EXTI_IRQn);// Disable the interrupt for the "enter" pin
+			HAL_TIM_Base_Start_IT(pTimDebouncerPointer);// Start the debounce timer
 
 		break;
 		}
