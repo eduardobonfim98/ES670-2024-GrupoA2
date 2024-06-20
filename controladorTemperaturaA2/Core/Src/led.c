@@ -1,8 +1,8 @@
 /* File name:        led.c                                                 */
-/* File description: arquivo para configuração dos regitradores dos leds    */
-/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini      */
-/* Creation date:    28mar2024                                              */
-/* Revision date:    28mar2024                                              */
+/* File description: File for configuring the LED registers                */
+/* Author name:      Henrique Akagi, Eduardo Siqueira, and Lucas Pavarini  */
+/* Creation date:    March 28, 2024                                        */
+/* Revision date:    20 of June 2024                                           */
 /* ************************************************************************ */
 
 #include "led.h"
@@ -11,9 +11,9 @@
 
 // **************************************************** //
 // Method name:         vLedInitLed                     //
-// Method description:  Função que inicializa os        //
-//                      registradores, habilitando o    //
-//                      clock e configurando os pinos   //
+// Method description:  Function that initializes the   //
+//                      registers, enabling the clock   //
+//                      and configuring the pins        //
 //                                                      //
 // Input params:        n/a                             //
 // Output params:       n/a                             //
@@ -37,13 +37,13 @@ void vLedInitLed ()
 
 // ***************************************************** //
 // Method name:         vLedWriteLed                     //
-// Method description:  Função que escreve o estado do   //
-//                      led                              //
+// Method description:  Function that writes the state   //
+//                      of the LED                       //
 // Input params:        cLedNum:                         //
-//                      indica qual led será escrito     //
+//                      indicates which LED will be set  //
 //                      iLedWrite:                       //
-//                      indica se o led será levado para //
-//                      nível alto ou baixo              //
+//                      indicates whether the LED will   //
+//                      be set to high or low            //
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedWriteLed (char cLedNum, int iLedWrite)
@@ -60,9 +60,9 @@ void vLedWriteLed (char cLedNum, int iLedWrite)
 
 // ***************************************************** //
 // Method name:         vLedOnLed                        //
-// Method description:  Função que liga o led            //
+// Method description:  Function that turns on the LED   //
 // Input params:        cLedNum:                         //
-//                                                       //
+//                      indicates which LED will be set  //
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedOnLed (char cLedNum){
@@ -87,9 +87,9 @@ void vLedOnLed (char cLedNum){
 
 // ***************************************************** //
 // Method name:         vLedOffLed                       //
-// Method description:  Função que desliga o led         //
+// Method description:  Function that turns off the LED  //
 // Input params:        cLedNum:                         //
-//                                                       //
+//                      indicates which LED will be set  //
 // Output params:       n/a                              //
 // ***************************************************** //
 void vLedOffLed (char cLedNum)
@@ -118,10 +118,10 @@ void vLedOffLed (char cLedNum)
 
 // ******************************************************** //
 // Method name:         vLedToggleLed                       //
-// Method description:  Função que alterna o estado do led  //
-//                                                          //
+// Method description:  Function that toggles the state of  //
+//                      the LED                             //
 // Input params:        cLedNum:                            //
-//                                                          //
+//                      indicates which LED will be set     //
 // Output params:       n/a                                 //
 // ******************************************************** //
 void vLedToggleLed (char cLedNum)
@@ -150,11 +150,10 @@ void vLedToggleLed (char cLedNum)
 
 // ******************************************************** //
 // Method name:         vLedShowNumber                      //
-// Method description:     Esta funcao exibe                //
-//                        um numero pelo LED				//
-//                                                          //
-// Input params:     char                             		//
-//                                                          //
+// Method description:  Function that displays a number     //
+//                      using the LEDs                      //
+// Input params:        int number:                         //
+//                      the number to be displayed          //
 // Output params:       n/a                                 //
 // ******************************************************** //
 void vLedShowNumber(int number) {

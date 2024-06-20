@@ -1,3 +1,11 @@
+/* File name:        communicationStateMachine.c                                              */
+/* File description: State Machine			   */
+/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini             */
+/* Creation date:    24abril2024                                                    */
+/* Revision date:    20 of June 2024                                                       */
+/* ******************************************************************************* */
+
+
 #include "communicationStateMachine.h"
 #include "pid.h"
 #include <stdio.h>
@@ -15,23 +23,21 @@
 
 #define MAX_VALUE_LENGTH 7
 extern UART_HandleTypeDef hlpuart1;
-unsigned char ucUartState = IDDLE; // Variável que armazena o estado atual da UART.
-unsigned char ucValueCount; // Contador para o número de caracteres no valor recebido.
+unsigned char ucUartState = IDDLE; // Variable that stores the current UART state
+unsigned char ucValueCount; // Counter for the number of characters in the received value
 extern unsigned char ucUartState;
 extern unsigned char c;
 
-extern float fActualTemp; // Variável para armazenar a temperatura atual
-extern float fDesiredTemp; // Variável para armazenar a temperatura desejada
+extern float fActualTemp;
+extern float fDesiredTemp;
 extern pid_data_type xPidConfig;
-extern unsigned int uiCoolerSpeed; // Variável para armazenar a velocidade do cooler (0 - 100%)
-extern unsigned char ucDutyCycleCooler; // Variável para armazenar o duty cycle do cooler (0 - 100%)
-extern unsigned char ucDutyCycleHeather; // Variável para armazenar o duty cycle do heather (0 - 100%)
+extern unsigned int uiCoolerSpeed;
+extern unsigned char ucDutyCycleCooler;
+extern unsigned char ucDutyCycleHeather;
 
 // **************************************************** //
-// Method name:         vCommunicationInitCommunication //
-// Method description:  Initiates the                   //
-//                      global variables and the        //
-//                      communication                   //
+// Method name:         vCommunicationStateMachineInit  //
+// Method description:  Initializes global variables and communication //
 // Input params:        UART_HandleTypeDef *huart       //
 // Output params:       n/a                             //
 // **************************************************** //
@@ -46,9 +52,9 @@ void vCommunicationStateMachineInit(UART_HandleTypeDef *huart) {
 
 // ******************************************************************************** //
 // Method name:         vCommunicationStateMachineProcessByteCommunication          //
-// Method description:  Makes a state machine to receive data and call other        //
-//                      functions to process the inputs.                            //
-// Input params:        n/a                                                         //
+// Method description:  Implements a state machine to receive data and call other   //
+//                      functions to process the inputs                             //
+// Input params:        unsigned char ucByte                                        //
 // Output params:       n/a                                                         //
 // ******************************************************************************** //
 void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte) {
@@ -113,7 +119,7 @@ void vCommunicationStateMachineProcessByteCommunication(unsigned char ucByte) {
 
 // ******************************************************************* //
 // Method name:         vCommunicationStateMachineReturnParam          //
-// Method description:  Function that returns the param                //
+// Method description:  Function that returns the parameter value      //
 // Input params:        unsigned char param                            //
 // Output params:       n/a                                            //
 // ******************************************************************* //
@@ -139,10 +145,10 @@ void vCommunicationStateMachineReturnParam(unsigned char param) {
 
 // ******************************************************************* //
 // Method name:         vCommunicationStateMachineSetParam             //
-// Method description:  Function that sets the desired temperature     //
-//                      based on the received value                    //
+// Method description:  Function that sets the PID parameters based    //
+//                      on the received value                          //
 // Input params:        unsigned char param, unsigned char *value      //
-// Output params:       None                                           //
+// Output params:       n/a                                            //
 // ******************************************************************* //
 void vCommunicationStateMachineSetParam(unsigned char param,
 		unsigned char *value) {
@@ -168,8 +174,8 @@ void vCommunicationStateMachineSetParam(unsigned char param,
 // Method name:         vCommunicationStateMachineTransmit             //
 // Method description:  Function that sends the processed data         //
 //                      to PuTTY                                       //
-// Input params:        unsigned char param, unsigned char *value      //
-// Output params:       None                                           //
+// Input params:        const char *data                               //
+// Output params:       n/a                                            //
 // ******************************************************************* //
 void vCommunicationStateMachineTransmit(const char *data) {
 	HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*) data, strlen(data));

@@ -7,7 +7,7 @@
 /*                   as well as starting and stopping the PWM signal.              */
 /* Author name:      Henrique Akagi, Eduardo Siqueira, and Lucas Pavarini          */
 /* Creation date:    May 15, 2024                                                  */
-/* Revision date:    n/a                                                           */
+/* Revision date:    20 of June 2024                                                             */
 /* ******************************************************************************* */
 
 #include "main.h"

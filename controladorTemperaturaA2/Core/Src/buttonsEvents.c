@@ -1,42 +1,69 @@
-/*
- * buttonsEvents.c
- *
- *  Created on: Apr 16, 2024
- *      Author: akira
- */
+/* File name:        buttonsEvent.c                                              */
+/* File description: Generate interruptions and events when you press a button */
+/* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini      */
+/* Creation date:    28mar2024                                              */
+/* Revision date:    20 of June 2024                                                 */
+/* ************************************************************************ */
+
 #include "buttons.h"
 #include "buttonsEvents.h"
 #include "led.h"
 #include "main.h"
 
+
+// Pointers to the debounce and press time timers
 extern TIM_HandleTypeDef *pTimDebouncerPointer, *pTimPressedTimePointer;
 
+// Variable to store which button was pressed
 extern char cWhatButton;
 
-//flags dos botões apertados
+// Flags to indicate which buttons were pressed
 extern char cUpFlag;
 extern char cDownFlag;
 extern char cLeftFlag;
 extern char cRightFlag;
 extern char cEnterFlag;
 
-//tempo que cada botão está apertado
+// Variables to store the time each button is pressed
 int iBTCimaPressedTime = 0;
 int iBTBaixoPressedTime = 0;
 int iBTEsquerdaPressedTime = 0;
 int iBTDireitaPressedTime = 0;
 int iBTEnterPressedTime = 0;
 
-//flag que indica se o timer dos botões está ativo
+// Flag to indicate if the long press timer is active
 extern char cLongPressFlag;
 
+
+/* ************************************************ */
+/* Method name:       vButtonsEventsInit            */
+/*                                                      */
+/* Method description: Initializes the debounce and   */
+/*                     press time timers              */
+/*                                                      */
+/* Input params:      pTimDebouncer - pointer to the  */
+/*                     debounce timer                 */
+/*                    pTimPressedTime - pointer to the */
+/*                     press time timer               */
+/*                                                      */
+/* Output params:     n/a                             */
+/* ************************************************ */
 void vButtonsEventsInit(TIM_HandleTypeDef *pTimDebouncer,
 TIM_HandleTypeDef *pTimPressedTime){
 	pTimDebouncerPointer = pTimDebouncer;
 	pTimPressedTimePointer = pTimPressedTime;
 }
 
-
+/* ************************************************ */
+/* Method name:       timerButtonsEventsDebouncingPeriodElapsedCallback */
+/*                                                      */
+/* Method description: Callback for the end of the    */
+/*                     debounce period                */
+/*                                                      */
+/* Input params:      n/a                             */
+/*                                                      */
+/* Output params:     n/a                             */
+/* ************************************************ */
 void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 	HAL_TIM_Base_Stop_IT(pTimDebouncerPointer);
 
@@ -93,6 +120,16 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(){
 
 }
 
+/* ************************************************ */
+/* Method name:       timerButtonsEventsLongPressPeriodElapsedCallback */
+/*                                                      */
+/* Method description: Callback for the end of the    */
+/*                     long press period              */
+/*                                                      */
+/* Input params:      n/a                             */
+/*                                                      */
+/* Output params:     n/a                             */
+/* ************************************************ */
 void timerButtonsEventsLongPressPeriodElapsedCallback(){
 	if(HAL_GPIO_ReadPin(BT_Cima_GPIO_Port, BT_Cima_Pin)){
 		iBTCimaPressedTime += 10;

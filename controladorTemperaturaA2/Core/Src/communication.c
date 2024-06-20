@@ -1,8 +1,8 @@
 /* File name:        communication.c                                              */
-/* File description: arquivo para configuração da comunicacao UART				   */
+/* File description: UART Communication			   */
 /* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini             */
 /* Creation date:    24abril2024                                                    */
-/* Revision date:    24abril2024                                                    */
+/* Revision date:    20 of June 2024                                                      */
 /* ******************************************************************************* */
 
 #include "communication.h"
@@ -14,19 +14,17 @@
 
 extern UART_HandleTypeDef hlpuart1;
 char c;
-char inputBuffer[16] = {0}; // 4 digitos pro numero, 3 pra casa decimal, 1 pra sinal de negativo
-//1 pra virgula
+char inputBuffer[16] = {0};
 int iCountDecimalPlaces = 0;
 bool bDecimalPointSeen = false;
 int iLenNumber = 0;
 
-// ****************************************************//
-// Nome da função:         vCommunicationInitCommunication //
-// Descrição da função:    Inicializa a comunicação UART para //
-//                         receber dados via interrupções.  //
-// Parâmetros de entrada:  n/a                           //
-// Parâmetros de saída:    n/a                          //
-// ****************************************************//
+// **************************************************** //
+// Method name:          vCommunicationInitCommunication //
+// Method description:   Initializes the UART communication for receiving data via interrupts //
+// Input params:         n/a                             //
+// Output params:        n/a                             //
+// **************************************************** //
 void vCommunicationInitCommunication(void)
 {
     memset(inputBuffer, 0, sizeof(inputBuffer));
@@ -37,11 +35,10 @@ void vCommunicationInitCommunication(void)
 }
 
 // **************************************************** //
-// Nome da função:         HAL_UART_RxCpltCallback      //
-// Descrição da função:    Callback chamado automaticamente //
-//                         quando dados UART são recebidos. //
-// Parâmetros de entrada:  UART_HandleTypeDef *huart    //
-// Parâmetros de saída:    n/a                          //
+// Method name:          HAL_UART_RxCpltCallback        //
+// Method description:   Callback automatically called when UART data is received  //
+// Input params:         UART_HandleTypeDef *huart      //
+// Output params:        n/a                             //
 // **************************************************** //
 void vCallbackCommunication(UART_HandleTypeDef *huart)
 {
@@ -61,11 +58,10 @@ void vCallbackCommunication(UART_HandleTypeDef *huart)
 
 
 // **************************************************** //
-// Nome da função:         vCommunicationCheckChar      //
-// Descrição da função:    Verifica e processa cada caractere //
-//                         recebido através da UART.    //
-// Parâmetros de entrada:  n/a                          //
-// Parâmetros de saída:    n/a                          //
+// Method name:          vCommunicationCheckChar        //
+// Method description:   Checks and processes each character received via UART     //
+// Input params:         n/a                             //
+// Output params:        n/a                             //
 // **************************************************** //
 void vCommunicationCheckChar()
 {
@@ -85,11 +81,10 @@ void vCommunicationCheckChar()
 }
 
 // **************************************************** //
-// Nome da função:         vCommunicationProcessInput	//
-// Descrição da função:    Processa a entrada completa  //
-//                         armazenada no buffer.        //
-// Parâmetros de entrada:  n/a  						//
-// Parâmetros de saída:    n/a							//
+// Method name:          vCommunicationProcessInput     //
+// Method description:   Processes the complete input stored in the buffer         //
+// Input params:         n/a                             //
+// Output params:        n/a                             //
 // **************************************************** //
 void vCommunicationProcessInput()
 {
@@ -114,11 +109,10 @@ void vCommunicationProcessInput()
 }
 
 // **************************************************** //
-// Nome da função:         vCommunicationProcessInput  //
-// Descrição da função:    Manda a string formatada    //
-//                         no buffer.                 //
-// Parâmetros de entrada:  n/a                        //
-// Parâmetros de saída:    n/a                        //
+// Method name:          vCommunicationTransmit         //
+// Method description:   Sends the formatted string in the buffer                  //
+// Input params:         const unsigned char *t         //
+// Output params:        n/a                             //
 // **************************************************** //
 void vCommunicationTransmit(const unsigned char *t)
 {

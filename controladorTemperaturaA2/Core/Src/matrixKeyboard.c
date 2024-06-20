@@ -1,8 +1,8 @@
 /* File name:        matrixKeyboard.c                                              */
-/* File description: arquivo para configuração do teclado matricial				   */
+/* File description: File for configuring the matrix keyboard				   */
 /* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini             */
 /* Creation date:    11abril2024                                                    */
-/* Revision date:    11abril2024                                                    */
+/* Revision date:    20 of June 2024                                                       */
 /* ******************************************************************************* */
 
 #include "matrixKeyboard.h"
@@ -20,7 +20,7 @@ int iColumn = 1;
 /* ************************************************ */
 /* Method name: 	      vMatrixKeyboardInit    	*/
 /*													*/
-/* Method description: inicializa o teclado     	 */
+/* Method description: Initializes the keyboard      	 */
 /*													*/
 /* Input params:	   n/a							*/
 /*													*/
@@ -111,7 +111,7 @@ xMatrixKeyboardState xKeyboardState = {0}; // Initialize all members to 0
 /* ************************************************ */
 /* Method name: 	   vMatrixKeyboardRead      	*/
 /*													*/
-/* Method description: Lê o teclado                 */
+/* Method description: Read the keyboard                */
 /*													*/
 /* Input params:	   n/a							*/
 /*													*/
@@ -341,15 +341,15 @@ void vMatrixKeyboardRead(){
 /* ************************************************ */
 void vMatrixKeyboardEvent(){
 
-	//Botão 1:
+	//Button 1:
 	if (matrixKeyboardStruct.cNumberOne == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberOne++;
 		if(matrixKeyboardTimerStruct.c500NumberOne >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(0);
 			matrixKeyboardTimerStruct.c500NumberOne = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberOne++;
 		if(matrixKeyboardTimerStruct.cFlagNumberOne == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberOne >= 300){
@@ -363,15 +363,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberOne = 0;
 	}
 
-	//Botão 2:
+	//Button 2:
 	if (matrixKeyboardStruct.cNumberTwo == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberTwo++;
 		if(matrixKeyboardTimerStruct.c500NumberTwo >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(1);
 			matrixKeyboardTimerStruct.c500NumberTwo = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberTwo++;
 		if(matrixKeyboardTimerStruct.cFlagNumberTwo == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberTwo >= 300){
@@ -385,15 +385,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberTwo = 0;
 	}
 
-	//Botão 3:
+	//Button 3:
 	if (matrixKeyboardStruct.cNumberThree == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberThree++;
 		if(matrixKeyboardTimerStruct.c500NumberThree >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(2);
 			matrixKeyboardTimerStruct.c500NumberThree = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberThree++;
 		if(matrixKeyboardTimerStruct.cFlagNumberThree == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberThree >= 300){
@@ -407,15 +407,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberThree = 0;
 	}
 
-	//Botão 4:
+	//Button 4:
 	if (matrixKeyboardStruct.cNumberFour == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberFour++;
 		if(matrixKeyboardTimerStruct.c500NumberFour >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(3);
 			matrixKeyboardTimerStruct.c500NumberFour = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberFour++;
 		if(matrixKeyboardTimerStruct.cFlagNumberFour == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberFour >= 300){
@@ -429,15 +429,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberFour = 0;
 	}
 
-	//Botão 5:
+	//Button 5:
 	if (matrixKeyboardStruct.cNumberFive == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberFive++;
 		if(matrixKeyboardTimerStruct.c500NumberFive >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(4);
 			matrixKeyboardTimerStruct.c500NumberFive = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberFive++;
 		if(matrixKeyboardTimerStruct.cFlagNumberFive == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberFive >= 300){
@@ -451,15 +451,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberFive = 0;
 	}
 
-	//Botão 6:
+	//Button 6:
 	if (matrixKeyboardStruct.cNumberSix == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberSix++;
 		if(matrixKeyboardTimerStruct.c500NumberSix >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(5);
 			matrixKeyboardTimerStruct.c500NumberSix = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberSix++;
 		if(matrixKeyboardTimerStruct.cFlagNumberSix == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberSix >= 300){
@@ -473,15 +473,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberSix = 0;
 	}
 
-	//Botão 7:
+	//Button 7:
 	if (matrixKeyboardStruct.cNumberSeven == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberSeven++;
 		if(matrixKeyboardTimerStruct.c500NumberSeven >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(6);
 			matrixKeyboardTimerStruct.c500NumberSeven = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberSeven++;
 		if(matrixKeyboardTimerStruct.cFlagNumberSeven == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberSeven >= 300){
@@ -495,15 +495,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberSeven = 0;
 	}
 
-	//Botão 8:
+	//Button 8:
 	if (matrixKeyboardStruct.cNumberEight == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberEight++;
 		if(matrixKeyboardTimerStruct.c500NumberEight >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(7);
 			matrixKeyboardTimerStruct.c500NumberEight = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberEight++;
 		if(matrixKeyboardTimerStruct.cFlagNumberEight == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberEight >= 300){
@@ -517,15 +517,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberEight = 0;
 	}
 
-	//Botão 9:
+	//Button 9:
 	if (matrixKeyboardStruct.cNumberNine == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberNine++;
 		if(matrixKeyboardTimerStruct.c500NumberNine >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(8);
 			matrixKeyboardTimerStruct.c500NumberNine = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberNine++;
 		if(matrixKeyboardTimerStruct.cFlagNumberNine == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberNine >= 300){
@@ -539,15 +539,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberNine = 0;
 	}
 
-	//Botão ZERO:
+	//Button Zero:
 	if (matrixKeyboardStruct.cNumberZero == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500NumberZero++;
 		if(matrixKeyboardTimerStruct.c500NumberZero >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(9);
 			matrixKeyboardTimerStruct.c500NumberZero = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000NumberZero++;
 		if(matrixKeyboardTimerStruct.cFlagNumberZero == 0){
 			if (matrixKeyboardTimerStruct.i3000NumberZero >= 300){
@@ -561,15 +561,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagNumberZero = 0;
 	}
 
-	//Botão A:
+	//Button A:
 	if (matrixKeyboardStruct.cLetterA == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500LetterA++;
 		if(matrixKeyboardTimerStruct.c500LetterA >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(10);
 			matrixKeyboardTimerStruct.c500LetterA = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000LetterA++;
 		if(matrixKeyboardTimerStruct.cFlagLetterA == 0){
 			if (matrixKeyboardTimerStruct.i3000LetterA >= 300){
@@ -583,15 +583,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagLetterA = 0;
 	}
 
-	//Botão B:
+	//Button B:
 	if (matrixKeyboardStruct.cLetterB == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500LetterB++;
 		if(matrixKeyboardTimerStruct.c500LetterB >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(11);
 			matrixKeyboardTimerStruct.c500LetterB = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000LetterB++;
 		if(matrixKeyboardTimerStruct.cFlagLetterB == 0){
 			if (matrixKeyboardTimerStruct.i3000LetterB >= 300){
@@ -605,15 +605,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagLetterB = 0;
 	}
 
-	//Botão C:
+	//Button C:
 	if (matrixKeyboardStruct.cLetterC == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500LetterC++;
 		if(matrixKeyboardTimerStruct.c500LetterC >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(12);
 			matrixKeyboardTimerStruct.c500LetterC = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000LetterC++;
 		if(matrixKeyboardTimerStruct.cFlagLetterC == 0){
 			if (matrixKeyboardTimerStruct.i3000LetterC >= 300){
@@ -627,15 +627,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagLetterC = 0;
 	}
 
-	//Botão D:
+	//Button D:
 	if (matrixKeyboardStruct.cLetterD == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500LetterD++;
 		if(matrixKeyboardTimerStruct.c500LetterD >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(13);
 			matrixKeyboardTimerStruct.c500LetterD = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000LetterD++;
 		if(matrixKeyboardTimerStruct.cFlagLetterD == 0){
 			if (matrixKeyboardTimerStruct.i3000LetterD >= 300){
@@ -649,15 +649,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagLetterD = 0;
 	}
 
-	//Botão #:
+	//Button #:
 	if (matrixKeyboardStruct.cSpecialCharacterHashtag == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500SpecialCharacterHashtag++;
 		if(matrixKeyboardTimerStruct.c500SpecialCharacterHashtag >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(14);
 			matrixKeyboardTimerStruct.c500SpecialCharacterHashtag = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000SpecialCharacterHashtag++;
 		if(matrixKeyboardTimerStruct.cFlagSpecialCharacterHashtag == 0){
 			if (matrixKeyboardTimerStruct.i3000SpecialCharacterHashtag >= 300){
@@ -671,15 +671,15 @@ void vMatrixKeyboardEvent(){
 		matrixKeyboardTimerStruct.cFlagSpecialCharacterHashtag = 0;
 	}
 
-	//Botão *:
+	//Button *:
 	if (matrixKeyboardStruct.cSpecialCharacterStar == 1){
-		//para 500ms:
+		//500ms:
 		matrixKeyboardTimerStruct.c500SpecialCharacterStar++;
 		if(matrixKeyboardTimerStruct.c500SpecialCharacterStar >= 50){
 			vMatrixKeyboardHalfSecPressedCallback(15);
 			matrixKeyboardTimerStruct.c500SpecialCharacterStar = 0;
 		}
-		//para 3000ms:
+		//3000ms:
 		matrixKeyboardTimerStruct.i3000SpecialCharacterStar++;
 		if(matrixKeyboardTimerStruct.cFlagSpecialCharacterStar == 0){
 			if (matrixKeyboardTimerStruct.i3000SpecialCharacterStar >= 300){

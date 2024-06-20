@@ -1,8 +1,8 @@
 /* File name:        buttons.c                                              */
-/* File description: arquivo para configuração dos regitradores dos botões  */
+/* File description: File to configure the button register  */
 /* Author name:      Henrique Akagi, Eduardo Siqueira e Lucas Pavarini      */
 /* Creation date:    28mar2024                                              */
-/* Revision date:    28mar2024                                              */
+/* Revision date:    20 of June 2024                                              */
 /* ************************************************************************ */
 
 #include "main.h"
@@ -11,7 +11,7 @@
 /* ************************************************ */
 /* Method name: 	   vButtonsInitButtons      	*/
 /*													*/
-/* Method description: inicializa os botões         */
+/* Method description: Initializes the buttons          */
 /*													*/
 /* Input params:	   n/a							*/
 /*													*/
@@ -36,13 +36,13 @@ void vButtonsInitButtons(){
 }
 
 /* *********************************************************** */
-/* Method name: 	   cButtonsGetState          	           */
-/*													           */
-/* Method description: verifica se o botão está pressionado    */
-/*													           */
-/* Input params:	   char indicando número do botão          */
-/*													           */
-/* Output params:	   estado representado por char            */
+/* Method name:         cButtonsGetState                       */
+/*                                                           */
+/* Method description:  Checks if the button is pressed      */
+/*                                                           */
+/* Input params:        char indicating the button number    */
+/*                                                           */
+/* Output params:       state represented by char            */
 /* *********************************************************** */
 char cButtonsGetState(char button){
 
@@ -88,15 +88,15 @@ char cButtonsGetState(char button){
 }
 
 /* ************************************************ */
-/* Method name: 	   cButtonsGetNumber      	    */
-/*													*/
-/* Method description: retorna um char que representa
- * 						o número do botão           */
-/*													*/
-/* Input params:	   n/a							*/
-/*													*/
-/* Output params:	   char que representa o
- * 						número do botao				*/
+/* Method name:         cButtonsGetNumber           */
+/*                                                  */
+/* Method description:  Returns a char representing */
+/*                      the button number           */
+/*                                                  */
+/* Input params:        n/a                         */
+/*                                                  */
+/* Output params:       char representing the       */
+/*                      button number               */
 /* ************************************************ */
 char cButtonsGetNumber(){
 	if(BIT_CHECK(GPIOC->IDR, 1)){

@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87f4aed9-38ef-4e86-bd4e-fd1dc39f187e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../controladorTemperaturaA2/Core/Src/communicationStateMachine.c" beforeDir="false" afterPath="$PROJECT_DIR$/../controladorTemperaturaA2/Core/Src/communicationStateMachine.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plottingData.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/plottingData.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,11 +87,15 @@
       <workItem from="1717768935605" duration="21345000" />
       <workItem from="1717899473730" duration="1952000" />
       <workItem from="1718151660005" duration="2074000" />
+      <workItem from="1718896612846" duration="824000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/jupyterNotebookForPlottingData$main.coverage" NAME="main Coverage Results" MODIFIED="1717899476788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
