@@ -152,19 +152,21 @@ void vPeriodicTask3();
 /* USER CODE BEGIN 0 */
 
 void vCoolerOn(float currentTemp, float setPoint) {
-        vCoolerfanPWMDuty(1.0); // Liga o cooler na potência máxima
-        vHeaterPWMDuty(0.0);
+        vCoolerfanPWMDuty(1.0); // Turn on the cooler on max power
+        vHeaterPWMDuty(0.0); // Turn off the heater
         fPrintCoolerDuty = 1.0;
         fPrintHeaterDuty = 0.0;
-        bCoolerActivated = true; // Atualiza o estado do cooler
+        bCoolerActivated = true; // Update the flag
 }
 
 void vCoolerOff(float currentTemp, float setPoint) {
         fPrintCoolerDuty = 0.0;
-        vCoolerfanPWMDuty(0.0); // Desliga o cooler
-        bCoolerActivated = false; // Atualiza o estado do cooler
+        vCoolerfanPWMDuty(0.0); // Turn off the cooler
+        bCoolerActivated = false; // Update the flag
 }
 
+
+//Updates the heater duty cycle according to PID control
 float vTemperatureControl()
 {
   float fSensorValue, fcontrolEffort;
@@ -176,7 +178,7 @@ float vTemperatureControl()
   return fcontrolEffort;
 }
 
-//hold the temperature and the set point on a buffer and show on LCD display
+//hold the temperature, the set point and the RPM on a buffer and show on LCD display
 void vPeriodicTask1(){
 	vLcdSet1();
     sprintf(cTempBuffer, "%.f", fTemperature);
@@ -224,6 +226,7 @@ void vPeriodicTask2(){
     vLcdWriteString("%");
 }
 
+//Hold the Kp, Ki and Kd and show on the LCD display
 void vPeriodicTask3(){
 	vLcdSet3();
     sprintf(cStrKp, "%.1f", xPidConfig.fKp);
@@ -333,13 +336,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1) {
 
+	  //Get the measured temperature
 	  fTemperature = fTemperatureSensorGetTemperature();
 	  //clear the display if menu has changed
 	  if (cMenuChanged == 1){
 		  vLcdSendCommand(CMD_CLEAR);
 		  cMenuChanged = 0;
 	  }
-	  //verify if the LCD will display the temperature menu or the duty cycle menu
+	  //verify if the LCD will display the temperature menu, duty cycle menu or the control parameters menu
 	  if(cLcdMenu == 0)
 		  vPeriodicTask1();
 	  else if (cLcdMenu == 1)
@@ -362,10 +366,11 @@ int main(void)
     	  vLedOffLed(green1);
       }
 
-
+      //checks if the cooler is turned off and the temperature is above the margin stipulated and turn the cooler on
       if (!bCoolerActivated && fTemperature > (fSetPoint + fHysteresis * fSetPoint)) {
           vCoolerOn(fTemperature, fSetPoint);
 
+      //if the cooler is activated and the temperature is below the margin, turn off the cooler and start PID controlling
       } else if (bCoolerActivated && fTemperature < (fSetPoint - fHysteresis * fSetPoint)) {
           vCoolerOff(fTemperature, fSetPoint);
           vTemperatureControl();
@@ -489,20 +494,21 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
+
 	if(htim == &htim6)
-		vMatrixKeyboardRead();
+		vMatrixKeyboardRead();//Matrix Keyboard callback
 	else
 		if(htim == pTimDebouncerPointer)
-			timerButtonsEventsDebouncingPeriodElapsedCallback();
+			timerButtonsEventsDebouncingPeriodElapsedCallback();//Buttons Debouncing callback
 		else
 			if (htim == pTimPressedTimePointer)
-				timerButtonsEventsLongPressPeriodElapsedCallback();
+				timerButtonsEventsLongPressPeriodElapsedCallback();//Buttons long pressed events callback
 			else
 				if (htim == &htim5)
-					vBuzzerStop();
+					vBuzzerStop();//stops the buzzer after the timer interruption, set for 100ms
 				else
 					if (htim == &htim4)
-						vTachometerUpdate();
+						vTachometerUpdate();//tachometer callback
 	}
 
 
@@ -518,6 +524,7 @@ void vButtonsEventCallbackPressedEvent(char cBt){
 	}
 }
 
+//Play the buzzer if any button is released
 void vButtonsEventCallbackReleasedEvent(char cBt){
 	vBuzzerPlay();
 }
