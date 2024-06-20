@@ -101,10 +101,6 @@ char cEnterFlag = 0;
 //flag that shows when a button is pressed for a long period
 char cLongPressFlag = 0;
 
-//bin value shown by the LEds
-int iLedValue = 0;
-int iLedBinValue = 0;
-
 //LCD variables
 extern char cLCDAddress;
 extern I2C_HandleTypeDef *hLCD;
@@ -120,8 +116,6 @@ char cMenuChanged = 0; //Flag indicating that the menu has changed
 //Duty Cycles of Heater and Cooler
 uint32_t uiHeaterCCRValue;
 uint32_t uiCoolerCCRValue;
-float fCoolerDuty;
-float fHeaterDuty;
 
 //buzzer set timer pointer, period and frequency
 extern unsigned short int usBuzzerPeriod;
@@ -130,12 +124,10 @@ extern TIM_HandleTypeDef *pTimerBuzzer;
 
 //tachometer rotations
 extern unsigned short int usCoolerSpeed;
-int teste;
 
 //Temperature Sensor variables
 extern float fTemperature;
 char ucTemperature[50];
-float timeCounter = 0.0f;
 
 //Struct for PID
 extern pid_data_type xPidConfig;
@@ -323,9 +315,6 @@ int main(void)
 
   //Heater and Cooler
   setupPWM();
-
-  //vCoolerfanPWMDuty(fCoolerDuty);
-  //vHeaterPWMDuty(fHeaterDuty);
 
   //Tachmeter
   vTachometerInit(&htim4, 500);
