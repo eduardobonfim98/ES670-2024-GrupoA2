@@ -514,28 +514,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){
 				else
 					if (htim == &htim4)
 						vTachometerUpdate();
-					else
-						if (htim == &htim15){
-							float temperature = fTemperatureSensorGetTemperature();  // Obtém a temperatura
-							timeCounter += 0.1f;  // Incrementa o contador de tempo em 0.1 segundos (100 ms)
-
-							//sprintf(ucTemperature, "t: %.1f, T: %.2f, H: %.1f, C: %.1f, \n\r", timeCounter, temperature, fPrintHeaterDuty, fPrintCoolerDuty);
-
-							//vCommunicationStateMachineTransmit(ucTemperature);
-						}
 	}
 
-/*void vMatrixKeyboardHalfSecPressedCallback (char cButton){
-	cNumber500ms += cButton;
-	if(cNumber500ms >= 16){
-		cNumber500ms = 0;
-	}
-	vLedShowNumber(cNumber500ms);
-}
 
-void vMatrixKeyboardThreeSecPressedCallback (char cButton){
-	vLedToggleLed(5);
-}*/
 
 //the up and down buttons increment/decrement the set point by 1 units
 void vButtonsEventCallbackPressedEvent(char cBt){
