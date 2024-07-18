@@ -4,9 +4,9 @@
 
 Este repositório foi originalmente criado na conta GitHub associada ao meu email universitário (eduardosiqueiraunicamp). Para fins de portfólio e melhor organização, o repositório foi transferido para a minha conta profissional no GitHub (eduardobonfim98). O projeto foi feito em um grupo de três e tem os seguintes autores:
 
-	•	Eduardo Siqueira (RA: 196308)
-	•	Henrique Akira (RA: 198741)
-	•	Lucas Finzzeto Pavarini (RA: 182509)
+	•	Eduardo Siqueira Bonfim
+	•	Henrique Akira 
+	•	Lucas Finzzeto Pavarini 
 
 ## Visão Geral
 
