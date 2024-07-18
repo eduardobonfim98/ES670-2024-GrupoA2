@@ -1,7 +1,3 @@
-Claro, aqui está o conteúdo formatado para um README:
-
----
-
 # Sistema de Controle de Temperatura
 
 ## Visão Geral
@@ -64,11 +60,11 @@ O controle de temperatura é realizado por um controlador PID que atua sobre a c
 3. A velocidade do cooler deve ser monitorada.
 4. O sistema opera entre a temperatura ambiente e 90°C. A temperatura máxima ocorre devido a limitações físicas do resistor.
 
-Mudança de Ownership do Repositório
+## Mudança de Ownership do Repositório
 
 Este repositório foi originalmente criado na conta GitHub associada ao meu email universitário (eduardosiqueiraunicamp). Para fins de portfólio e melhor organização, o repositório foi transferido para a minha conta profissional no GitHub (eduardobonfim98).
 
-Documentação Completa
+## Documentação Completa
 
 Para mais detalhes, consulte a documentação completa no arquivo Relatorio.pdf incluído neste repositório. A documentação cobre:
 
@@ -80,7 +76,7 @@ Para mais detalhes, consulte a documentação completa no arquivo Relatorio.pdf 
 	•	Manual de utilização
 	•	Problemas identificados e não resolvidos
 
-Créditos
+## Créditos
 
 Autores do projeto:
 
@@ -88,7 +84,7 @@ Autores do projeto:
 	•	Henrique Akira (RA: 198741)
 	•	Lucas Finzzeto Pavarini (RA: 182509)
 
-Licença
+## Licença
 
 Este projeto está licenciado sob os termos da licença MIT. Para mais detalhes, veja o arquivo LICENSE.
 
