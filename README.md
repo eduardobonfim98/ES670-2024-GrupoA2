@@ -1,5 +1,13 @@
 # Sistema de Controle de Temperatura
 
+## Mudança de Ownership do Repositório
+
+Este repositório foi originalmente criado na conta GitHub associada ao meu email universitário (eduardosiqueiraunicamp). Para fins de portfólio e melhor organização, o repositório foi transferido para a minha conta profissional no GitHub (eduardobonfim98). O projeto foi feito em um grupo de três e tem os seguintes autores:
+
+	•	Eduardo Siqueira (RA: 196308)
+	•	Henrique Akira (RA: 198741)
+	•	Lucas Finzzeto Pavarini (RA: 182509)
+
 ## Visão Geral
 
 Este projeto visa desenvolver um sistema de controle de temperatura eficiente. O principal objetivo do sistema é controlar a temperatura de um resistor, ajustando-a conforme a temperatura alvo definida pelo usuário. Para atingir essa meta, o sistema manipula a corrente do resistor utilizando um sinal PWM (Pulse Width Modulation) dentro de uma malha de controle. Quando a temperatura desejada é maior do que a atual, o sistema utiliza o aquecedor, quando é menor, utiliza o cooler.
@@ -60,9 +68,6 @@ O controle de temperatura é realizado por um controlador PID que atua sobre a c
 3. A velocidade do cooler deve ser monitorada.
 4. O sistema opera entre a temperatura ambiente e 90°C. A temperatura máxima ocorre devido a limitações físicas do resistor.
 
-## Mudança de Ownership do Repositório
-
-Este repositório foi originalmente criado na conta GitHub associada ao meu email universitário (eduardosiqueiraunicamp). Para fins de portfólio e melhor organização, o repositório foi transferido para a minha conta profissional no GitHub (eduardobonfim98).
 
 ## Documentação Completa
 
@@ -75,14 +80,6 @@ Para mais detalhes, consulte a documentação completa no arquivo Relatorio.pdf 
 	•	Procedimentos de sintonização do controlador
 	•	Manual de utilização
 	•	Problemas identificados e não resolvidos
-
-## Créditos
-
-Autores do projeto:
-
-	•	Eduardo Siqueira (RA: 196308)
-	•	Henrique Akira (RA: 198741)
-	•	Lucas Finzzeto Pavarini (RA: 182509)
 
 ## Licença
 
