@@ -20,9 +20,9 @@ Desenvolvido em C com CubeIDE, o software do sistema inclui:
 
 Procedimentos de Utilização
 
-	1.	Definir Temperatura: Utilize os botões para aumentar/diminuir o setpoint.
-	2.	Monitoramento: Acompanhe a temperatura atual e desejada no display LCD.
-	3.	Ajuste de Parâmetros: Use comandos UART para ajustar Kp, Ki e Kd.
+	1.	Definir Temperatura: Utilize os botões para aumentar/diminuir o setpoint e para mudar a tela do LCD.
+	2.	Monitoramento: Acompanhe a temperatura atual e desejada, a velocidade do cooler, Kp, Ki, Kd no display LCD.
+	3.	Ajuste de parâmetros da planta de controle: Use comandos UART para ajustar Kp, Ki e Kd.
 
 Mudança de Ownership do Repositório
 
