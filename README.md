@@ -2,11 +2,7 @@
 
 ## Mudança de Ownership do Repositório
 
-Este repositório foi originalmente criado na conta GitHub associada ao meu email universitário (eduardosiqueiraunicamp). Para fins de portfólio e melhor organização, o repositório foi transferido para a minha conta profissional no GitHub (eduardobonfim98). O projeto foi feito em um grupo de três e tem os seguintes autores:
-
-	•	Eduardo Siqueira Bonfim
-	•	Henrique Akira 
-	•	Lucas Finzzeto Pavarini 
+Este repositório foi originalmente criado na conta GitHub associada ao meu email universitário (eduardosiqueiraunicamp). Para fins de portfólio e melhor organização, o repositório foi transferido para a minha conta profissional no GitHub (eduardobonfim98). 
 
 ## Visão Geral
 
@@ -80,6 +76,15 @@ Para mais detalhes, consulte a documentação completa no arquivo Relatorio.pdf 
 	•	Procedimentos de sintonização do controlador
 	•	Manual de utilização
 	•	Problemas identificados e não resolvidos
+
+
+## Autores
+
+O projeto foi feito em um grupo de três e tem os seguintes autores:
+
+	•	Eduardo Siqueira Bonfim
+	•	Henrique Akira 
+	•	Lucas Finzzeto Pavarini 
 
 ## Licença
 
